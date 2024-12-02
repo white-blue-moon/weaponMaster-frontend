@@ -1,11 +1,19 @@
-<script>
-	export let name;
-</script>
-
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
+  <script>
+	import GnbBar from './components/GnbBar.svelte';
+	import Gnb from './components/Gnb.svelte';
+	import Footer from './components/Footer.svelte';
+  </script>
+  
+  <GnbBar />
+  <Gnb /> 
+  
+  <main>
+	<h1>Welcome to Weapon Master!</h1>
+	<p>서비스 소개...</p>
+  </main>
+  
+  <Footer />
+  
 
 <style>
 	main {
