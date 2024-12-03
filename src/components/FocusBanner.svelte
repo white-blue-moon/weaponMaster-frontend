@@ -16,7 +16,7 @@
     background: url('https://bbscdn.df.nexon.com/data6/commu/202411/0bdd08c0-b79a-9b8e-5cc9-6facb18d0077.jpg') 50% 0px no-repeat;
     background-size: contain;
     width: 100%;
-    height: 100vh;
+    height: 400px;
     position: relative; /* li를 relative로 설정 */
   }
 
@@ -25,7 +25,7 @@
     background: url('https://bbscdn.df.nexon.com/data6/commu/202411/853af6d8-f14e-232b-4bc6-415ab5986aab.png') no-repeat center center;
     background-size: contain; /* 이미지 크기를 내용에 맞게 조정 */
     position: absolute; /* a 태그를 절대 위치로 설정 */
-    top: 25%; /* li 태그의 세로 가운데에 위치 */
+    top: 40%; /* li 태그의 세로 가운데에 위치 */
     left: 50%; /* li 태그의 가로 가운데에 위치 */
     transform: translate(-50%, -50%); /* 정확한 중앙 정렬을 위해 translate 사용 */
     width: 100%; /* 원하는 크기만큼 조정 */

@@ -2,6 +2,7 @@
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
+    import NewsBanner from '../components/NewsBanner.svelte';
     import TestText from '../components/TestText.svelte';
     import Footer from '../components/Footer.svelte';
 </script>
@@ -11,33 +12,43 @@
     <div class="gnb"><Gnb /></div>
     <div class="focus-banner"><FocusBanner /></div>
 </div>
+<NewsBanner />
 <div class="test-text"><TestText /></div> 
 <Footer />
 
 <style>
-    /* 부모 컨테이너 설정: Gnb와 FocusBanner가 겹치도록 */
+    /* 부모 컨테이너 설정 */
     .menu {
         position: relative; /* Gnb와 FocusBanner의 위치를 기준으로 설정 */
+        display: block;
+        overflow: hidden; /* 자식 요소들의 absolute 높이를 포함하도록 설정 */
     }
 
     /* Gnb 스타일 설정 */
     .menu .gnb {
-        position: relative; /* FocusBanner와 겹치지 않도록 Gnb를 relative로 설정 */
-        z-index: 3; /* FocusBanner보다 위에 위치하게 설정 */
+        position: relative;
+        z-index: 2; /* FocusBanner보다 위에 위치하도록 설정 */
     }
 
     /* FocusBanner 스타일 설정 */
     .menu .focus-banner {
-        position: absolute; /* Gnb 아래에 절대 위치로 배치 */
-        top: 0; /* Gnb 바로 위에 위치 */
+        position: absolute;
+        top: 0; /* Gnb와 완전히 겹치게 설정 */
         left: 0;
         right: 0;
-        z-index: 1; /* Gnb 아래로 겹치게 설정 */
-        color: white;
+        z-index: 1; /* Gnb 아래에 위치하도록 설정 */
+    }
+
+    /* 부모 높이를 반영하도록 가상 요소 추가 (clearfix) */
+    .menu::after {
+        content: "";
+        display: block;
+        clear: both;
+        height: 200px; /* FocusBanner의 height에 맞게 설정 */
     }
 
     /* TestText 스타일 설정 */
     .test-text {
-        margin-top: 200px; /* menu 하단에 충분한 공간을 두기 위한 마진 */
+        margin-top: 20px; /* menu 하단에 충분한 공간을 두기 위한 마진 */
     }
 </style>
