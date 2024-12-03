@@ -1,10 +1,10 @@
   <script>
-	import GnbBar from './components/GnbBar.svelte';
+	import GnbPublisher from './components/GnbPublisher.svelte';
 	import Gnb from './components/Gnb.svelte';
 	import Footer from './components/Footer.svelte';
   </script>
   
-  <GnbBar />
+  <GnbPublisher />
   <Gnb /> 
   
   <main>
