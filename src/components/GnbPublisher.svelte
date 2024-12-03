@@ -18,7 +18,7 @@
     align-items: center; /* 세로 중앙 정렬 */
     justify-content: space-between; /* 로고와 버튼 간 공간 분리 */
     position: relative;
-    height: 100px; /* 헤더 높이 설정 */
+    height: 63px; /* 헤더 높이 설정 */
     padding: 0 20px; /* 양쪽 여백 추가 */
   }
 
