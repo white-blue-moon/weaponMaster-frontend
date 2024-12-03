@@ -41,7 +41,7 @@
 
 <style>
   nav {
-    background-color: #222;
+    background-color: rgba(0,0,0,.5);
     padding: 4px 0px 0px;
     position: relative;
   }
