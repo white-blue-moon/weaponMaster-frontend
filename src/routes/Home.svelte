@@ -1,12 +1,14 @@
 <script>
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
+    import FocusBanner from '../components/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
 </script>
 
 
 <GnbPublisher />
 <Gnb /> 
+<FocusBanner />
 
 <main>
   <h1>Welcome to Weapon Master!</h1>
