@@ -13,7 +13,7 @@
         <Gnb />
     </div>
     <div class="focus-banner">
-        <FocusBanner width="2560px" height="600px"/>
+        <FocusBanner width="1450px" height="600px"/>
     </div>
 </div>
 
@@ -41,6 +41,7 @@
         position: relative; /* Gnb와 FocusBanner의 위치를 기준으로 설정 */
         display: block;
         overflow: hidden; /* 자식 요소들의 absolute 높이를 포함하도록 설정 */
+        height: 600px;
     }
 
     /* Gnb 스타일 설정 */
@@ -52,10 +53,10 @@
     /* FocusBanner 스타일 설정 */
     .menu .focus-banner {
         position: absolute;
-        top: 0; /* Gnb와 완전히 겹치게 설정 */
-        left: 0;
-        right: 0;
-        z-index: 1; /* Gnb 아래에 위치하도록 설정 */
+        top: 0;
+        left: 50%; /* 부모의 가로 중심으로 이동 */
+        transform: translateX(-50%); /* 자신의 너비의 절반만큼 이동 */
+        z-index: 1;
     }
 
     /* 부모 높이를 반영하도록 가상 요소 추가 (clearfix) */
@@ -83,5 +84,6 @@
 
     .news-focus-banners {
         display: flex;
+        position: relative;
     }
 </style>

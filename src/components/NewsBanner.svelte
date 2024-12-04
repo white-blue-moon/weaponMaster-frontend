@@ -3,7 +3,7 @@
 
     export let width = "400px"; // 기본값 설정
     export let height = "280px"; // 기본값 설정
-  
+
     let activeTab = "전체";
   
     const tabs = ["전체", "공지사항", "업데이트", "개발자노트"];
