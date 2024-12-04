@@ -25,6 +25,7 @@
         on:mouseleave={() => (isPaused = false)}
       >
         <!-- 이전 버튼 -->
+        <!-- svelte-ignore a11y-invalid-attribute -->
         <a href="#" class="arrow_l swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide">
           <span class="icon prev"></span>
         </a>
@@ -35,11 +36,13 @@
         </i>
   
         <!-- 다음 버튼 -->
+        <!-- svelte-ignore a11y-invalid-attribute -->
         <a href="#" class="arrow_r swiper-button-next" tabindex="0" role="button" aria-label="Next slide">
           <span class="icon next"></span>
         </a>
   
         <!-- 일시정지/재생 버튼 -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
         <i class="pause" on:click={togglePause}>
           {#if isPaused}
             || <!-- 일시정지 상태 -->
@@ -65,18 +68,18 @@
 
 /* 컨트롤러 스타일 */
 .pay_ctrl {
-  position: absolute;
-  bottom: 10px; /* 슬라이드 내부 하단 여백 */
-  right: 10px; /* 슬라이드 내부 우측 여백 */
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 14px;
-  z-index: 10; /* 슬라이드 위에 배치 */
+    font-family: Arial, sans-serif;
+    position: absolute;
+    bottom: 0; /* 슬라이드 내부 하단 여백 */
+    right: 0; /* 슬라이드 내부 우측 여백 */
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+    padding: 9px 10px;
+    font-size: 14px;
+    z-index: 10; /* 슬라이드 위에 배치 */
+    margin-bottom: 0;
 }
 
 /* 화살표 버튼 스타일 */
@@ -86,32 +89,28 @@
   align-items: center;
   width: 24px;
   height: 24px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 50%;
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
   z-index: 11;
-}
-
-.arrow_l:hover, .arrow_r:hover {
-  background: rgba(0, 0, 0, 0.8);
+  text-decoration: none;
 }
 
 .arrow_l .icon::before {
-  content: "←";
-  color: #00f;
+  content: "<";
+  color: #bec5cc;
 }
 
 .arrow_r .icon::before {
-  content: "→";
-  color: #00f;
+  content: ">";
+  color: #bec5cc;
 }
 
 /* 페이지 정보 스타일 */
 .page_cnt {
-  color: white;
+  color: #bec5cc;
   font-size: 14px;
+}
+
+.swiper-pagination-current {
+    color: #007aff;
 }
 
 /* 일시정지/재생 버튼 */
@@ -119,13 +118,8 @@
   cursor: pointer;
   font-size: 18px;
   padding: 2px 5px;
-  background: rgba(0, 0, 0, 0.5);
   border-radius: 5px;
-  color: #fff;
-}
-
-.pause:hover {
-  background: rgba(255, 255, 255, 0.2);
+  color: #007aff;
 }
 
 </style>
