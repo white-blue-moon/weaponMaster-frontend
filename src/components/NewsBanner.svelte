@@ -128,7 +128,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: calc(var(--news-width) - 20px); /* 최대 너비 설정 */
+        max-width: calc(var(--news-width) - 15px); /* 최대 너비 설정 */
         display: inline-block;
     }
 
