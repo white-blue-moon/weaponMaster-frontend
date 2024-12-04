@@ -9,10 +9,29 @@
 
 <GnbPublisher />
 <div class="menu">
-    <div class="gnb"><Gnb /></div>
-    <div class="focus-banner"><FocusBanner /></div>
+    <div class="gnb">
+        <Gnb />
+    </div>
+    <div class="focus-banner">
+        <FocusBanner width="2560px" height="600px"/>
+    </div>
 </div>
-<NewsBanner />
+
+<div class="news-container">
+    <div class="news-banner">
+        <NewsBanner />
+    </div>
+    <div class="news-focus-banners">
+        <div class="news-left-focus-banner">
+            <FocusBanner width="560px" height="280px" />
+        </div>
+        <div class="news-right-focus-banner">
+            <FocusBanner width="300px" height="280px"/>
+        </div>
+    </div>
+</div>
+
+
 <div class="test-text"><TestText /></div> 
 <Footer />
 
@@ -50,5 +69,19 @@
     /* TestText 스타일 설정 */
     .test-text {
         margin-top: 20px; /* menu 하단에 충분한 공간을 두기 위한 마진 */
+    }
+
+    .news-container {
+        margin: 60px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .news-banner {
+        margin-right: 40px;
+    }
+
+    .news-focus-banners {
+        display: flex;
     }
 </style>
