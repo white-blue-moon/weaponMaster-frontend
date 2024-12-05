@@ -1,6 +1,7 @@
 <script>
     export let width = "560px"; // 기본값 설정
     export let height = "280px"; // 기본값 설정
+    export let background = "https://bbscdn.df.nexon.com/data6/commu/202411/0bdd08c0-b79a-9b8e-5cc9-6facb18d0077.jpg"; // 기본 이미지
 
     let isPaused = false;
 
@@ -16,7 +17,7 @@
       role="group"
       aria-label="2 / 15"
       data-swiper-slide-index="1"
-      style="--swiper-width: {width}; --swiper-height: {height};"
+      style="--swiper-width: {width}; --swiper-height: {height}; --swiper-background: url('{background}');"
     >
       <!-- 컨트롤러 -->
       <p
@@ -58,7 +59,7 @@
 <style>
 /* 슬라이드 스타일 */
 .swiper-slide {
-  background: url('https://bbscdn.df.nexon.com/data6/commu/202411/0bdd08c0-b79a-9b8e-5cc9-6facb18d0077.jpg') 50% 0px no-repeat;
+  background: var(--swiper-background) 50% 0px no-repeat;
   background-size: cover;
   width: var(--swiper-width);
   height: var(--swiper-height);

@@ -13,7 +13,7 @@
         <Gnb />
     </div>
     <div class="focus-banner">
-        <FocusBanner width="1450px" height="600px"/>
+        <FocusBanner width="1450px" height="600px" background="https://bbscdn.df.nexon.com/data6/commu/202411/0a3de54d-8ab7-0919-3ef8-266c04a409e4.jpg"/>
     </div>
 </div>
 
@@ -23,10 +23,10 @@
     </div>
     <div class="news-focus-banners">
         <div class="news-left-focus-banner">
-            <FocusBanner width="560px" height="280px" />
+            <FocusBanner width="560px" height="280px" background="https://bbscdn.df.nexon.com/data6/commu/202411/094bad7a-b6d9-5c78-f677-e013907b33d6.jpg"/>
         </div>
         <div class="news-right-focus-banner">
-            <FocusBanner width="300px" height="280px"/>
+            <FocusBanner width="300px" height="280px" background="https://bbscdn.df.nexon.com/data6/commu/202411/4297ef52-57ee-be59-2a83-e926ea732041.jpg"/>
         </div>
     </div>
 </div>
