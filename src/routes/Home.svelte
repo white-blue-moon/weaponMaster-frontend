@@ -5,6 +5,7 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import TestText from '../components/TestText.svelte';
     import Footer from '../components/Footer.svelte';
+    import GuideAndRecommand from '../components/GuideAndRecommand.svelte';
 </script>
 
 <GnbPublisher />
@@ -31,8 +32,12 @@
     </div>
 </div>
 
+<div class="guide-and-recommand">
+    <GuideAndRecommand />
+</div>
 
-<div class="test-text"><TestText /></div> 
+<!-- <div class="test-text"><TestText /></div> -->
+
 <Footer />
 
 <style>
@@ -85,5 +90,9 @@
     .news-focus-banners {
         display: flex;
         position: relative;
+    }
+
+    .guide-and-recommand {
+        margin: 60px;
     }
 </style>
