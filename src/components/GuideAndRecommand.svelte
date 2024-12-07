@@ -1,5 +1,5 @@
 <script>
-    // 필요한 경우 데이터 배열로 컨텐츠를 관리할 수 있습니다.
+    // 필요한 경우 데이터 배열로 컨텐츠를 관리
     const slides = [
       {
         img: "//bbscdn.df.nexon.com/data7/commu/202411/11ac10dd-6bbb-2f74-67a8-b862ff51aa4a.jpg",
@@ -16,8 +16,7 @@
       {
         img: "//bbscdn.df.nexon.com/data7/commu/202411/642d0b07-f939-b8d4-68b5-7acfb975bb22.png",
         category: "커뮤니티",
-        title:
-          "트래블러 랭킹 3위가 알려주는 초 심화공략(feat.별빛하울링), 전직업 완벽공략 프로젝트 5편!",
+        title: "트래블러 랭킹 3위가 알려주는 초 심화공략(feat.별빛하울링), 전직업 완벽공략 프로젝트 5편!",
         author: "관훈",
       },
     ];
@@ -26,7 +25,7 @@
   <section class="guide_rec">
     <article class="container">
       <h3>가이드 <i>&amp;</i> 추천글</h3>
-
+  
       <!-- Navigation Buttons -->
       <div class="lst_control">
         <button class="arrow_l">&lt;</button>
@@ -41,8 +40,8 @@
               <a href="/">
                 <div class="image-wrapper">
                   <img src={slide.img} alt={slide.title} />
-                  <span class="category">{slide.category}</span>
                 </div>
+                <span class="category">{slide.category}</span>
                 <div class="info">
                   <h4 class="title">{slide.title}</h4>
                   <p class="author">{slide.author}</p>
@@ -54,6 +53,7 @@
       </div>
     </article>
   </section>
+  
   
 <style>
 .guide_rec {
@@ -117,31 +117,45 @@
   background: #fff;
 }
 
+.slide a {
+  text-decoration: none; /* 밑줄 제거 */
+}
+
 .image-wrapper {
   position: relative;
-  overflow: hidden;
+  height: 200px;
 }
 
 .image-wrapper img {
   width: 100%;
-  height: 200px;
+  max-height: 100%; /* 이미지가 컨테이너를 넘지 않도록 */
   object-fit: cover;
 }
 
 .category {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: #28a745;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #2eaf00;
   color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
+  width: 120px;
+  height: 44px;
+  margin: -22px auto 10px; /* 상단 위치를 이미지 끝에서 카테고리 중앙까지 이동 */
+  border-radius: 3px;
   font-size: 0.9em;
-  font-weight: bold;
+  text-align: center;
+  position: relative;
+  z-index: 1; /* 이미지 위에 카테고리가 나타나도록 */
 }
 
 .info {
   padding: 10px;
+  display: flex; /* 추가: Flexbox 적용 */
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 가로 중앙 정렬 */
+  justify-content: center; /* 세로 중앙 정렬 */
+  text-align: center; /* 텍스트 가로 중앙 정렬 */
+  margin-top: 20px;
 }
 
 .title {
@@ -149,12 +163,12 @@
   margin: 0;
   margin-bottom: 5px;
   color: #333;
-  font-weight: bold;
 }
 
 .author {
   font-size: 0.9em;
   color: #555;
 }
+
 </style>
   
