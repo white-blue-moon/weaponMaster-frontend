@@ -4,8 +4,8 @@
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
     import TestText from '../components/TestText.svelte';
-    import Footer from '../components/Footer.svelte';
     import GuideAndRecommand from '../components/GuideAndRecommand.svelte';
+    import Footer from '../components/Footer.svelte';
 </script>
 
 <GnbPublisher />
@@ -71,11 +71,6 @@
         display: block;
         clear: both;
         height: 200px; /* FocusBanner의 height에 맞게 설정 */
-    }
-
-    /* TestText 스타일 설정 */
-    .test-text {
-        margin-top: 20px; /* menu 하단에 충분한 공간을 두기 위한 마진 */
     }
 
     .news-container {
