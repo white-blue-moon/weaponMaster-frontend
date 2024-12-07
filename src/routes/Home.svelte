@@ -36,6 +36,7 @@
     <GuideAndRecommand />
 </div>
 
+<!-- TODO 출력 테스트용 컴포넌트 추후 제거 필요 -->
 <!-- <div class="test-text"><TestText /></div> -->
 
 <Footer />

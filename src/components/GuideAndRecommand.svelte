@@ -106,15 +106,13 @@
   width: 100%;
   padding: 0;
   list-style: none;
-  overflow-x: hidden; /* 슬라이드가 컨테이너를 벗어나지 않도록 설정 */
 }
 
 .slide {
   gap: 20px; /* 슬라이드 간 간격 */
   width: 420px;
-  border: 1px solid #ccc;
-  overflow: hidden;
   background: #fff;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
 }
 
 .slide a {
@@ -168,13 +166,15 @@
 .title {
   font-size: 1em;
   margin: 0;
-  margin-bottom: 5px;
-  color: #333;
+  font-weight: 450;
+  color: #36393f;
 }
 
 .author {
   font-size: 0.9em;
-  color: #555;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  color: #a2a5ac;
 }
 
 </style>
