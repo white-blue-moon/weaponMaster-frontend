@@ -1,7 +1,3 @@
-<script>
-  // TODO
-</script>
-
 <section>
   <nav>
     <ul class="main-menu">
@@ -46,6 +42,10 @@
     position: relative;
   }
 
+  nav:hover {
+    background-color: #22252d; /* 배경색 설정 */
+  }
+
   .main-menu {
     display: flex;
     list-style: none;
@@ -64,15 +64,32 @@
     align-items: center;
   }
 
+  /* 기본 메인 메뉴 텍스트 색상 */
   .main-menu a {
-    color: white;
+    color: white; /* 기본 색상 */
     text-decoration: none;
     display: inline-block;
     padding: 5px 10px;
   }
 
-  .main-menu a:hover {
-    text-decoration: underline;
+  /* 기본 서브 메뉴 텍스트 색상 */
+  .submenu a {
+    color: white; /* 기본 색상 */
+    text-decoration: none;
+    margin: 5px 0;
+  }
+
+  /* nav:hover 상태에서 모든 텍스트는 기본적으로 #898c92 */
+  nav:hover .main-menu a,
+  nav:hover .submenu a {
+    color: #898c92;
+  }
+
+  /* 마우스가 올라가 있는 항목만 흰색으로 변경 */
+  .main-menu a:hover, 
+  .submenu a:hover {
+    color: white !important;; /* 강조 색상 (강제 적용 -> 우선순위 높임) */
+    text-decoration: none; /* 밑줄 제거 */
   }
 
   .submenu {
@@ -81,8 +98,8 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background-color: #333;
-    border-top: 1px solid #444;
+    background-color: #22252d;
+    border-top: 0.5px solid #444;
     padding: 10px 0;
   }
 
@@ -101,15 +118,5 @@
     flex-direction: column; /* 메뉴를 세로로 정렬 */
     align-items: center; /* 텍스트를 가로로 중앙 정렬 */
     text-align: center;
-  }
-
-  .submenu a {
-    color: white;
-    text-decoration: none;
-    margin: 5px 0; /* 각 링크 간격 추가 */
-  }
-
-  .submenu a:hover {
-    text-decoration: underline;
   }
 </style>
