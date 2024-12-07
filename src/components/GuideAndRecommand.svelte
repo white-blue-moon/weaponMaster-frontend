@@ -124,12 +124,19 @@
 .image-wrapper {
   position: relative;
   height: 200px;
+  overflow: hidden; /* 이미지가 확대될 때 컨테이너를 벗어나지 않도록 설정 */
 }
 
 .image-wrapper img {
   width: 100%;
-  max-height: 100%; /* 이미지가 컨테이너를 넘지 않도록 */
+  height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease; /* 부드러운 확대 효과 */
+}
+
+/* 마우스를 올렸을 때 이미지 확대 */
+.slide:hover .image-wrapper img {
+  transform: scale(1.1); /* 이미지 확대 */
 }
 
 .category {
