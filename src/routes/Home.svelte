@@ -3,7 +3,6 @@
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
-    import TestText from '../components/TestText.svelte';
     import GuideAndRecommand from '../components/GuideAndRecommand.svelte';
     import Footer from '../components/Footer.svelte';
 </script>
@@ -35,9 +34,6 @@
 <div class="guide-and-recommand">
     <GuideAndRecommand />
 </div>
-
-<!-- TODO 출력 테스트용 컴포넌트 추후 제거 필요 -->
-<!-- <div class="test-text"><TestText /></div> -->
 
 <Footer />
 

@@ -111,7 +111,6 @@
         list-style: none;
         padding: 0;
         max-height: calc(var(--news-height) - 50px); /* 뉴스 영역의 최대 높이 */
-        /* overflow-y: auto; 스크롤 가능 */
     }
   
     .news_con li {

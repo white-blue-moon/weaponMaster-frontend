@@ -65,6 +65,7 @@
   height: var(--swiper-height);
   position: relative; /* 컨트롤러 배치를 위해 relative 유지 */
   overflow: hidden;
+  list-style: none;
 }
 
 /* 컨트롤러 스타일 */
