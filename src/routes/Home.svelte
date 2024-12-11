@@ -1,40 +1,93 @@
 <script>
+    import { onMount } from "svelte";
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
     import GuideAndRecommand from '../components/GuideAndRecommand.svelte';
     import Footer from '../components/Footer.svelte';
+    import * as FOCUS_BANNER_TYPE from '../constants/focusBannerType';
+
+    let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
+    let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
+    let banners1, banners2, banners3;
+
+    // API 호출
+    async function fetchFocusBanners() {
+        try {
+            const response = await fetch("http://localhost:7070/focus-banners", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify([
+                    { "bannerType": 1, "version": 1 },
+                    { "bannerType": 2, "version": 1 },
+                    { "bannerType": 3, "version": 1 },
+                ]),
+            });
+
+            if (!response.ok) {
+                throw new Error(`API 호출 실패: ${response.status}`);
+            }
+
+            focusBanners = await response.json(); // 반환 값을 focusBanners에 저장
+        } catch (error) {
+            console.error("Focus banners API 호출 중 오류:", error);
+        } finally {
+            loading = false;  // 로딩이 끝났으므로 로딩 상태를 false로 설정
+        }
+    }
+
+    // 컴포넌트가 마운트될 때 API 호출
+    onMount(async () => {
+        await fetchFocusBanners();  // API 호출 완료될 때까지 기다림
+
+        // focusBanners가 업데이트된 후 banners1, banners2, banners3 할당
+        banners1 = focusBanners.banners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+        banners2 = focusBanners.banners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
+        banners3 = focusBanners.banners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
+    });
 </script>
 
+<!-- 페이지 전체 렌더링을 loading 상태가 끝날 때까지 기다림 -->
 <GnbPublisher />
 <div class="menu">
     <div class="gnb">
         <Gnb />
     </div>
     <div class="focus-banner">
-        <FocusBanner width="1450px" height="600px" background="https://bbscdn.df.nexon.com/data6/commu/202411/0a3de54d-8ab7-0919-3ef8-266c04a409e4.jpg"/>
+        {#if !loading}
+            <!-- 첫 번째 배너 데이터로 FocusBanner 렌더링 -->
+            <FocusBanner width="1450px" height="600px" imageUrls={banners1} />
+        {:else}
+            <!-- 로딩 중 상태 -->
+            <p>로딩 중...</p>
+        {/if}
     </div>
 </div>
-
 <div class="news-container">
     <div class="news-banner">
         <NewsBanner />
     </div>
     <div class="news-focus-banners">
-        <div class="news-left-focus-banner">
-            <FocusBanner width="560px" height="280px" background="https://bbscdn.df.nexon.com/data6/commu/202411/094bad7a-b6d9-5c78-f677-e013907b33d6.jpg"/>
-        </div>
-        <div class="news-right-focus-banner">
-            <FocusBanner width="300px" height="280px" background="https://bbscdn.df.nexon.com/data6/commu/202411/4297ef52-57ee-be59-2a83-e926ea732041.jpg"/>
-        </div>
+        {#if !loading}
+            <!-- 두 번째와 세 번째 배너 데이터로 FocusBanner 렌더링 -->
+            <div class="news-left-focus-banner">
+                <FocusBanner width="560px" height="280px" imageUrls={banners2} />
+            </div>
+            <div class="news-right-focus-banner">
+                <FocusBanner width="300px" height="280px" imageUrls={banners3} />
+            </div>
+        {:else}
+            <!-- 로딩 중 상태 -->
+            <p>로딩 중...</p>
+        {/if}
     </div>
 </div>
-
 <div class="guide-and-recommand">
     <GuideAndRecommand />
 </div>
-
 <Footer />
 
 <style>
@@ -88,3 +141,5 @@
         margin: 60px;
     }
 </style>
+
+
