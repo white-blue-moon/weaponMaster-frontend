@@ -4,7 +4,7 @@
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
-    import GuideAndRecommand from '../components/GuideAndRecommand.svelte';
+    import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     import * as FOCUS_BANNER_TYPE from '../constants/focusBannerType';
 
@@ -15,16 +15,18 @@
     // API 호출
     async function fetchFocusBanners() {
         try {
-            const response = await fetch("http://localhost:7070/focus-banners", {
+            const response = await fetch("http://localhost:7070/page/home", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify([
-                    { "bannerType": 1, "version": 1 },
-                    { "bannerType": 2, "version": 1 },
-                    { "bannerType": 3, "version": 1 },
-                ]),
+                body: JSON.stringify({
+                    "reqBanner": [
+                        {"bannerType": 1},
+                        {"bannerType": 2},
+                        {"bannerType": 3}
+                    ]
+                }),
             });
 
             if (!response.ok) {
@@ -44,9 +46,9 @@
         await fetchFocusBanners();  // API 호출 완료될 때까지 기다림
 
         // focusBanners가 업데이트된 후 banners1, banners2, banners3 할당
-        banners1 = focusBanners.banners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
-        banners2 = focusBanners.banners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
-        banners3 = focusBanners.banners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
+        banners1 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+        banners2 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
+        banners3 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
     });
 </script>
 
@@ -86,7 +88,7 @@
     </div>
 </div>
 <div class="guide-and-recommand">
-    <GuideAndRecommand />
+    <ListBox />
 </div>
 <Footer />
 
