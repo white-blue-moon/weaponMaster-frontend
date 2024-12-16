@@ -4,7 +4,7 @@
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
-    import ListBox from '../components/ListBox.svelte';
+    import ListBox from '../components/GuideAndRecommand.svelte';
     import Footer from '../components/Footer.svelte';
     import * as FOCUS_BANNER_TYPE from '../constants/focusBannerType';
 
@@ -15,7 +15,8 @@
     // API 호출
     async function fetchFocusBanners() {
         try {
-            const response = await fetch("http://localhost:7070/page/home", {
+            // TODO url 및 API 경로 상수화 하기
+            const response = await fetch("http://localhost:7070", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
