@@ -7,6 +7,9 @@
       <li><a href="/">가이드</a></li>
       <li><a href="/">커뮤니티</a></li>
       <li><a href="/">서비스센터</a></li>
+      <li> <!-- 빈 영역 --> </li>
+      <li> <!-- 빈 영역 --> </li>
+      <li> <!-- 빈 영역 --> </li>
     </ul>
 
     <div class="submenu">
@@ -31,15 +34,38 @@
         <a href="/customer/faq">FAQ</a>
         <a href="/customer/personalQuestion">1:1문의</a>
       </div>
+      <div>
+        <!-- 빈 영역 아래 비워둠 -->
+      </div>
+      <div>
+        <!-- 로그인 밑은 비워둠 -->
+      </div>
+      <div>
+        <!-- GAME INFO 밑은 비워둠 -->
+      </div>
     </div>
   </nav>
+
+  <div class="gameTab">
+    <div class="login">
+      <a href="#" class="go_login" id="webGnbMyBtn">
+        로그인
+      </a>
+    </div>
+    <div class="gameInfo">
+      <a id="gameInfo" href="#">
+        <b>GAME INFO</b>
+      </a>
+    </div>  
+  </div>
+
 </section>
 
 <style>
   nav {
     background-color: rgba(0,0,0,.5);
-    padding: 4px 0px 0px;
     position: relative;
+    height: 100px;
   }
 
   nav:hover {
@@ -70,6 +96,7 @@
     text-decoration: none;
     display: inline-block;
     padding: 5px 10px;
+    font-size: 18px;
   }
 
   /* 기본 서브 메뉴 텍스트 색상 */
@@ -118,5 +145,63 @@
     flex-direction: column; /* 메뉴를 세로로 정렬 */
     align-items: center; /* 텍스트를 가로로 중앙 정렬 */
     text-align: center;
+  }
+
+  .gameTab {
+    display: flex;
+    position: absolute; /* 위치를 절대값으로 설정 */
+    top: 0; /* nav의 상단에 맞춤 */
+    right: 0; /* nav의 우측 끝에 맞춤 */
+    z-index: 10; /* 다른 요소 위에 출력되도록 설정 */
+  }
+
+  .login {
+    background-color: #303544;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    height: 100px;
+  }
+
+  .login a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+  }
+
+  .gameInfo {
+    background: url('/images/game_info.gif') no-repeat center center;
+    background-size: 100%; /* 초기 배경 크기 설정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 260px;
+    height: 100px;
+    overflow: hidden; /* 확대된 배경이 영역을 넘지 않도록 */
+    position: relative;
+    transition: background-size 0.3s ease-in-out; /* 배경 확대 부드럽게 */
+  }
+
+  .gameInfo a {
+    text-decoration: none;
+  }
+
+  .gameInfo a b {
+    font-family: 'DNFForgedBlade'; /* 던파 공식 홈페이지 폰트 */
+    color: white;
+    font-size: 27px;
+    font-weight: 599;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* X, Y, 흐림 정도, 색상 */
+    display: inline-block; /* transform 적용이 가능하도록 변경 */
+    transition: transform 0.3s ease-in-out; /* 텍스트 축소 부드럽게 */
+  }
+
+  .gameInfo:hover {
+    background-size: 110%; /* 배경 이미지를 확대 */
+  }
+
+  .gameInfo:hover a b {
+    transform: scale(0.9); /* 텍스트 축소 */
   }
 </style>
