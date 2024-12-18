@@ -1,7 +1,7 @@
 <section>
   <nav>
     <ul class="main-menu">
-      <li><a href="/"><img src="https://resource.df.nexon.com/ui/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
+      <li><a class="logo" href="/"><img src="https://resource.df.nexon.com/ui/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
       <li><a href="/">새소식</a></li>
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
@@ -95,8 +95,11 @@
     color: white; /* 기본 색상 */
     text-decoration: none;
     display: inline-block;
-    padding: 5px 10px;
     font-size: 18px;
+  }
+
+  .main-menu .logo {
+    margin-top: 7px;
   }
 
   /* 기본 서브 메뉴 텍스트 색상 */
