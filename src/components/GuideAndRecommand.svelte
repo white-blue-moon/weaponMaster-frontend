@@ -28,8 +28,8 @@
   
       <!-- Navigation Buttons -->
       <div class="lst_control">
-        <button class="arrow_l">&lt;</button>
-        <button class="arrow_r">&gt;</button>
+        <button class="arrow_l"></button>
+        <button class="arrow_r"></button>
       </div>
   
       <div class="guide_rec_s">
@@ -57,7 +57,6 @@
   
 <style>
 .guide_rec {
-  font-family: Arial, sans-serif;
   width: 100%;
 }
 
@@ -66,9 +65,11 @@
 }
 
 .guide_rec h3 {
-  font-size: 1.5em;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
   display: inline-block; /* 버튼과 수평 정렬 위해 inline-block 설정 */
-  margin: 0;
+  margin-bottom: 10px;
 }
 
 .guide_rec_s {
@@ -80,24 +81,29 @@
 
 .lst_control {
   position: absolute;
+  margin-top: 24px;
   top: 0; /* 제목과 같은 높이에 위치 */
   right: 0; /* 오른쪽 끝에 위치 */
   display: flex;
 }
 
+.arrow_l {
+  background: url(https://resource.df.nexon.com/ui//img/main/lst_arrow_l.png) no-repeat;
+}
+
+.arrow_r {
+  background: url(https://resource.df.nexon.com/ui//img/main/lst_arrow_r.png) no-repeat;
+}
+
 .arrow_l,
 .arrow_r {
-  background: none;
+  width: 30px;
+  height: 40px;
   border: none;
-  font-size: 1.5em;
+  margin: 0;
   cursor: pointer;
   color: #333;
   transition: color 0.2s;
-}
-
-.arrow_l:hover,
-.arrow_r:hover {
-  color: #007aff; /* 호버 시 강조 색상 */
 }
 
 .slides {

@@ -1,3 +1,11 @@
+<script>
+  let isLoginAreaVisible = false;
+
+  function toggleLogin() {
+    isLoginAreaVisible = !isLoginAreaVisible;
+  }
+</script>
+
 <section>
   <nav>
     <ul class="main-menu">
@@ -47,11 +55,31 @@
   </nav>
 
   <div class="gameTab">
-    <div class="login">
+    <!-- 로그인 버튼 -->
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div class="login" on:click={toggleLogin} class:is-active={isLoginAreaVisible}>
       <a href="#" class="go_login" id="webGnbMyBtn">
-        로그인
+        {#if !isLoginAreaVisible}로그인{/if}
       </a>
+    
+      <!-- 확장된 로그인 영역 -->
+      {#if isLoginAreaVisible}
+        <div class="login_area">
+          <ul>
+            <li class="btn_before">
+              <a href="#">관리자 로그인</a>
+              <a href="#" class="blue">일반 로그인</a>
+            </li>
+            <li class="txt_before">
+              <a href="/account/join/agreement">처음 오셨나요? 회원가입</a>
+            </li>
+          </ul>
+        </div>
+      {/if}
     </div>
+
+
+    <!-- GAME INFO -->
     <div class="gameInfo">
       <a id="gameInfo" href="#">
         <b>GAME INFO</b>
@@ -150,6 +178,10 @@
     text-align: center;
   }
 
+  /* ================================== */
+  /* 로그인, GAME INFO 영역 */
+  /* ================================== */
+
   .gameTab {
     display: flex;
     position: absolute; /* 위치를 절대값으로 설정 */
@@ -167,10 +199,79 @@
     height: 100px;
   }
 
+  .login:hover {
+    cursor: pointer;
+  }
+
   .login a {
     color: white;
     font-size: 16px;
     text-decoration: none;
+  }
+
+  /* 활성화된 상태 (배경 이미지 적용 및 텍스트 숨김) */
+  .login.is-active {
+    background: #f2f4f6 url(https://resource.df.nexon.com/ui/img/btn/btn_login_x.png) no-repeat 40px 35px;
+  }
+
+  /* 활성화된 상태에서는 a 태그 안의 텍스트 숨김 */
+  .login.is-active .go_login {
+    visibility: hidden; /* 텍스트 숨김 */
+  }
+
+  .login_area {
+    position: absolute;
+    top: 100px; /* nav 높이 아래에 위치 */
+    right: 0;
+    width: 370px;
+    background-color: #f2f4f6;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 20;
+  }
+
+  .login_area ul {
+    list-style: none;
+    padding-left: 35px;
+    padding-right: 35px;
+  }
+
+  /* 확장된 로그인 영역 내부 요소 스타일 */
+  .login_area a {
+    display: block;
+    text-decoration: none;
+    color: white;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .btn_before {
+    display: flex;
+    padding: 0;
+  }
+
+  .btn_before a {
+    flex: 1; /* 버튼이 동일한 너비를 가지도록 설정 */
+    background-color: #484e5f; /* 기본 배경색 */
+    line-height: 52px;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+  }
+
+  .btn_before a.blue {
+    background-color: #3392ff; /* 던파ID 로그인 버튼 색상 */
+  }
+
+  /* 회원가입 링크 스타일 */
+  .txt_before a {
+    margin-top: 5px;
+    color: #36393f;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    line-height: 24px;
   }
 
   .gameInfo {
@@ -201,6 +302,7 @@
   }
 
   .gameInfo:hover {
+    cursor: pointer;
     background-size: 110%; /* 배경 이미지를 확대 */
   }
 
