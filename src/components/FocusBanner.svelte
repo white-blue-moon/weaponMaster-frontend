@@ -88,7 +88,6 @@
                     {#if isPaused}
                         ||
                     {:else}
-                        ▶
                     {/if}
                 </i>
             </p>
@@ -135,7 +134,7 @@
         align-items: center;
         gap: 7px;
         background: rgba(0, 0, 0, 0.7);
-        padding: 9px 10px;
+        padding: 5px 0px 5px 6px;
         font-size: 14px;
         z-index: 10;
         margin-bottom: 0;
@@ -152,16 +151,26 @@
     }
 
     .arrow_l .icon::before {
-        content: "<";
-        color: #bec5cc;
+        content: ""; /* 가상요소 before 에서는 반드시 content를 설정 */
+        display: block; /* 블록 요소로 렌더링 */
+        background: url('https://resource.df.nexon.com/ui/img/main/focus_prev.png') no-repeat center center;
+        background-size: contain; /* 이미지 크기를 부모에 맞춤 */
+        width: 41px; /* 아이콘 크기 설정 */
+        height: 41px;
     }
 
     .arrow_r .icon::before {
-        content: ">";
-        color: #bec5cc;
+        content: ""; /* 가상요소 before 에서는 반드시 content를 설정 */
+        display: block; /* 블록 요소로 렌더링 */
+        background: url('https://resource.df.nexon.com/ui/img/main/focus_next.png') no-repeat center center;
+        background-size: contain; /* 이미지 크기를 부모에 맞춤 */
+        width: 41px; /* 아이콘 크기 설정 */
+        height: 41px;
     }
 
+
     .page_cnt {
+        padding-top: 1px;
         color: #bec5cc;
         font-size: 14px;
     }
@@ -171,10 +180,12 @@
     }
 
     .pause {
+        margin: 0;
+        right: 6px;
+        top: 6px;
+        background: url('https://resource.df.nexon.com/ui/img/main/focus_play.png') no-repeat -15px -56.1px;
+        width: 23px; /* 아이콘 크기 설정 */
+        height: 29px;
         cursor: pointer;
-        font-size: 18px;
-        padding: 2px 5px;
-        border-radius: 5px;
-        color: #007aff;
     }
 </style>
