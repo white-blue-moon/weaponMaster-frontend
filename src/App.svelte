@@ -1,11 +1,13 @@
 <script>
 	import { Router, Route, link } from 'svelte-routing';
 	import Home from './routes/Home.svelte';
+	import Join from './routes/Join.svelte';
 </script>
   
   
 <Router>
 	<Route path="/" component={Home} />
+	<Route path="/account/join" component={Join} />
 </Router>
   
 

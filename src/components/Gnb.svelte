@@ -67,11 +67,11 @@
         <div class="login_area">
           <ul>
             <li class="btn_before">
-              <a href="#">관리자 로그인</a>
-              <a href="#" class="blue">일반 로그인</a>
+              <a href="#">관리자모드 로그인</a>
+              <a href="#" class="blue">일반모드 로그인</a>
             </li>
             <li class="txt_before">
-              <a href="/account/join/agreement">처음 오셨나요? 회원가입</a>
+              <a href="/account/join">처음 오셨나요? 회원가입</a>
             </li>
           </ul>
         </div>

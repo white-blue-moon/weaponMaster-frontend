@@ -4,7 +4,7 @@
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
-    import ListBox from '../components/GuideAndRecommand.svelte';
+    import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     import * as FOCUS_BANNER_TYPE from '../constants/focusBannerType';
 

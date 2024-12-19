@@ -16,7 +16,7 @@
   </div>
   
   <div class="actions">
-    <a class="join" href="/join">회원가입</a>
+    <a class="join" href="/account/join">회원가입</a>
     <a class="login" href="/login">로그인</a>
   </div>
 </div>
