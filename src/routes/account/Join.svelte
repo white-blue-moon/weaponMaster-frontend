@@ -1,6 +1,6 @@
 <script>
-    import GnbPublisher from '../components/GnbPublisher.svelte';
-    import Footer from '../components/Footer.svelte';
+    import GnbPublisher from '../../components/GnbPublisher.svelte';
+    import Footer from '../../components/Footer.svelte';
 
     let userId = "";
     let password = "";

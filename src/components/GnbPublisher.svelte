@@ -1,5 +1,5 @@
 <script>
-  // TODO
+  import { PATHS } from '../constants/paths';
 </script>
 
 <div class="header">
@@ -16,8 +16,8 @@
   </div>
   
   <div class="actions">
-    <a class="join" href="/account/join">회원가입</a>
-    <a class="login" href="/login">로그인</a>
+    <a class="join" href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
+    <a class="login" href={ PATHS.ACCOUNT.LOGIN }>로그인</a>
   </div>
 </div>
 

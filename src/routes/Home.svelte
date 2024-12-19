@@ -6,7 +6,8 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
-    import * as FOCUS_BANNER_TYPE from '../constants/focusBannerType';
+    import { API } from '../constants/api.js';
+    import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
 
     let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
     let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
@@ -16,7 +17,7 @@
     async function fetchFocusBanners() {
         try {
             // TODO url 및 API 경로 상수화 하기
-            const response = await fetch("http://localhost:7070", {
+            const response = await fetch(API.HOME, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
