@@ -5,10 +5,9 @@
     let userId = "";
     let password = "";
     let confirmPassword = "";
-    let nickname = "";
     let server = "";
     let character = "";
-    let requiredFields = { userId: false, password: false, confirmPassword: false, nickname: false };
+    let requiredFields = { userId: false, password: false, confirmPassword: false };
 
     // TODO 아래 정보 서버에서 관리하기
     const servers = [
@@ -58,7 +57,6 @@
     $: requiredFields.userId = userId.trim() !== "";
     $: requiredFields.password = password.trim() !== "";
     $: requiredFields.confirmPassword = confirmPassword.trim() !== "";
-    $: requiredFields.nickname = nickname.trim() !== "";
 </script>
 
 <GnbPublisher />
@@ -85,11 +83,6 @@
         </div>
 
         <div class="form-row">
-            <label for="nickname">닉네임<span class="required">*</span></label>
-            <input id="nickname" type="text" bind:value={nickname} placeholder="닉네임을 입력하세요" />
-        </div>
-
-        <div class="form-row">
             <label for="server">서버 선택</label>
             <select id="server" bind:value={server}>
                 <option value="" disabled selected>서버를 선택하세요</option>
@@ -112,6 +105,7 @@
 </main>
 <Footer />
 
+<!-- TODO 이미지 경로 등은 최소한 상수로 관리하도록 수정하기 -->
 <style>
     header {
         position: relative;
@@ -139,7 +133,6 @@
 
     header h2 {
         margin-top: 0;
-        margin-left: 11px;
         text-align: center;
         color: #fff;
         font-size: 40px;
@@ -157,74 +150,74 @@
     }
 
     form {
-        width: 400px;
+        width: 560px;
         background: #fff;
         padding: 20px 30px;
-        border-radius: 8px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
     
     .form-row {
         display: flex;
         align-items: center;
-        margin-bottom: 21px;
+        margin-bottom: 20px;
     }
 
     label {
-        width: 120px;
+        height: 30px;
         font-size: 14px;
-        font-weight: bold;
-        color: #333;
-        display: flex; /* 플렉스 박스 적용 */
-        align-items: center; /* 수직 가운데 정렬 */
+        color: #6a6e76;
+        width: 120px; /* 고정된 레이블 너비 */
     }
 
     input, select {
         flex: 1;
-        padding: 10px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin:0;
+        height: 54px;
+        padding: 0 10px;
+        font-size: 16px;
+        border: 1px solid #e1e6ee;
+        background: #f8f9fb;
+        color: #6a6e76;
+        box-sizing: border-box;
     }
 
     input::placeholder {
         color: #aaa;
+        opacity: 0.7;
     }
 
-    /* 공통 스타일 */
     button {
-        padding: 8px 12px;
-        font-size: 14px;
-        border-radius: 4px;
-        margin: 0;
-        margin-left: 6px;
+        height: 54px;
+        padding: 0 20px;
+        font-size: 16px;
+        color: #fff;
+        border: none;
         cursor: pointer;
+        background: #3392ff;
+        margin-left: 10px;
+        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     }
 
-    /* 중복확인 및 캐릭터 확인 버튼 스타일 */
+    button:hover {
+        background: #005fcc;
+    }
+
     .secondary-button {
-        color: #0078ff;
         background: #fff;
-        border: 1px solid #0078ff;
-        padding: 8px 12px; /* 버튼 크기 조정 */
+        color: #3392ff;
+        border: 1px solid #3392ff;
+        height: 54px;
     }
 
     .secondary-button:hover {
+        background: #3392ff;
         color: #fff;
-        background: #0078ff;
-        border: 1px solid #0078ff;
     }
 
     .submit-button {
-        margin: 0;
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        background: #0078ff;
-        border: none;
+        background: #3392ff;
         color: #fff;
-        cursor: pointer;
+        width: 100%;
+        text-align: center;
     }
 
     .submit-button:hover {
@@ -236,3 +229,4 @@
         margin-left: 5px;
     }
 </style>
+
