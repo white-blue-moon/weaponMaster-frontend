@@ -6,8 +6,9 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
-    import { API } from '../constants/api.js';
+    import { API } from '../constants/api';
     import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
 
     let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
     let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
@@ -15,30 +16,19 @@
 
     // API 호출
     async function fetchFocusBanners() {
-        try {
-            // TODO url 및 API 경로 상수화 하기
-            const response = await fetch(API.HOME, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    "reqBanner": [
-                        {"bannerType": 1},
-                        {"bannerType": 2},
-                        {"bannerType": 3}
-                    ]
-                }),
-            });
+        const response = await apiFetch(API.HOME, {
+            method: 'POST',
+            body: JSON.stringify({
+                "reqBanner": [
+                    {"bannerType": 1},
+                    {"bannerType": 2},
+                    {"bannerType": 3}
+                ]
+            }),
+        }).catch(handleApiError);
 
-            if (!response.ok) {
-                throw new Error(`API 호출 실패: ${response.status}`);
-            }
-
-            focusBanners = await response.json(); // 반환 값을 focusBanners에 저장
-        } catch (error) {
-            console.error("Focus banners API 호출 중 오류:", error);
-        } finally {
+        if (response != null) {
+            focusBanners = response; // 반환 값을 focusBanners에 저장
             loading = false;  // 로딩이 끝났으므로 로딩 상태를 false로 설정
         }
     }

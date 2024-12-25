@@ -1,6 +1,8 @@
 <script>
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import Footer from '../../components/Footer.svelte';
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
 
     let userId = "";
     let password = "";
@@ -11,14 +13,14 @@
 
     // TODO 아래 정보 서버에서 관리하기
     const servers = [
-        { id: 1, serverId: "anton",     name: "안톤"},
-        { id: 2, serverId: "bakal",     name: "바칼" },
-        { id: 3, serverId: "cain",      name: "카인" },
-        { id: 4, serverId: "casillas",  name: "카시야스" },
-        { id: 5, serverId: "diregie",   name: "디레지에" },
-        { id: 6, serverId: "hilder",    name: "힐더" },
-        { id: 7, serverId: "prey",      name: "프레이" },
-        { id: 8, serverId: "siroco",    name: "시로코" }
+        { id: 1, serverId: "anton", name: "안톤" },
+        { id: 2, serverId: "bakal", name: "바칼" },
+        { id: 3, serverId: "cain", name: "카인" },
+        { id: 4, serverId: "casillas", name: "카시야스" },
+        { id: 5, serverId: "diregie", name: "디레지에" },
+        { id: 6, serverId: "hilder", name: "힐더" },
+        { id: 7, serverId: "prey", name: "프레이" },
+        { id: 8, serverId: "siroco", name: "시로코" }
     ];
 
     function checkDuplicateId() {
@@ -47,10 +49,28 @@
         return isValid;
     }
 
-    function handleSubmit() {
+    async function handleSubmit(event) {
+        event.preventDefault(); // 폼 기본 동작 방지
+
         if (validateForm()) {
-            alert("회원가입이 완료되었습니다.");
-            window.location.href = "/"; // 홈으로 리다이렉트
+            const response = await apiFetch(API.ACCOUNT.JOIN, {
+                method: 'POST',
+                body: JSON.stringify({
+                    "userId" : userId,
+                    "userPw" : password,
+                    "dfServerId" : servers.find(s => s.id == server)?.serverId, // 올바른 서버 ID 가져오기
+                    "dfCharacterName" : character,
+                }),
+            }).catch(handleApiError);
+
+            console.log("join res : ", response);
+
+            if (response.success) {
+                alert('회원가입이 완료되었습니다.');
+                window.location.href = "/"; // 홈으로 리다이렉트
+            } else {
+                alert('회원가입에 실패하였습니다.');
+            }
         }
     }
 
