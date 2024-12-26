@@ -5,5 +5,6 @@ export const API = {
     ACCOUNT: {
         JOIN: `${ROOT}/account/join`,
         LOGIN: `${ROOT}/account/login`,
+        EXIST_USER_ID: (userId) => `${ROOT}/account/exist/${userId}`,
     },
 };

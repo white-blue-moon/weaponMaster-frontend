@@ -5,11 +5,11 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
 
     let userId = "";
+    let isUserIdExist = false;
     let password = "";
     let confirmPassword = "";
     let server = "";
     let character = "";
-    let requiredFields = { userId: false, password: false, confirmPassword: false };
 
     // TODO 아래 정보 서버에서 관리하기
     const servers = [
@@ -23,60 +23,67 @@
         { id: 8, serverId: "siroco", name: "시로코" }
     ];
 
-    function checkDuplicateId() {
-        alert(`Checking if ID '${userId}' is available...`);
+    // TODO 유저 아이디, 혹은 password 를 다시 입력하는 경우 관련 valid 변수 다시 false 로 바꾸는 함수 필요
+
+    async function checkDuplicateId() {
+        const response = await apiFetch(API.ACCOUNT.EXIST_USER_ID(userId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.exist) {
+            alert('이미 존재하는 아이디입니다');
+            isUserIdExist = true;
+            return;
+        }
+
+        alert('사용 가능한 아이디입니다');
+        isUserIdExist = false;
+        return;
     }
 
     function checkCharacterExistence() {
         alert(`Checking if character '${character}' exists...`);
     }
 
-    function validateForm() {
-        let isValid = true;
-        for (const key in requiredFields) {
-            if (!requiredFields[key]) {
-                isValid = false;
-                alert(`${key} is required.`);
-                break;
-            }
+    function isValidForm() {
+        if (userId.trim() == "" || password.trim() == "" || confirmPassword.trim() == "") {
+            alert('비어 있는 입력칸을 입력 후 시도해 주세요')
+            return false;
         }
 
         if (password !== confirmPassword) {
-            alert("Passwords do not match.");
-            isValid = false;
+            alert("비밀번호가 일치하지 않습니다 다시 확인해 주세요");
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
-    async function handleSubmit(event) {
-        event.preventDefault(); // 폼 기본 동작 방지
-
-        if (validateForm()) {
-            const response = await apiFetch(API.ACCOUNT.JOIN, {
-                method: 'POST',
-                body: JSON.stringify({
-                    "userId" : userId,
-                    "userPw" : password,
-                    "dfServerId" : servers.find(s => s.id == server)?.serverId, // 올바른 서버 ID 가져오기
-                    "dfCharacterName" : character,
-                }),
-            }).catch(handleApiError);
-
-            console.log("join res : ", response);
-
-            if (response.success) {
-                alert('회원가입이 완료되었습니다.');
-                window.location.href = "/"; // 홈으로 리다이렉트
-            } else {
-                alert('회원가입에 실패하였습니다.');
-            }
+    async function onSubmitJoin(event) {
+        event.preventDefault();
+        if (!isValidForm()) {
+            return;
         }
-    }
 
-    $: requiredFields.userId = userId.trim() !== "";
-    $: requiredFields.password = password.trim() !== "";
-    $: requiredFields.confirmPassword = confirmPassword.trim() !== "";
+        const response = await apiFetch(API.ACCOUNT.JOIN, {
+            method: 'POST',
+            body: JSON.stringify({
+                "userId" : userId,
+                "userPw" : password,
+                "dfServerId" : servers.find(s => s.id == server)?.serverId, // 올바른 서버 ID 가져오기
+                "dfCharacterName" : character,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            alert('회원가입이 완료되었습니다.');
+            window.location.href = "/";
+            return;
+        }
+
+        alert('회원가입에 실패하였습니다.');
+        return;
+    }
 </script>
 
 <GnbPublisher />
@@ -85,7 +92,7 @@
     <h2>회원가입</h2>
 </header>
 <main>
-    <form on:submit|preventDefault={handleSubmit}>
+    <form on:submit={onSubmitJoin}>
         <div class="form-row">
             <label for="userId">아이디<span class="required">*</span></label>
             <input id="userId" type="text" bind:value={userId} placeholder="6자 이상 영문 및 숫자 조합" />

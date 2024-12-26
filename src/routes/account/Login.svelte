@@ -1,5 +1,47 @@
 <script>
     import GnbPublisher from '../../components/GnbPublisher.svelte';
+    import { API } from '../../constants/api';
+
+    let userId = "";
+    let password = "";
+
+    function isValidForm() {
+        if (userId == "") {
+            alert("아이디를 입력하여 주세요");
+            return false;
+        }
+
+        if (password == "") {
+            alert("비밀번호를 입력하여 주세요");
+            return false;
+        }
+
+        return true;
+    }
+
+    async function onSubmitLogin(event) {
+        event.preventDefault();
+        if (!isValidForm()) {
+            return;
+        }
+
+        const response = await apiFetch(API.ACCOUNT.LOGIN, {
+            method: 'POST',
+            body: JSON.stringify({
+                "userId" : userId,
+                "userPw" : password,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            alert(`로그인에 성공하였습니다 ${userId}님 안녕하세요`);
+            window.location.href = "/";
+            return;
+        }
+
+        alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 한번 확인해 주세요.');
+        return;
+    }
 </script>
 
 <GnbPublisher />
@@ -12,7 +54,7 @@
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
     <article class="login">
-        <form action="/account/login" method="post" id="loginForm">
+        <form action="/account/login" method="post" id="loginForm" on:submit={onSubmitLogin}>
             <ul class="login_normal">
                 <li>
                     <label for="id">아이디</label>
