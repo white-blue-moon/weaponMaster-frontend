@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
@@ -7,6 +6,7 @@
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     import { API } from '../constants/api';
+    import { onMount } from "svelte";
     import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
