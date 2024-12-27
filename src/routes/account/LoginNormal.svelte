@@ -1,6 +1,7 @@
 <script>
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
 
     let userId = "";
     let password = "";
@@ -25,7 +26,7 @@
             return;
         }
 
-        const response = await apiFetch(API.ACCOUNT.LOGIN, {
+        const response = await apiFetch(API.ACCOUNT.LOGIN_NORMAL, {
             method: 'POST',
             body: JSON.stringify({
                 "userId" : userId,
@@ -34,7 +35,7 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            alert(`로그인에 성공하였습니다 ${userId}님 안녕하세요`);
+            alert(`로그인에 성공하였습니다. ${userId} 님 안녕하세요.`);
             window.location.href = "/";
             return;
         }
@@ -58,19 +59,19 @@
             <ul class="login_normal">
                 <li>
                     <label for="id">아이디</label>
-                    <input type="text" id="id" name="id" placeholder="아이디" value="" autofocus="" maxlength="24">
+                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={userId} autofocus="" maxlength="24">
                 </li>
                 <li>
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" name="password" placeholder="비밀번호" maxlength="16">
+                    <input type="password" id="password" name="password" placeholder="비밀번호" bind:value={password} maxlength="16">
                 </li>
 
                 <li class="msg" id="validationMsg">
                 </li>
 
                 <li class="btn">
-                    <a href="#" id="login">일반모드 로그인</a>
-                </li>
+                    <button type="submit" id="login">일반모드 로그인</button>
+                </li>              
             </ul>
 
             <ul class="login_admin">
@@ -181,7 +182,8 @@
         margin-left: 0px;
     }
 
-    .login .login_normal li.btn a {
+    .login .login_normal li.btn button {
+        all: unset; /* 모든 기본 스타일 제거 */
         display: block;
         width: 560px;
         height: 61px;
@@ -190,8 +192,9 @@
         text-align: center;
         color: #fff;
         font-size: 16px;
+        cursor: pointer;
     }
-
+ 
     /* Nexon Login 스타일 */
     .login .login_admin {
         position: relative;

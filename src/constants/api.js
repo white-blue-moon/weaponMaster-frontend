@@ -4,7 +4,7 @@ export const API = {
     HOME: ROOT,
     ACCOUNT: {
         JOIN: `${ROOT}/account/join`,
-        LOGIN: `${ROOT}/account/login`,
+        LOGIN_NORMAL: `${ROOT}/account/login/normal`,
         EXIST_USER_ID: (userId) => `${ROOT}/account/exist/${userId}`,
     },
 };

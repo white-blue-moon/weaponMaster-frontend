@@ -3,7 +3,7 @@
 	import { PATHS } from './constants/paths';
 	import Home from './routes/Home.svelte';
 	import Join from './routes/account/Join.svelte';
-	import Login from './routes/account/Login.svelte';
+	import LoginNormal from './routes/account/LoginNormal.svelte';
 	import Inspection from './routes/Inspection.svelte';
 </script>
   
@@ -17,7 +17,7 @@
 
 	<!-- 계졍 관련 -->
 	<Route path={ PATHS.ACCOUNT.JOIN } component={Join} />
-	<Route path={ PATHS.ACCOUNT.LOGIN } component={Login} />
+	<Route path={ PATHS.ACCOUNT.LOGIN } component={LoginNormal} />
 </Router>
   
 
