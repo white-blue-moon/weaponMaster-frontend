@@ -1,5 +1,6 @@
 <script>
   import { PATHS } from '../constants/paths';
+  import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
 </script>
 
 <div class="header">
@@ -16,8 +17,18 @@
   </div>
   
   <div class="actions">
-    <a class="join" href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
-    <a class="login" href={ PATHS.ACCOUNT.LOGIN }>로그인</a>
+    {#if !$isLoggedIn}
+      <a class="join" href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
+      <a class="login" href={ PATHS.ACCOUNT.LOGIN }>로그인</a>
+    {/if}
+    {#if $isLoggedIn}
+      <span class="loginInfo">
+        <!-- 유저 타입에 따라 다른 아이콘 출력되도록 하기 -->
+        <span class="platform-icon padding-2px platform-icon-nexon gnbText"></span>
+        <span class="nickname gnbText">{ $userInfo }</span>
+      </span>
+      <a class="logout" href="#" on:click={handleLogout}>로그아웃</a>
+    {/if}
   </div>
 </div>
 
@@ -93,7 +104,7 @@
     font-size: 14px;
   }
 
-  .actions .login {
+  .actions .login, .actions .logout {
     font-family: NEXON Gothic Bold; /* 넥슨 공식 폰트 스타일 */
     font-size: 15px;
     padding: 7px;
@@ -101,13 +112,45 @@
     border-radius: 19px;
   }
 
-  .actions .login:hover {
+  .actions .login:hover, .logout:hover {
     border: 2px solid #007aff;
     background-color: #007aff;
     color: white;
     transition: border-color 0.3s ease; /* 색상 변화에 부드러운 전환 효과 추가 */
     transition: background-color 0.3s ease; /* 색상 변화에 부드러운 전환 효과 추가 */
     transition: color 0.3s ease; /* 색상 변화에 부드러운 전환 효과 추가 */
+  }
+
+  .loginInfo {
+    display: flex; /* 플렉스박스를 사용하여 정렬 */
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 8px; /* 아이콘과 닉네임 간 간격 */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: top;
+    border-radius: 0;
+    box-sizing: border-box;
+    -webkit-text-size-adjust: none;
+    touch-action: manipulation;
+    letter-spacing: normal;
+  }
+
+  .platform-icon-nexon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: transparent url(//rs.nxfs.nexon.com/gnb/images/ico_platform_icon_nexon.svg) 0 0 no-repeat;
+    background-size: contain; /* 아이콘이 컨테이너 크기에 맞게 조정되도록 설정 */
+  }
+
+  .nickname {
+    font-size: 14px; /* 닉네임 텍스트 크기 */
+    font-weight: 400; /* 텍스트 두께 */
+    color: #000; /* 닉네임 색상 */
+    line-height: 1.2; /* 닉네임 텍스트 높이 */
   }
 
 </style>

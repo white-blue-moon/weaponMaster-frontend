@@ -1,6 +1,7 @@
 <script>
 	import { Router, Route, link } from 'svelte-routing';
 	import { PATHS } from './constants/paths';
+
 	import Home from './routes/Home.svelte';
 	import Join from './routes/account/Join.svelte';
 	import LoginNormal from './routes/account/LoginNormal.svelte';

@@ -1,5 +1,6 @@
 <script>
   import { PATHS } from '../constants/paths';
+  import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
 
   let isLoginAreaVisible = false;
 
@@ -23,7 +24,9 @@
     </ul>
 
     <div class="submenu">
-      <div class="empty"></div> <!-- 홈 밑은 비워둠 -->
+      <div class="empty">
+        <!-- 로고 밑은 비워둠 -->
+      </div> 
       <div>
         <a href="/notice/list">공지사항</a>
         <a href="/update/list">업데이트</a>
@@ -61,20 +64,38 @@
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="login" on:click={toggleLogin} class:is-active={isLoginAreaVisible}>
       <a href="#" class="go_login" id="webGnbMyBtn">
-        {#if !isLoginAreaVisible}로그인{/if}
+        {#if !isLoginAreaVisible}
+          {#if !$isLoggedIn}
+            로그인
+          {:else}
+            MY
+          {/if}
+        {/if}
       </a>
     
       <!-- 확장된 로그인 영역 -->
       {#if isLoginAreaVisible}
         <div class="login_area">
           <ul>
-            <li class="btn_before">
-              <a href="#">관리자모드 로그인</a>
-              <a href={ PATHS.ACCOUNT.LOGIN } class="blue">일반모드 로그인</a>
-            </li>
-            <li class="txt_before">
-              <a href={ PATHS.ACCOUNT.JOIN }>처음 오셨나요? 회원가입</a>
-            </li>
+            {#if !$isLoggedIn}
+              <li class="btn_before">
+                <a href="#">관리자모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN } class="blue">일반모드 로그인</a>
+              </li>
+              <li class="txt_before">
+                <a href={ PATHS.ACCOUNT.JOIN }>처음 오셨나요? 회원가입</a>
+              </li>
+            {/if}
+            {#if $isLoggedIn}
+              <li class="user_after">
+                <div class="user_text">
+                  <span class="userId">{$userInfo}</span>
+                  <span>님 안녕하세요</span>
+                  <!-- TODO 일반/관리자 모드에 따른 아이콘 추가하기 -->
+                </div>
+                <a href="#" class="blue" on:click={handleLogout}>로그아웃</a>
+              </li>
+            {/if}
           </ul>
         </div>
       {/if}
@@ -262,8 +283,25 @@
     text-decoration: none;
   }
 
-  .btn_before a.blue {
+  .btn_before .blue {
     background-color: #3392ff; /* 던파ID 로그인 버튼 색상 */
+  }
+
+
+  /* ================================= */
+  /* ========== 로그인 후 화면 ========== */
+  
+  .user_after .user_text {
+    text-align: center;
+  }
+
+  .user_after .user_text .userId {
+    color: #616163;
+  }
+
+  .user_after .blue {
+    background-color: #3392ff;
+    line-height: 30px;
   }
 
   /* 회원가입 링크 스타일 */

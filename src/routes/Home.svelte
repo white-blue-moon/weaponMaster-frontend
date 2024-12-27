@@ -1,15 +1,16 @@
 <script>
+    import { API } from '../constants/api';
+    import { onMount } from "svelte";
+    import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
+
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
     import FocusBanner from '../components/FocusBanner.svelte';
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
-    import { API } from '../constants/api';
-    import { onMount } from "svelte";
-    import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-
+    
     let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
     let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
     let banners1, banners2, banners3;

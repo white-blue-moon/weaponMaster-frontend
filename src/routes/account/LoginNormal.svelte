@@ -1,7 +1,9 @@
 <script>
-    import GnbPublisher from '../../components/GnbPublisher.svelte';
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { userInfo, isLoggedIn } from "../../utils/auth";
+
+    import GnbPublisher from '../../components/GnbPublisher.svelte';
 
     let userId = "";
     let password = "";
@@ -36,6 +38,11 @@
 
         if (response.success) {
             alert(`로그인에 성공하였습니다. ${userId} 님 안녕하세요.`);
+            
+            // 계정 정보 Store 업데이트
+            userInfo.set(userId); // TODO 추후 서버에서 받은 사용자 정보로 저장되도록 수정 필요
+            isLoggedIn.set(true);
+
             window.location.href = "/";
             return;
         }
