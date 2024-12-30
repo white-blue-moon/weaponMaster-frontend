@@ -1,8 +1,10 @@
 <script>
-    import GnbPublisher from '../../components/GnbPublisher.svelte';
-    import Footer from '../../components/Footer.svelte';
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
+
+    import GnbPublisher from '../../components/GnbPublisher.svelte';
+    import HeaderBanner from '../../components/HeaderBanner.svelte';
+    import Footer from '../../components/Footer.svelte';
 
     let userId = "";
     let isUserIdExist = false;
@@ -87,10 +89,7 @@
 </script>
 
 <GnbPublisher />
-<header class="bg_member">
-    <h1><a href="/">weaponMasterr</a></h1>
-    <h2>회원가입</h2>
-</header>
+<HeaderBanner headerText="회원가입" bannerBackground="https://resource.df.nexon.com/ui/img/mem/bg.png"/>
 <main>
     <form on:submit={onSubmitJoin}>
         <div class="form-row">
@@ -134,39 +133,6 @@
 
 <!-- TODO 이미지 경로 등은 최소한 상수로 관리하도록 수정하기 -->
 <style>
-    header {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        overflow: hidden;
-    }
-    
-    header.bg_member {
-        background: url(https://resource.df.nexon.com/ui/img/mem/bg.png) no-repeat 50% 0;
-    }
-
-    header h1 a {
-        display: block;
-        margin: 53px auto 0 auto;
-        width: 216px;
-        height: 122px;
-        background: url(https://resource.df.nexon.com/ui/img/mem/logo.png) no-repeat;
-        font-size: 0;
-    }
-
-    a {
-        text-decoration: none;
-    }
-
-    header h2 {
-        margin-top: 0;
-        text-align: center;
-        color: #fff;
-        font-size: 40px;
-        font-weight: 300;
-        line-height: 54px;
-    }
-
     main {
         display: flex;
         justify-content: center;

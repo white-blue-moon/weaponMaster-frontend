@@ -4,6 +4,7 @@
     import { userInfo, isLoggedIn } from "../../utils/auth";
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
+    import HeaderBanner from '../../components/HeaderBanner.svelte';
 
     let userId = "";
     let password = "";
@@ -53,11 +54,7 @@
 </script>
 
 <GnbPublisher />
-
-<header class="bg_login">
-   <h1><a href="/">weaponMaster</a></h1>
-   <h2>로그인</h2>
-</header>
+<HeaderBanner headerText="로그인" bannerBackground="https://resource.df.nexon.com/ui/img/login/bg.png"/>
 <section class="content">
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
@@ -94,38 +91,8 @@
 </section>
 
 <style>
-    header {
-       position: relative;
-       width: 100%;
-       height: 300px;
-       overflow: hidden;
-    }   
-
-    header.bg_login {
-        background: url(https://resource.df.nexon.com/ui/img/login/bg.png) no-repeat 50% 0;
-    }
-
-    header h1 a {
-        display: block;
-        margin: 53px auto 0 auto;
-        width: 216px;
-        height: 122px;
-        background: url(https://resource.df.nexon.com/ui/img/mem/logo.png) no-repeat;
-        font-size: 0;
-    }
-
     a {
         text-decoration: none;
-    }
-
-    header h2 {
-        margin-top: 0;
-        margin-left: 11px;
-        text-align: center;
-        color: #fff;
-        font-size: 40px;
-        font-weight: 300;
-        line-height: 54px;
     }
 
     .content {
