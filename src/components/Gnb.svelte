@@ -9,11 +9,11 @@
   }
 </script>
 
-<section>
+<section class="gnb">
   <nav>
     <ul class="main-menu">
       <li><a class="logo" href="/"><img src="https://resource.df.nexon.com/ui/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
-      <li><a href="/">새소식</a></li>
+      <li><a href="{ PATHS.NEWS.LIST }">새소식</a></li>
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
       <li><a href="/">커뮤니티</a></li>
@@ -28,7 +28,7 @@
         <!-- 로고 밑은 비워둠 -->
       </div> 
       <div>
-        <a href="/notice/list">공지사항</a>
+        <a href="{ PATHS.NEWS.LIST }">공지사항</a>
         <a href="/update/list">업데이트</a>
         <a href="/event/list">이벤트</a>
         <a href="/devnote/list">개발자노트</a>
@@ -112,7 +112,15 @@
 
 </section>
 
+
 <style>
+  /* Gnb 스타일 설정 */
+  .gnb {
+      position: relative;
+      height: 300px;
+      z-index: 2; /* Banner보다 위에 위치하도록 설정 */
+  }
+
   nav {
     background-color: rgba(0,0,0,.5);
     position: relative;

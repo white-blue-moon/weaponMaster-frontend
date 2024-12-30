@@ -1,16 +1,27 @@
 <script>
     export let homeName = "weaponMaster";
     export let headerText = "HEADER TEXT";
+    export let isLogoVisible = true;
     export let bannerBackground = "https://resource.df.nexon.com/ui/img/mem/bg.png";
     const logoBackground = "https://resource.df.nexon.com/ui/img/mem/logo.png";
 </script>
 
 <header class="banner" style="--banner-background: url({bannerBackground})">
-    <h1><a href="/" style="--logo-background: url({logoBackground})">{ homeName }</a></h1>
-    <h2>{ headerText }</h2>
+    {#if isLogoVisible}
+    <h1>
+        <a href="/" style="--logo-background: url({logoBackground})">{ homeName }</a>
+    </h1>
+    {/if}
+    <h2 class:isLogoVisible={isLogoVisible} class:notLogoVisible={!isLogoVisible}>
+        { headerText }
+    </h2>
 </header>
 
 <style>
+    * {
+        margin: 0;
+    }
+
     header {
         position: relative;
         width: 100%;
@@ -35,12 +46,22 @@
         text-decoration: none;
     }
 
-    header h2 {
+    header h2.isLogoVisible {
         margin-top: 0;
         text-align: center;
         color: #fff;
         font-size: 40px;
         font-weight: 300;
         line-height: 54px;
+    }
+
+    header h2.notLogoVisible {
+        position: relative;
+        width: 100%;
+        color: #fff;
+        font-size: 40px;
+        text-align: center;
+        font-weight: 300;
+        line-height: 396px;
     }
 </style>

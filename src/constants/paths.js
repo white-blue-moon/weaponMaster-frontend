@@ -5,4 +5,7 @@ export const PATHS = {
         JOIN: '/account/join',
         LOGIN: '/account/login',
     },
+    NEWS: {
+        LIST: '/news/list',
+    }
 };
