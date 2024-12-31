@@ -13,7 +13,7 @@
   </div>
   
   <div class="logo">
-    <img src="https://rs.nxfs.nexon.com/bannerusr/24/12/cb8Q30153846079.png" alt="추모">
+    <img src="https://rs.nxfs.nexon.com/bannerusr/24/12/LoDB30160754039.png" alt="1230 애도">
   </div>
   
   <div class="actions">

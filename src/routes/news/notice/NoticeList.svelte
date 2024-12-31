@@ -1,10 +1,12 @@
 <script>
     import { DF_UI } from "../../../constants/resourcePath";
+    import { PATHS } from "../../../constants/paths";
 
     import GnbPublisher from "../../../components/GnbPublisher.svelte";
     import HeaderBanner from "../../../components/HeaderBanner.svelte";
     import Gnb from "../../../components/Gnb.svelte";
     import Footer from "../../../components/Footer.svelte";
+  
 </script>
 
 <GnbPublisher />
@@ -32,8 +34,6 @@
         <div class="category_type_c" style="--category-arrow: url('{DF_UI}/img/board/arrow_tri_dn_11x7.png');">
             <a>점검</a>
             <a>일반</a>
-            <a>퍼스트서버</a>
-            <a>당첨자발표</a>
         </div>
 
         <div class="board_srch">
@@ -142,7 +142,7 @@
 
     <!-- TODO 관리자모드 접속자에게만 보이도록 하기 -->
     <article class="btnarea_r mt30">
-        <a href="javascript:void(0);" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
+        <a href="{ PATHS.NEWS.WRITE }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
     </article>
 
     <article class="paging mt60" style="--paging: url('{DF_UI}/img/btn/paging.png');">

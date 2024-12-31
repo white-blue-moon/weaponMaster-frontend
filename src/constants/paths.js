@@ -7,5 +7,6 @@ export const PATHS = {
     },
     NEWS: {
         LIST: '/news/list',
+        WRITE: '/news/writeForm'
     }
 };
