@@ -31,8 +31,6 @@
             }
         });
 
-
-
         // DOM 조작을 통한 툴바 정렬
         const toolbar = document.querySelector('.ql-toolbar');
         if (toolbar) {
@@ -108,6 +106,7 @@
             <option value="점검">점검</option>
         </select>
         <dl>
+            <!-- TODO 공지사항 타입일 때에만 일반/점검 중 선택하게 하기 -->
             <dt class="infotxt">일반과 점검 중 한 가지를 선택해 주세요.</dt>
         </dl>
     </article>

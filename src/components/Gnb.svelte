@@ -1,5 +1,6 @@
 <script>
   import { PATHS } from '../constants/paths';
+  import { DF_UI } from '../constants/resourcePath'
   import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
 
   let isLoginAreaVisible = false;
@@ -62,7 +63,7 @@
   <div class="gameTab">
     <!-- 로그인 버튼 -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="login" on:click={toggleLogin} class:is-active={isLoginAreaVisible}>
+    <div class="login" on:click={toggleLogin} class:is-active={isLoginAreaVisible} style="--login-x-icon: url({DF_UI}/img/btn/btn_login_x.png)">
       <a href="#" class="go_login" id="webGnbMyBtn">
         {#if !isLoginAreaVisible}
           {#if !$isLoggedIn}
@@ -101,13 +102,13 @@
       {/if}
     </div>
 
-
     <!-- GAME INFO -->
-    <div class="gameInfo">
-      <a id="gameInfo" href="#">
-        <b>GAME INFO</b>
+    <article class="gameinfo" style="--gameinfo-background: url({DF_UI}/img/common/gamestart_ani3.jpg)">
+      <a id="gameinfo" href="javascript:$.neople.game.gameStart()">
+          <span></span>
+          <b>GAME INFO</b>
       </a>
-    </div>  
+    </article>
   </div>
 
 </section>
@@ -242,7 +243,7 @@
 
   /* 활성화된 상태 (배경 이미지 적용 및 텍스트 숨김) */
   .login.is-active {
-    background: #f2f4f6 url(https://resource.df.nexon.com/ui/img/btn/btn_login_x.png) no-repeat 40px 35px;
+    background: #f2f4f6 var(--login-x-icon) no-repeat 40px 35px;
   }
 
   /* 활성화된 상태에서는 a 태그 안의 텍스트 숨김 */
@@ -295,6 +296,60 @@
     background-color: #3392ff; /* 던파ID 로그인 버튼 색상 */
   }
 
+  .gameinfo {
+      top: 0;
+      right: 0;
+      width: 260px;
+      height: 100px;
+      z-index: 900;
+      overflow: hidden;
+  }
+
+  .gameinfo span {
+      transition: .5s;
+      display: block;
+      animation: gameinfo 5s steps(150) infinite;
+      width: 260px;
+      height: 100px;
+      background: var(--gameinfo-background);
+      background-position: 0 0;
+      background-size: cover;
+      transition: transform 0.3s ease-in-out; /* 배경 확대 부드럽게 */
+  }
+
+  /* 버튼 배경 애니메이션 @keyframes 정의 */
+  @keyframes gameinfo {
+    100% {
+        background-position: 0 -15000px;
+    }
+  }
+
+  .gameinfo:hover span {
+    transform: scale(1.1); /* 배경 이미지를 확대 */
+  }
+
+  .gameinfo b {
+      transition: .5s;
+      display: block;
+      position: absolute;
+      left: 1;
+      top: 0;
+      width: 260px;
+      color: #fff;
+      font-size: 27px;
+      font-weight: 700;
+      font-family: 'DNFForgedBlade';
+      z-index: 100;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      text-align: center;
+      line-height: 100px;
+      transition: transform 0.3s ease-in-out; /* 텍스트 축소 부드럽게 */
+  }
+
+  .gameinfo:hover b {
+    transform: scale(0.89); /* 텍스트 축소 */
+  }
 
   /* ================================= */
   /* ========== 로그인 후 화면 ========== */
@@ -322,39 +377,4 @@
     line-height: 24px;
   }
 
-  .gameInfo {
-    background: url('/images/game_info.gif') no-repeat center center;
-    background-size: 100%; /* 초기 배경 크기 설정 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 260px;
-    height: 100px;
-    overflow: hidden; /* 확대된 배경이 영역을 넘지 않도록 */
-    position: relative;
-    transition: background-size 0.3s ease-in-out; /* 배경 확대 부드럽게 */
-  }
-
-  .gameInfo a {
-    text-decoration: none;
-  }
-
-  .gameInfo a b {
-    font-family: 'DNFForgedBlade'; /* 던파 공식 홈페이지 폰트 */
-    color: white;
-    font-size: 27px;
-    font-weight: 599;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* X, Y, 흐림 정도, 색상 */
-    display: inline-block; /* transform 적용이 가능하도록 변경 */
-    transition: transform 0.3s ease-in-out; /* 텍스트 축소 부드럽게 */
-  }
-
-  .gameInfo:hover {
-    cursor: pointer;
-    background-size: 110%; /* 배경 이미지를 확대 */
-  }
-
-  .gameInfo:hover a b {
-    transform: scale(0.9); /* 텍스트 축소 */
-  }
 </style>
