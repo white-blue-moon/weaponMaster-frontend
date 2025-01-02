@@ -75,7 +75,7 @@
 </div>
 
 
-<style>
+<style lang="scss">
     * {
         margin: 0;
         box-sizing: border-box;
@@ -200,8 +200,8 @@
 }
 
 .board_view dl dd p span.hits {
-    padding-left: 24px;
-    background: url('../img/board/board_ico_view.png') no-repeat 0 calc(50% + 1px);
+  padding-left: 24px;
+  background: url("#{$DF_UI}/img/board/board_ico_view.png") no-repeat 0 calc(50% + 1px);
 }
 
 .board_view  .bd_viewcont {
@@ -258,7 +258,7 @@
 
 .btncopy {
     width: 49px;
-    background: #484e5f url('../img/board/board_ico_copy.png') no-repeat 50%;
+    background: #484e5f url('#{$DF_UI}/img/board/board_ico_copy.png') no-repeat 50%;
     text-indent: -9999px;
 }
 
