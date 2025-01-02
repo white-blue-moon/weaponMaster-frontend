@@ -1,4 +1,8 @@
 <script>
+    import { API } from '../../../constants/api';
+    import { onMount } from "svelte";
+    import { apiFetch, handleApiError } from '../../../utils/apiFetch';
+    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../../../constants/articles'
     import { DF_UI } from "../../../constants/resourcePath";
     import { PATHS } from "../../../constants/paths";
 
@@ -6,7 +10,22 @@
     import HeaderBanner from "../../../components/HeaderBanner.svelte";
     import Gnb from "../../../components/Gnb.svelte";
     import Footer from "../../../components/Footer.svelte";
-  
+
+    let articles = [];
+
+    async function fetchArticles() {
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.NEWS, ARTICLE_TYPE.NEWS.NOTICE), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            articles = response.articles;
+        }
+    }
+
+    onMount(async ()=> {
+        await fetchArticles();
+    });
 </script>
 
 <GnbPublisher />
@@ -65,80 +84,25 @@
     </article>
 
     <article class="board_list news_list" style="--board-ico-view: url('{DF_UI}/img/board/board_ico_view.png');">
-        <ul class="notice">
-            <li class="category">일반</li>
-            <li class="title" data-no="2845982">
-                <a href="/community/news/notice/2845982">
-                    (12/5 추가) 던전앤파이터 20주년 아트 공모전 사전 안내
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2024.11.29</li>
-            <li class="hits">88,441</li>
-        </ul>
-
-        <ul class="notice">
-            <li class="category">일반</li>
-            <li class="title" data-no="2838879">
-                <a href="/community/news/notice/2838879">
-                    피싱 사기 피해 방지 안내 (24/8/6 수정)
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2023.10.18</li>
-            <li class="hits">378,385</li>
-        </ul>
-
-        <ul>
-            <li class="category">일반</li>
-            <li class="title" data-no="2846146">
-                <a href="/community/news/notice/2846146">
-                    '븜끼얏호우!' 카카오톡 이모티콘 출시 안내
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2024.12.27</li>
-            <li class="hits">25,884</li>
-        </ul>
-
-        <ul>
-            <li class="category">일반</li>
-            <li class="title" data-no="2846247">
-                <a href="/community/news/notice/2846247">
-                    모험단/캐릭터 이름 초기화 사전 안내
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2024.12.26</li>
-            <li class="hits">42,711</li>
-        </ul>
-
-        <ul>
-            <li class="category">일반</li>
-            <li class="title" data-no="2846301">
-                <a href="/community/news/notice/2846301">
-                    12/25(수), 12/26(목) 넥슨 고객상담실 휴무 안내
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2024.12.24</li>
-            <li class="hits">9,562</li>
-        </ul>
-
-        <ul>
-            <li class="category"><b>점검</b></li>
-            <li class="title" data-no="2846288">
-                <a href="/community/news/notice/2846288">
-                    12/26(목) 정기점검 안내
-                </a>
-                <div class="iconset"></div>
-            </li>
-            <li class="date">2024.12.24</li>
-            <li class="hits">44,942</li>
-        </ul>
-
-        <!-- Additional notice entries follow the same structure -->
+        {#each articles as article}
+            <ul class={ article.isPinned ? 'notice' : '' }>
+                <li class="category">
+                    {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
+                        <b>점검</b>
+                    {:else}
+                        일반
+                    {/if}
+                </li>
+                <li class="title" data-no={ article.id }>
+                    <a href={ `/community/news/notice/${article.id}` }>{ article.title }</a>
+                    <div class="iconset"></div>
+                </li>
+                <li class="date">{ article.createDate.split('T')[0] }</li>
+                <li class="hits">{ article.viewCount.toLocaleString() }</li>
+            </ul>
+        {/each}
     </article>
+    
 
     <!-- TODO 관리자모드 접속자에게만 보이도록 하기 -->
     <article class="btnarea_r mt30">
@@ -171,6 +135,7 @@
 <div class="footer">
     <Footer />
 </div>
+
 
 
 <style>

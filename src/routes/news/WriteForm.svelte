@@ -109,7 +109,7 @@
             return;
         }
 
-        const response = await apiFetch(API.NEWS.ARTICLES, {
+        const response = await apiFetch(API.ARTICLES.BASE, {
             method: 'POST',
             body: JSON.stringify({
                 "categoryType": categoryType,

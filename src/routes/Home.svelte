@@ -1,7 +1,7 @@
 <script>
     import { API } from '../constants/api';
     import { onMount } from "svelte";
-    import { FOCUS_BANNER_TYPE } from '../constants/focusBannerType';
+    import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
     import GnbPublisher from '../components/GnbPublisher.svelte';
