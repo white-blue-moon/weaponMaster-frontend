@@ -4,6 +4,8 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../../utils/auth";
     import { onMount } from 'svelte';
+    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE, CATEGORY_TYPE } from "../../constants/articles";
+    import { PATHS } from "../../constants/paths";
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
@@ -11,9 +13,8 @@
     import HeaderBanner from "../../components/HeaderBanner.svelte";
     import Gnb from "../../components/Gnb.svelte";
     import Footer from "../../components/Footer.svelte";
-    import { PATHS } from "../../constants/paths";
-
-    export let categoryType = 1; // TODO 상수화하기 (+ 카테고리 타입값 분류 필요)
+    
+    export let categoryType = CATEGORY_TYPE.NEWS;
     let articleType = 0;
     let articleDetailType;
     let title = ''; // 제목 입력 값
@@ -86,7 +87,7 @@
         }
 
         // (새소식 - 공지사항) : 분류 항목 선택 필수
-        if (categoryType == 1 && articleType == 1 && articleDetailType == 0) {
+        if (categoryType == CATEGORY_TYPE.NEWS && articleType == ARTICLE_TYPE.NEWS.NOTICE && articleDetailType == 0) {
             alert('게시물 분류 항목을 선택해 주세요.');
             return false;
         }
@@ -156,10 +157,10 @@
         <div class="category_wrt">
             <div class="split_cont">
                 <div class="split_left_controls" style="--article-radio: url({DF_UI}/img/form/radio.png)">
-                    <p><input type="radio" name="articleType" id="01" value="1" bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
-                    <p><input type="radio" name="articleType" id="02" value="2" bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
-                    <p><input type="radio" name="articleType" id="03" value="3" bind:group={ articleType }><label for="03"><span></span>이벤트</label></p>
-                    <p><input type="radio" name="articleType" id="04" value="4" bind:group={ articleType }><label for="04"><span></span>개발자노트</label></p>
+                    <p><input type="radio" name="articleType" id="01" value={ ARTICLE_TYPE.NEWS.NOTICE } bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
+                    <p><input type="radio" name="articleType" id="02" value={ ARTICLE_TYPE.NEWS.UPDATE } bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
+                    <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.EVENT } bind:group={ articleType }><label for="03"><span></span>이벤트</label></p>
+                    <p><input type="radio" name="articleType" id="04" value={ ARTICLE_TYPE.NEWS.DEV_NOTE } bind:group={ articleType }><label for="04"><span></span>개발자노트</label></p>
                 </div>
             </div>
         </div>
@@ -168,8 +169,8 @@
     <article class="article_slt" style="padding:13px 0">
         <select bind:value={ articleDetailType } style="--article-slt-arrow: url({DF_UI}/img/board/arrow_tri_dn_21x21.png)">
             <option value="0" disabled selected>분류 항목 선택</option>
-            <option value="1">일반</option>
-            <option value="2">점검</option>
+            <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL }>일반</option>
+            <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION }>점검</option>
         </select>
         <dl>
             <dt class="infotxt">일반과 점검 중 한 가지를 선택해 주세요.</dt>

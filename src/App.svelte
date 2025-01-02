@@ -8,6 +8,7 @@
 	import LoginNormal from './routes/account/LoginNormal.svelte';
 	import NoticeList from './routes/news/notice/NoticeList.svelte';
 	import WriteForm from './routes/news/WriteForm.svelte';
+	import ReadForm from './routes/news/ReadForm.svelte';
 </script>
   
   
@@ -24,6 +25,7 @@
 
 	<!-- 새소식 -->
 	<Route path={ PATHS.NEWS.LIST } component={ NoticeList } />
+	<Route path={ PATHS.NEWS.READ } component={ ReadForm } />
 	<Route path={ PATHS.NEWS.WRITE } component={ WriteForm } />
 </Router>
   
