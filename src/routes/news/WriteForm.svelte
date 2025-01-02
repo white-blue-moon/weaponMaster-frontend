@@ -1,5 +1,8 @@
 <script>
     import { DF_UI } from "../../constants/resourcePath";
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { userInfo, isLoggedIn } from "../../utils/auth";
     import { onMount } from 'svelte';
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
@@ -8,10 +11,15 @@
     import HeaderBanner from "../../components/HeaderBanner.svelte";
     import Gnb from "../../components/Gnb.svelte";
     import Footer from "../../components/Footer.svelte";
+    import { PATHS } from "../../constants/paths";
+
+    export let categoryType = 1; // TODO 상수화하기 (+ 카테고리 타입값 분류 필요)
+    let articleType = 0;
+    let articleDetailType;
+    let title = ''; // 제목 입력 값
+    let contents = ''; // 본문 내용 HTML
 
     let editor;
-    let content = ''; // 초기값 설정
-    let articleType; // 분류 항목
 
     onMount(() => {
         editor = new Quill('#editor', {
@@ -43,7 +51,7 @@
             ql_editor.style.height = '400px';
 
             // 영문과 달리 한글을 한 글자만 입력했을 때에는 placeholder 가 사라지지 않는 현상이 있어서 직접 추가
-            ql_editor.addEventListener('compositionstart', (e) => {
+            ql_editor.addEventListener('compositionstart', () => {
                 ql_editor.classList.remove('ql-blank');
             });
 
@@ -59,11 +67,69 @@
             document.head.appendChild(style);
         }
 
-        // 에디터 내용 변경 시 content 업데이트
+        // 에디터 내용 업데이트
         editor.on('text-change', () => {
-            content = editor.root.innerHTML;
+            contents = editor.root.innerHTML;
         });
     });
+
+    function isArticleValid() {
+        if (!$isLoggedIn) {
+            alert('로그인 후 이용하여 주세요.');
+            window.location.href = PATHS.ACCOUNT.LOGIN;
+            return false;
+        }
+
+        if (articleType == 0) {
+            alert('게시물 위치를 선택하지 않았습니다.');
+            return false;
+        }
+
+        // (새소식 - 공지사항) : 분류 항목 선택 필수
+        if (categoryType == 1 && articleType == 1 && articleDetailType == 0) {
+            alert('게시물 분류 항목을 선택해 주세요.');
+            return false;
+        }
+
+        if (title.trim() == '') {
+            alert('제목을 입력하여 주세요.');
+            return false;
+        }
+
+        if (editor.getText().trim() == '') {
+            alert('본문 내용을 입력하여 주세요.');
+            return false;
+        }
+
+        return true;
+    }
+
+    async function handleRegister() {
+        if (!isArticleValid()) {
+            return;
+        }
+
+        const response = await apiFetch(API.NEWS.ARTICLES, {
+            method: 'POST',
+            body: JSON.stringify({
+                "categoryType": categoryType,
+                "articleType": articleType,
+                "articleDetailType": articleDetailType,
+                "title": title,
+                "contents": contents,
+                "author": $userInfo,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            alert('게시물 등록이 완료되었습니다.');
+            window.location.href = PATHS.NEWS.LIST; // TODO 카테고리 별 경로로 수정 필요
+            return;
+        }
+
+        alert('게시물 등록에 실패하였습니다.');
+        return;
+    }
 </script>
 
 <GnbPublisher />
@@ -80,9 +146,9 @@
 
 <section class="menu2nd">
     <a class="active" href="/news/notice/list">공지사항</a>
-    <a class="" href="#">업데이트</a>
-    <a class="" href="#">이벤트</a>
-    <a class="" href="/news/devnote/list">개발자노트</a>
+    <a href="#">업데이트</a>
+    <a href="#">이벤트</a>
+    <a href="/news/devnote/list">개발자노트</a>
 </section>
 
 <section class="content">
@@ -90,43 +156,43 @@
         <div class="category_wrt">
             <div class="split_cont">
                 <div class="split_left_controls" style="--article-radio: url({DF_UI}/img/form/radio.png)">
-                    <p><input type="radio" name="articleType" id="01" value="1"><label for="01"><span></span>공지사항</label></p>
-                    <p><input type="radio" name="articleType" id="02" value="2"><label for="02"><span></span>업데이트</label></p>
-                    <p><input type="radio" name="articleType" id="03" value="3"><label for="03"><span></span>이벤트</label></p>
-                    <p><input type="radio" name="articleType" id="04" value="4"><label for="04"><span></span>개발자노트</label></p>
+                    <p><input type="radio" name="articleType" id="01" value="1" bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
+                    <p><input type="radio" name="articleType" id="02" value="2" bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
+                    <p><input type="radio" name="articleType" id="03" value="3" bind:group={ articleType }><label for="03"><span></span>이벤트</label></p>
+                    <p><input type="radio" name="articleType" id="04" value="4" bind:group={ articleType }><label for="04"><span></span>개발자노트</label></p>
                 </div>
             </div>
         </div>
     </article>
     
     <article class="article_slt" style="padding:13px 0">
-        <select bind:value={ articleType } style="--article-slt-arrow: url({DF_UI}/img/board/arrow_tri_dn_21x21.png)">
-            <option value="" disabled selected>분류 항목 선택</option>
-            <option value="일반">일반</option>
-            <option value="점검">점검</option>
+        <select bind:value={ articleDetailType } style="--article-slt-arrow: url({DF_UI}/img/board/arrow_tri_dn_21x21.png)">
+            <option value="0" disabled selected>분류 항목 선택</option>
+            <option value="1">일반</option>
+            <option value="2">점검</option>
         </select>
         <dl>
-            <!-- TODO 공지사항 타입일 때에만 일반/점검 중 선택하게 하기 -->
             <dt class="infotxt">일반과 점검 중 한 가지를 선택해 주세요.</dt>
         </dl>
     </article>
 
     <article class="board_write">
         <ul>
-            <li><input type="text" id="title" placeholder="제목을 입력해 주세요."></li>
+            <li><input type="text" id="title" bind:value={title} placeholder="제목을 입력해 주세요."></li>
             <li id="editor" class="editor_area"></li>
         </ul>
     </article>
 
     <article class="btnarea mt40">
-        <a href="javascript:void(0);" class="btn btntype_bu46 bold mar" style="width:140px" id="saveButton">등록</a>
-        <a href="javascript:void(0);" class="btn btntype_bk46 bold" style="width:140px" id="cancelButton">취소</a>
+        <a href="#" class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
+        <a href="#" class="btn btntype_bk46 bold" style="width:140px">취소</a>
     </article>
 </section>
 
 <div class="footer">
     <Footer />
 </div>
+
 
 <style>
     * {

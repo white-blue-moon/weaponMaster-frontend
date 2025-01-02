@@ -7,4 +7,7 @@ export const API = {
         LOGIN_NORMAL: `${ROOT}/account/login/normal`,
         EXIST_USER_ID: (userId) => `${ROOT}/account/exist/${userId}`,
     },
+    NEWS : {
+        ARTICLES: `${ROOT}/news/articles`, // 새소식 글 등록
+    }
 };
