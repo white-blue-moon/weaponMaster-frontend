@@ -1,11 +1,60 @@
 <script>
     import { DF_UI } from '../../constants/resourcePath';
-
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { onMount } from "svelte";
+    import { ARTICLE_DETAIL_TYPE } from '../../constants/articles'
+    import { PATHS } from '../../constants/paths';
+    
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
     import HeaderBanner from "../../components/HeaderBanner.svelte";
     import Footer from '../../components/Footer.svelte';
 
+    // 현재 URL 경로 가져오기
+    let url = window.location.pathname;
+
+    // 슬래시(`/`)로 구분하여 배열로 분리하고 마지막 부분 가져오기
+    let pageId = url.split('/').pop();
+    let article = null;
+
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.PAGE(pageId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article = response.articles[0];
+        }
+    }
+
+    onMount(async ()=> {
+        await fetchArticle();
+    });
+
+    function getDetailTypeText(detailType) {
+        if (detailType == ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL) {
+            return '일반';
+        }
+
+        if (detailType == ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION) {
+            return '점검';
+        }
+
+        return '분류 없음';
+    }
+
+    function formatDate(inputDate) {
+        const date = new Date(inputDate); // 문자열을 Date 객체로 변환
+
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() 값이 0부터 시작하므로 +1
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+
+        return `${year}.${month}.${day} ${hours}:${minutes}`;
+    }
 </script>
 
 
@@ -23,7 +72,7 @@
 </div>
 
 <section class="menu2nd">
-    <a class="active" href="/news/notice/list">공지사항</a>
+    <a class="active" href={ PATHS.NEWS.LIST }>공지사항</a>
     <a href="#">업데이트</a>
     <a href="#">이벤트</a>
     <a href="/news/devnote/list">개발자노트</a>
@@ -31,39 +80,42 @@
 
 
 <section class="content news">
-    <!-- article_type -->
-    <h3>공지사항</h3>
-    <div class="board_view news_view">
-        <dl>
-            <!-- article_detail_type -->
-            <dt>일반</dt>
-            <dd>
-                <!-- title -->
-                <p>1/1(수) 확인된 오류 안내</p>
-                <p class="sinfo">
-                    <!-- createDate -->
-                    <span class="date">2025.01.01 00:24</span>
-                    <!-- viewCount -->
-                    <span class="hits">11,536</span>
-                </p>
-            </dd>
-        </dl>
-        <!-- contents -->
-        <div class="bd_viewcont">
-            <div class="operation_guide">
-                본문 내용
+    {#if article}
+        <!-- article_type -->
+        <h3>공지사항</h3>
+        <div class="board_view news_view">
+            <dl>
+                <!-- article_detail_type -->
+                <dt>{ getDetailTypeText(article.articleDetailType) }</dt>
+                <dd>
+                    <!-- title -->
+                    <p>{ article.title }</p>
+                    <p class="sinfo">
+                        <!-- createDate -->
+                        <span class="date">{ formatDate(article.createDate) }</span>
+                        <!-- viewCount -->
+                        <span class="hits">{ article.viewCount }</span>
+                    </p>
+                </dd>
+            </dl>
+            <!-- contents -->
+            <div class="bd_viewcont">
+                <div class="operation_guide">
+                    { @html article.contents }
+                </div>
             </div>
         </div>
-    </div>
+
         <article class="bdview_bnrarea">
             <a href="/community/news/notice/2838879">
                 <img src="https://bbscdn.df.nexon.com/data6/commu/202408/3619ee93-0fa1-455d-ed97-34e61638f387.jpg" alt="지인 사칭 피싱 방지 배너 1">
             </a>
         </article>
-    <article class="bdview_btnarea line">
-        <div class="btnst1"><a href="javascript:void(0);" class="btncopy">텍스트복사</a></div>
-        <div class="btnst2"><a href="javascript:void(0);" class="btn btntype_bk46 bold list" style="width:140px">목록</a></div>
-    </article>
+        <article class="bdview_btnarea line">
+            <div class="btnst1"><a href="javascript:void(0);" class="btncopy">텍스트복사</a></div>
+            <div class="btnst2"><a href="javascript:void(0);" class="btn btntype_bk46 bold list" style="width:140px">목록</a></div>
+        </article>
+    {/if}
 </section>
 
 
@@ -118,7 +170,6 @@
     a {
         text-decoration: none;
     }
-
 
     .news {
         position: relative;
@@ -219,7 +270,22 @@
         line-height: 30px;
         font-weight: 400;
     }
-    
+
+    :global(.operation_guide p) {
+        margin: 0;
+    }
+
+    :global(.operation_guide p span) {
+        color: #36393f !important;
+    }
+
+    // 기본 블랙인 경우에 한해서만 색상 변경
+    :global(.operation_guide p strong[style*="color: rgb(0, 0, 0)"]) {
+        color: #36393f !important;
+    }
+
+    // color: rgb(57, 132, 198); -> 공홈에서 사용하는 블루 텍스트 값
+
     .bdview_bnrarea {
         position: relative;
         margin-bottom: 80px;

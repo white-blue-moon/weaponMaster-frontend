@@ -31,7 +31,7 @@
       <div>
         <a href="{ PATHS.NEWS.LIST }">공지사항</a>
         <a href="/update/list">업데이트</a>
-        <a href="/event/list">이벤트</a>
+        <!-- <a href="/event/list">이벤트</a> -->
         <a href="/devnote/list">개발자노트</a>
       </div>
       <div>
@@ -166,9 +166,14 @@
 
   /* 기본 서브 메뉴 텍스트 색상 */
   .submenu a {
-    color: white; /* 기본 색상 */
-    text-decoration: none;
-    margin: 5px 0;
+    position: relative;
+    display: block;
+    padding: 0;
+    height: inherit;
+    color: #898c92;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 32px;
   }
 
   /* nav:hover 상태에서 모든 텍스트는 기본적으로 #898c92 */
@@ -192,8 +197,13 @@
     width: 100%;
     background-color: #22252d;
     border-top: 0.5px solid #444;
-    padding: 10px 0;
   }
+
+  .gnb nav ul li div {
+    display: none;
+    position: relative;
+    padding: 24px 0 29px 0;
+}
 
   nav:hover .submenu {
     display: flex;
@@ -210,7 +220,10 @@
     flex-direction: column; /* 메뉴를 세로로 정렬 */
     align-items: center; /* 텍스트를 가로로 중앙 정렬 */
     text-align: center;
+    padding: 24px 0 29px 0;
   }
+
+
 
   /* ================================== */
   /* 로그인, GAME INFO 영역 */

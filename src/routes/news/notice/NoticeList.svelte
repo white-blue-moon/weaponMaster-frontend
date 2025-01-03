@@ -1,7 +1,7 @@
 <script>
     import { API } from '../../../constants/api';
-    import { onMount } from "svelte";
     import { apiFetch, handleApiError } from '../../../utils/apiFetch';
+    import { onMount } from "svelte";
     import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../../../constants/articles'
     import { DF_UI } from "../../../constants/resourcePath";
     import { PATHS } from "../../../constants/paths";
@@ -41,7 +41,7 @@
 </div>
 
 <section class="menu2nd">
-    <a class="active" href="/news/notice/list">공지사항</a>
+    <a class="active" href={ PATHS.NEWS.LIST }>공지사항</a>
     <a class="" href="#">업데이트</a>
     <a class="" href="#">이벤트</a>
     <a class="" href="/news/devnote/list">개발자노트</a>
@@ -94,7 +94,7 @@
                     {/if}
                 </li>
                 <li class="title" data-no={ article.id }>
-                    <a href={ `/community/news/notice/${article.id}` }>{ article.title }</a>
+                    <a href={ `/news/${article.id}` }>{ article.title }</a>
                     <div class="iconset"></div>
                 </li>
                 <li class="date">{ article.createDate.split('T')[0] }</li>
@@ -467,7 +467,6 @@
         color: #d50000;
         font-weight: 500;
     }
-
 
     /* 페이징 네비게이션 */
     .paging {

@@ -10,5 +10,6 @@ export const API = {
     ARTICLES: {
         BASE: `${ROOT}/articles`,
         LIST: (categoryType, articleType) => `${ROOT}/articles/list/${categoryType}/${articleType}`,
+        PAGE: (id) => `${ROOT}/articles/${id}`,
     }
 };
