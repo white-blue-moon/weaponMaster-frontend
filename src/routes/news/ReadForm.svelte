@@ -1,5 +1,5 @@
 <script>
-    import { DF_UI } from '../../constants/resourcePath'
+    import { DF_UI } from '../../constants/resourcePath';
 
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
@@ -120,175 +120,175 @@
     }
 
 
-.news {
-    position: relative;
-}
-
-.content {
-    margin: 63px auto 0 auto;
-    width: 1300px;
-    min-height: 500px;
-}
-
-.content h3 {
-    color: #151518;
-    font-size: 26px;
-    line-height: 34px;
-    font-weight: 300;
-}
-
-.board_view {
-    position: relative;
-    margin-top: 23px;
-    width: 1300px;
-}
-
-.board_view dl {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.board_view dl dt {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    width: 180px;
-    height: 200px;
-    border: 1px solid #e0e2ec;
-    background: #f8f9fb;
-    color: #36393f;
-    font-size: 16px;
-    font-weight: 400;
-}
-
-.board_view dl dd {
-    display: flex;
-    flex-direction: column;
-    width: 1120px;
-    height: 200px;
-    border: 1px solid #eeedf2;
-    border-left: none;
-}
-
-.board_view dl dd p:nth-child(1) {
-    padding-left: 30px;
-    height: 139px;
-    border-bottom: 1px solid #eeedf2;
-    color: #36393f;
-    font-size: 22px;
-    line-height: 34px;
-}
-
-.board_view dl dd p {
-    display: flex;
-    align-items: center;
-}
-
-.board_view dl dd p:nth-child(2) {
-    padding-right: 45px;
-    height: 59px;
-    justify-content: end;
-    color: #6a6e76;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.board_view dl dd p span {
-    margin-left: 60px;
-}
-
-.board_view dl dd p span.hits {
-  padding-left: 24px;
-  background: url("#{$DF_UI}/img/board/board_ico_view.png") no-repeat 0 calc(50% + 1px);
-}
-
-.board_view  .bd_viewcont {
-    padding: 45px 0 150px 0;
-    color: #36393f;
-    font-size: 16px;
-    line-height: 30px;
-    font-weight: 400;
-}
-
-.operation_guide {
-    position: relative;
-    color: #898c92;
-    font-size: 16px;
-    line-height: 30px;
-    font-weight: 400;
-}
-
-.bdview_bnrarea {
-    position: relative;
-    margin-bottom: 80px;
-    width: 100%;
-    height: 200px;
-}
-
-.bdview_btnarea.line {
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eeedf2;
-}
-
-.bdview_btnarea {
-    position: relative;
-    vertical-align: top;
-    overflow: hidden;
-}
-
-.bdview_btnarea .btnst1 {
-    float: left;
-}
-
-.bdview_btnarea .btnst1 a.btncopy {
-    margin-right: 25px;
-}
-
-.bdview_btnarea .btnst1 a {
-    display: inline-block;
-    height: 46px;
-    line-height: 46px;
-    color: #6a6e76;
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.btncopy {
-    width: 49px;
-    background: #484e5f url('#{$DF_UI}/img/board/board_ico_copy.png') no-repeat 50%;
-    text-indent: -9999px;
-}
-
-.bdview_btnarea .btnst2 {
-    float: right;
-    font-size: 0;
-}
-
-.bdview_btnarea .btnst2 a {
-    margin-left: 4px;
-}
-
-.btntype_bk46 {
-    height: 46px;
-    line-height: 45px;
-    background: #484e5f;
-    color: #fff;
-    font-size: 13px;
-}
-
-.btn {
-    position: relative;
-    display: inline-block;
-    min-width: 90px;
-    text-align: center;
-}
-
-.bold {
-    font-weight: 500 !important;
-}
+    .news {
+        position: relative;
+    }
+    
+    .content {
+        margin: 63px auto 0 auto;
+        width: 1300px;
+        min-height: 500px;
+    }
+    
+    .content h3 {
+        color: #151518;
+        font-size: 26px;
+        line-height: 34px;
+        font-weight: 300;
+    }
+    
+    .board_view {
+        position: relative;
+        margin-top: 23px;
+        width: 1300px;
+    }
+    
+    .board_view dl {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .board_view dl dt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        width: 180px;
+        height: 200px;
+        border: 1px solid #e0e2ec;
+        background: #f8f9fb;
+        color: #36393f;
+        font-size: 16px;
+        font-weight: 400;
+    }
+    
+    .board_view dl dd {
+        display: flex;
+        flex-direction: column;
+        width: 1120px;
+        height: 200px;
+        border: 1px solid #eeedf2;
+        border-left: none;
+    }
+    
+    .board_view dl dd p:nth-child(1) {
+        padding-left: 30px;
+        height: 139px;
+        border-bottom: 1px solid #eeedf2;
+        color: #36393f;
+        font-size: 22px;
+        line-height: 34px;
+    }
+    
+    .board_view dl dd p {
+        display: flex;
+        align-items: center;
+    }
+    
+    .board_view dl dd p:nth-child(2) {
+        padding-right: 45px;
+        height: 59px;
+        justify-content: end;
+        color: #6a6e76;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .board_view dl dd p span {
+        margin-left: 60px;
+    }
+    
+    .board_view dl dd p span.hits {
+      padding-left: 24px;
+      background: url("#{$DF_UI}/img/board/board_ico_view.png") no-repeat 0 calc(50% + 1px);
+    }
+    
+    .board_view  .bd_viewcont {
+        padding: 45px 0 150px 0;
+        color: #36393f;
+        font-size: 16px;
+        line-height: 30px;
+        font-weight: 400;
+    }
+    
+    .operation_guide {
+        position: relative;
+        color: #898c92;
+        font-size: 16px;
+        line-height: 30px;
+        font-weight: 400;
+    }
+    
+    .bdview_bnrarea {
+        position: relative;
+        margin-bottom: 80px;
+        width: 100%;
+        height: 200px;
+    }
+    
+    .bdview_btnarea.line {
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eeedf2;
+    }
+    
+    .bdview_btnarea {
+        position: relative;
+        vertical-align: top;
+        overflow: hidden;
+    }
+    
+    .bdview_btnarea .btnst1 {
+        float: left;
+    }
+    
+    .bdview_btnarea .btnst1 a.btncopy {
+        margin-right: 25px;
+    }
+    
+    .bdview_btnarea .btnst1 a {
+        display: inline-block;
+        height: 46px;
+        line-height: 46px;
+        color: #6a6e76;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+    }
+    
+    .btncopy {
+        width: 49px;
+        background: #484e5f url('#{$DF_UI}/img/board/board_ico_copy.png') no-repeat 50%;
+        text-indent: -9999px;
+    }
+    
+    .bdview_btnarea .btnst2 {
+        float: right;
+        font-size: 0;
+    }
+    
+    .bdview_btnarea .btnst2 a {
+        margin-left: 4px;
+    }
+    
+    .btntype_bk46 {
+        height: 46px;
+        line-height: 45px;
+        background: #484e5f;
+        color: #fff;
+        font-size: 13px;
+    }
+    
+    .btn {
+        position: relative;
+        display: inline-block;
+        min-width: 90px;
+        text-align: center;
+    }
+    
+    .bold {
+        font-weight: 500 !important;
+    }
 
 
     .footer {

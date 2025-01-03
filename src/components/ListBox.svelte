@@ -20,42 +20,42 @@
         author: "관훈",
       },
     ];
-  </script>
+</script>
   
-  <section class="guide_rec">
-    <article class="container">
-      <h3>가이드 <i>&amp;</i> 추천글</h3>
+<section class="guide_rec">
+  <article class="container">
+    <h3>가이드 <i>&amp;</i> 추천글</h3>
+
+    <!-- Navigation Buttons -->
+    <div class="lst_control">
+      <button class="arrow_l"></button>
+      <button class="arrow_r"></button>
+    </div>
+
+    <div class="guide_rec_s">
+      <!-- Slides -->
+      <ul class="slides">
+        {#each slides as slide}
+          <li class="slide">
+            <a href="/">
+              <div class="image-wrapper">
+                <img src={ slide.img } alt={ slide.title }/>
+              </div>
+              <span class="category">{ slide.category }</span>
+              <div class="info">
+                <h4 class="title">{ slide.title }</h4>
+                <p class="author">{ slide.author }</p>
+              </div>
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  </article>
+</section>
   
-      <!-- Navigation Buttons -->
-      <div class="lst_control">
-        <button class="arrow_l"></button>
-        <button class="arrow_r"></button>
-      </div>
   
-      <div class="guide_rec_s">
-        <!-- Slides -->
-        <ul class="slides">
-          {#each slides as slide}
-            <li class="slide">
-              <a href="/">
-                <div class="image-wrapper">
-                  <img src={slide.img} alt={slide.title} />
-                </div>
-                <span class="category">{slide.category}</span>
-                <div class="info">
-                  <h4 class="title">{slide.title}</h4>
-                  <p class="author">{slide.author}</p>
-                </div>
-              </a>
-            </li>
-          {/each}
-        </ul>
-      </div>
-    </article>
-  </section>
-  
-  
-<style>
+<style lang="scss">
 .guide_rec {
   width: 100%;
 }
@@ -88,11 +88,11 @@
 }
 
 .arrow_l {
-  background: url(https://resource.df.nexon.com/ui//img/main/lst_arrow_l.png) no-repeat;
+  background: url(#{$DF_UI}/img/main/lst_arrow_l.png) no-repeat;
 }
 
 .arrow_r {
-  background: url(https://resource.df.nexon.com/ui//img/main/lst_arrow_r.png) no-repeat;
+  background: url(#{$DF_UI}/img/main/lst_arrow_r.png) no-repeat;
 }
 
 .arrow_l,

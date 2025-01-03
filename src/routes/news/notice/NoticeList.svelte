@@ -50,7 +50,7 @@
 <section class="content news">
     <h3>공지사항</h3>
     <article class="news_header">
-        <div class="category_type_c" style="--category-arrow: url('{DF_UI}/img/board/arrow_tri_dn_11x7.png');">
+        <div class="category_type_c">
             <a>점검</a>
             <a>일반</a>
         </div>
@@ -63,7 +63,7 @@
                         <option value="2">제목</option>
                     </select>
                     <div class="select-element">
-                        <span class="active-option" style="--select-option: url('{DF_UI}/img/form/select.png');">제목+본문</span>
+                        <span class="active-option">제목+본문</span>
                         <div class="option-list" style="max-height: 205px; height: 84px;">
                             <ul>
                                 <li data-value="1">제목+본문</li>
@@ -76,14 +76,14 @@
             <div class="bs_ipt">
                 <input type="text" id="searchKeyword" name="" class="search_input" autocomplete="off">
                 <!-- svelte-ignore a11y-missing-attribute -->
-                <a class="btn_del" style="--select-btn-clse: url('{DF_UI}/img/btn/btn_clse_18x18.png');">삭제</a>
+                <a class="btn_del">삭제</a>
                 <!-- svelte-ignore a11y-label-has-associated-control -->
-                <label id="searchButton" style="--select-search: url('{DF_UI}/img/btn/btn_srch_30x30.png');"></label>
+                <label id="searchButton"></label>
             </div>
         </div>
     </article>
 
-    <article class="board_list news_list" style="--board-ico-view: url('{DF_UI}/img/board/board_ico_view.png');">
+    <article class="board_list news_list">
         {#each articles as article}
             <ul class={ article.isPinned ? 'notice' : '' }>
                 <li class="category">
@@ -109,7 +109,7 @@
         <a href="{ PATHS.NEWS.WRITE }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
     </article>
 
-    <article class="paging mt60" style="--paging: url('{DF_UI}/img/btn/paging.png');">
+    <article class="paging mt60">
         <a href="javascript:void(0);" class="first" data-page="1">FIRST</a>
         <a href="javascript:void(0);" class="prev" data-page="1">PREV</a>
 
@@ -138,7 +138,7 @@
 
 
 
-<style>
+<style lang="scss">
     * {
         margin: 0;
         box-sizing: border-box;
@@ -241,7 +241,7 @@
         margin-right: 5px;
         width: 11px;
         height: 8px;
-        background: var(--category-arrow) no-repeat 0 0;
+        background: url("#{$DF_UI}/img/board/arrow_tri_dn_11x7.png") no-repeat 0 0;
     }
 
     .board_srch {
@@ -299,7 +299,7 @@
         right: 10px;
         width: 15px;
         height: 15px;
-        background: var(--select-option) no-repeat;
+        background: url("#{$DF_UI}/img/form/select.png") no-repeat;
     }
 
     .select .option-list {
@@ -370,7 +370,7 @@
         margin-left: auto;
         width: 30px;
         height: 30px;
-        background: var(--select-btn-clse) no-repeat 50%;
+        background: url("#{$DF_UI}/img/btn/btn_clse_18x18.png") no-repeat 50%;
         cursor: pointer;
         font-size: 0;
         text-indent: -999px;
@@ -380,7 +380,7 @@
         margin-left: auto;
         width: 30px;
         height: 30px;
-        background: var(--select-search) no-repeat;
+        background: url("#{$DF_UI}/img/btn/btn_srch_30x30.png") no-repeat;
         cursor: pointer;
     }
 
@@ -453,7 +453,7 @@
     .board_list ul li.hits {
         width: 110px;
         padding-left: 24px;
-        background: var(--board-ico-view) no-repeat 0 calc(50% + 1px);
+        background: url("#{$DF_UI}/img/board/board_ico_view.png") no-repeat 0 calc(50% + 1px);
         text-align: left;
         font-size: 13px;
     }
@@ -484,13 +484,13 @@
 
     .paging a.first {
         margin-right: 0;
-        background: var(--paging) no-repeat -50px 0;
+        background: url("#{$DF_UI}/img/btn/paging.png") no-repeat -50px 0;
         text-indent: -9999px;
     }
 
     .paging a.prev {
         margin-right: 14px;
-        background: var(--paging) no-repeat 0 0;
+        background: url("#{$DF_UI}/img/btn/paging.png") no-repeat 0 0;
         text-indent: -9999px;
     }
 
@@ -511,13 +511,13 @@
 
     .paging a.next {
         margin-left: 14px;
-        background: var(--paging) no-repeat 0 -50px;
+        background: url("#{$DF_UI}/img/btn/paging.png") no-repeat 0 -50px;
         text-indent: -9999px;
     }
 
     .paging a.end {
         margin-left: 0;
-        background: var(--paging) no-repeat -50px -50px;
+        background: url("#{$DF_UI}/img/btn/paging.png") no-repeat -50px -50px;
         text-indent: -9999px;
     }
 

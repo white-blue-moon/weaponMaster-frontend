@@ -6,13 +6,13 @@
     const logoBackground = "https://resource.df.nexon.com/ui/img/mem/logo.png";
 </script>
 
-<header class="banner" style="--banner-background: url({bannerBackground})">
+<header class="banner" style="--banner-background: url({ bannerBackground })">
     {#if isLogoVisible}
     <h1>
-        <a href="/" style="--logo-background: url({logoBackground})">{ homeName }</a>
+        <a href="/" style="--logo-background: url({ logoBackground })">{ homeName }</a>
     </h1>
     {/if}
-    <h2 class:isLogoVisible={isLogoVisible} class:notLogoVisible={!isLogoVisible}>
+    <h2 class:isLogoVisible={ isLogoVisible } class:notLogoVisible={ !isLogoVisible }>
         { headerText }
     </h2>
 </header>

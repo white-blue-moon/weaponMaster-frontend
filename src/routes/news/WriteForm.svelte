@@ -156,7 +156,7 @@
     <article class="community_header h_wrt">
         <div class="category_wrt">
             <div class="split_cont">
-                <div class="split_left_controls" style="--article-radio: url({DF_UI}/img/form/radio.png)">
+                <div class="split_left_controls">
                     <p><input type="radio" name="articleType" id="01" value={ ARTICLE_TYPE.NEWS.NOTICE } bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
                     <p><input type="radio" name="articleType" id="02" value={ ARTICLE_TYPE.NEWS.UPDATE } bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
                     <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.EVENT } bind:group={ articleType }><label for="03"><span></span>이벤트</label></p>
@@ -167,7 +167,7 @@
     </article>
     
     <article class="article_slt" style="padding:13px 0">
-        <select bind:value={ articleDetailType } style="--article-slt-arrow: url({DF_UI}/img/board/arrow_tri_dn_21x21.png)">
+        <select bind:value={ articleDetailType }>
             <option value="0" disabled selected>분류 항목 선택</option>
             <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL }>일반</option>
             <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION }>점검</option>
@@ -195,7 +195,7 @@
 </div>
 
 
-<style>
+<style lang="scss">
     * {
         margin: 0;
         box-sizing: border-box;
@@ -302,13 +302,13 @@
         margin: -3px 5px 0 0;
         width: 15px;
         height: 15px;
-        background: var(--article-radio) no-repeat;
+        background: url("#{$DF_UI}/img/form/radio.png") no-repeat;
         vertical-align: middle;
         cursor: pointer;
     }
 
     input[type="radio"]:checked + label span {
-        background: var(--article-radio) no-repeat 0 -100px;
+        background: url("#{$DF_UI}/img/form/radio.png") no-repeat 0 -100px;
     }
 
     .category_wrt p span {
@@ -331,7 +331,7 @@
         height: 45px;
         border: 2px solid #36393f;
         border-radius: 41px;
-        background: #fff var(--article-slt-arrow) no-repeat right 13px top 10px;
+        background: #fff url("#{$DF_UI}/img/board/arrow_tri_dn_21x21.png") no-repeat right 13px top 10px;
         color: #36393f;
         font-size: 14px;
         font-weight: 500;

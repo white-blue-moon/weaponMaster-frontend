@@ -63,12 +63,13 @@
   <div class="gameTab">
     <!-- 로그인 버튼 -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div class="login" on:click={toggleLogin} class:is-active={isLoginAreaVisible} style="--login-x-icon: url({DF_UI}/img/btn/btn_login_x.png)">
+    <div class="login" on:click={ toggleLogin } class:is-active={ isLoginAreaVisible }>
       <a href="#" class="go_login" id="webGnbMyBtn">
         {#if !isLoginAreaVisible}
           {#if !$isLoggedIn}
             로그인
-          {:else}
+          {/if}
+          {#if $isLoggedIn}
             MY
           {/if}
         {/if}
@@ -87,14 +88,15 @@
                 <a href={ PATHS.ACCOUNT.JOIN }>처음 오셨나요? 회원가입</a>
               </li>
             {/if}
+
             {#if $isLoggedIn}
               <li class="user_after">
                 <div class="user_text">
-                  <span class="userId">{$userInfo}</span>
+                  <span class="userId">{ $userInfo }</span>
                   <span>님 안녕하세요</span>
                   <!-- TODO 일반/관리자 모드에 따른 아이콘 추가하기 -->
                 </div>
-                <a href="#" class="blue" on:click={handleLogout}>로그아웃</a>
+                <a href="#" class="blue" on:click={ handleLogout }>로그아웃</a>
               </li>
             {/if}
           </ul>
@@ -103,7 +105,7 @@
     </div>
 
     <!-- GAME INFO -->
-    <article class="gameinfo" style="--gameinfo-background: url({DF_UI}/img/common/gamestart_ani3.jpg)">
+    <article class="gameinfo">
       <a id="gameinfo" href="javascript:$.neople.game.gameStart()">
           <span></span>
           <b>GAME INFO</b>
@@ -114,7 +116,7 @@
 </section>
 
 
-<style>
+<style lang="scss">
   /* Gnb 스타일 설정 */
   .gnb {
       position: relative;
@@ -243,7 +245,7 @@
 
   /* 활성화된 상태 (배경 이미지 적용 및 텍스트 숨김) */
   .login.is-active {
-    background: #f2f4f6 var(--login-x-icon) no-repeat 40px 35px;
+    background: #f2f4f6 url("#{$DF_UI}/img/btn/btn_login_x.png") no-repeat 40px 35px;
   }
 
   /* 활성화된 상태에서는 a 태그 안의 텍스트 숨김 */
@@ -311,7 +313,7 @@
       animation: gameinfo 5s steps(150) infinite;
       width: 260px;
       height: 100px;
-      background: var(--gameinfo-background);
+      background: url("#{$DF_UI}/img/common/gamestart_ani3.jpg");
       background-position: 0 0;
       background-size: cover;
       transition: transform 0.3s ease-in-out; /* 배경 확대 부드럽게 */
