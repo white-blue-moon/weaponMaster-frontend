@@ -27,6 +27,7 @@
 	<Route path={ PATHS.NEWS.LIST } component={ NoticeList } />
 	<Route path={ PATHS.NEWS.READ } component={ ReadForm } />
 	<Route path={ PATHS.NEWS.WRITE } component={ WriteForm } />
+	<Route path={ PATHS.NEWS.EDIT } component={ WriteForm } />
 </Router>
   
 

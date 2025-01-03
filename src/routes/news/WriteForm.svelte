@@ -13,16 +13,36 @@
     import HeaderBanner from "../../components/HeaderBanner.svelte";
     import Gnb from "../../components/Gnb.svelte";
     import Footer from "../../components/Footer.svelte";
-    
+
+    const url = window.location.pathname;
+    let isEditPage = false;
+    let pageId = 0;
+    let article = null;
+
+    // 마지막 문자열이 숫자인지 확인하는 정규식
+    if (/\d+$/.test(url)) {
+        isEditPage = true;
+        pageId = url.split('/').pop();
+    }
+
     export let categoryType = CATEGORY_TYPE.NEWS;
     let articleType = 0;
     let articleDetailType;
     let title = ''; // 제목 입력 값
     let contents = ''; // 본문 내용 HTML
-
     let editor;
 
-    onMount(() => {
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.PAGE(pageId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article = response.articles[0];
+        }
+    }
+
+    onMount(async () => {
         editor = new Quill('#editor', {
             theme: 'snow',
             placeholder: '여기에 내용을 입력하세요...',
@@ -72,6 +92,17 @@
         editor.on('text-change', () => {
             contents = editor.root.innerHTML;
         });
+
+        if (isEditPage) {
+            await fetchArticle();
+
+            categoryType = article.categoryType;
+            articleType = article.articleType;
+            articleDetailType = article.articleDetailType;
+            title = article.title;
+            editor.root.innerHTML = article.contents;
+            contents = article.contents;
+        }
     });
 
     function isArticleValid() {
@@ -110,9 +141,15 @@
             return;
         }
 
+        let apiMethod = 'POST';
+        if (isEditPage) {
+            apiMethod = 'PUT';
+        }
+
         const response = await apiFetch(API.ARTICLES.BASE, {
-            method: 'POST',
+            method: apiMethod,
             body: JSON.stringify({
+                "id": pageId,
                 "categoryType": categoryType,
                 "articleType": articleType,
                 "articleDetailType": articleDetailType,
@@ -129,6 +166,16 @@
         }
 
         alert('게시물 등록에 실패하였습니다.');
+        return;
+    }
+
+    function handleCancle() {
+        const confirmCancel = confirm("정말 게시물 작성을 취소하시겠습니까?");
+        if (confirmCancel) {
+            window.location.href = `/news/${article.id}`;
+            return;
+        }
+
         return;
     }
 </script>
@@ -148,7 +195,6 @@
 <section class="menu2nd">
     <a class="active" href="/news/notice/list">공지사항</a>
     <a href="#">업데이트</a>
-    <a href="#">이벤트</a>
     <a href="/news/devnote/list">개발자노트</a>
 </section>
 
@@ -159,8 +205,7 @@
                 <div class="split_left_controls">
                     <p><input type="radio" name="articleType" id="01" value={ ARTICLE_TYPE.NEWS.NOTICE } bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
                     <p><input type="radio" name="articleType" id="02" value={ ARTICLE_TYPE.NEWS.UPDATE } bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
-                    <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.EVENT } bind:group={ articleType }><label for="03"><span></span>이벤트</label></p>
-                    <p><input type="radio" name="articleType" id="04" value={ ARTICLE_TYPE.NEWS.DEV_NOTE } bind:group={ articleType }><label for="04"><span></span>개발자노트</label></p>
+                    <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.DEV_NOTE } bind:group={ articleType }><label for="03"><span></span>개발자노트</label></p>
                 </div>
             </div>
         </div>
@@ -186,7 +231,8 @@
 
     <article class="btnarea mt40">
         <a href="#" class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
-        <a href="#" class="btn btntype_bk46 bold" style="width:140px">취소</a>
+        <!-- TODO 진짜 취소할 건지 물어보기 -->
+        <a href="#" class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
 </section>
 

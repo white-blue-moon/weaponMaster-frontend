@@ -9,8 +9,7 @@ export const ARTICLE_TYPE = {
     NEWS: {
         NOTICE: 1,
         UPDATE: 2,
-        EVENT: 3,
-        DEV_NOTE: 4,
+        DEV_NOTE: 3,
     },
 
     COMMUNITY: {

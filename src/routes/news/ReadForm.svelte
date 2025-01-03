@@ -74,7 +74,6 @@
 <section class="menu2nd">
     <a class="active" href={ PATHS.NEWS.LIST }>공지사항</a>
     <a href="#">업데이트</a>
-    <a href="#">이벤트</a>
     <a href="/news/devnote/list">개발자노트</a>
 </section>
 
@@ -112,8 +111,15 @@
             </a>
         </article>
         <article class="bdview_btnarea line">
-            <div class="btnst1"><a href="javascript:void(0);" class="btncopy">텍스트복사</a></div>
-            <div class="btnst2"><a href="javascript:void(0);" class="btn btntype_bk46 bold list" style="width:140px">목록</a></div>
+            <div class="btnst1">
+                <a href="javascript:void(0);" class="btncopy">텍스트복사</a>
+            </div>
+            <div class="btnst2">
+                <!-- 수정, 삭제는 관리자에게만 보이기 -->
+                <a href={`/news/edit/${ article.id }`} id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
+                <a href="javascript:void(0);" id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
+                <a href={ PATHS.NEWS.LIST } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
+            </div>          
         </article>
     {/if}
 </section>
@@ -265,7 +271,7 @@
     
     .operation_guide {
         position: relative;
-        color: #898c92;
+        color: #36393f;
         font-size: 16px;
         line-height: 30px;
         font-weight: 400;
@@ -275,16 +281,15 @@
         margin: 0;
     }
 
-    :global(.operation_guide p span) {
-        color: #36393f !important;
-    }
-
     // 기본 블랙인 경우에 한해서만 색상 변경
     :global(.operation_guide p strong[style*="color: rgb(0, 0, 0)"]) {
         color: #36393f !important;
     }
 
     // color: rgb(57, 132, 198); -> 공홈에서 사용하는 블루 텍스트 값
+    :global(.operation_guide p strong[style*="color: rgb(0, 102, 204)"]) {
+        color: rgb(57, 132, 198) !important;
+    }
 
     .bdview_bnrarea {
         position: relative;

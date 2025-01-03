@@ -43,7 +43,6 @@
 <section class="menu2nd">
     <a class="active" href={ PATHS.NEWS.LIST }>공지사항</a>
     <a class="" href="#">업데이트</a>
-    <a class="" href="#">이벤트</a>
     <a class="" href="/news/devnote/list">개발자노트</a>
 </section>
 
