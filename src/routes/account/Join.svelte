@@ -28,7 +28,7 @@
     // TODO 유저 아이디, 혹은 password 를 다시 입력하는 경우 관련 valid 변수 다시 false 로 바꾸는 함수 필요
 
     async function checkDuplicateId() {
-        const response = await apiFetch(API.ACCOUNT.EXIST_USER_ID(userId), {
+        const response = await apiFetch(API.ACCOUNT.EXIST_USER(userId), {
             method: 'GET',
         }).catch(handleApiError);
 

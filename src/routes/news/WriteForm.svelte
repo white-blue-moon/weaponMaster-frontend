@@ -16,8 +16,8 @@
 
     const url = window.location.pathname;
     let isEditPage = false;
-    let pageId = 0;
     let article = null;
+    let pageId;
 
     // 마지막 문자열이 숫자인지 확인하는 정규식
     if (/\d+$/.test(url)) {
@@ -33,7 +33,7 @@
     let editor;
 
     async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.PAGE(pageId), {
+        const response = await apiFetch(API.ARTICLES.READ(pageId), {
             method: 'GET',
         }).catch(handleApiError);
 
@@ -142,14 +142,15 @@
         }
 
         let apiMethod = 'POST';
+        let apiURL = API.ARTICLES.CREATE;
         if (isEditPage) {
             apiMethod = 'PUT';
+            apiURL = API.ARTICLES.UPDATE(pageId);
         }
 
-        const response = await apiFetch(API.ARTICLES.BASE, {
+        const response = await apiFetch(apiURL, {
             method: apiMethod,
             body: JSON.stringify({
-                "id": pageId,
                 "categoryType": categoryType,
                 "articleType": articleType,
                 "articleDetailType": articleDetailType,
@@ -170,8 +171,8 @@
     }
 
     function handleCancle() {
-        const confirmCancel = confirm("정말 게시물 작성을 취소하시겠습니까?");
-        if (confirmCancel) {
+        const isConfirm = confirm("정말 게시물 작성을 취소하시겠습니까?");
+        if (isConfirm) {
             window.location.href = `/news/${article.id}`;
             return;
         }
@@ -230,9 +231,8 @@
     </article>
 
     <article class="btnarea mt40">
-        <a href="#" class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
-        <!-- TODO 진짜 취소할 건지 물어보기 -->
-        <a href="#" class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
+        <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
+        <a href="" class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
 </section>
 

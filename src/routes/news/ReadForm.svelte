@@ -5,6 +5,7 @@
     import { onMount } from "svelte";
     import { ARTICLE_DETAIL_TYPE } from '../../constants/articles'
     import { PATHS } from '../../constants/paths';
+    import { userInfo, isLoggedIn } from "../../utils/auth";
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
@@ -19,7 +20,7 @@
     let article = null;
 
     async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.PAGE(pageId), {
+        const response = await apiFetch(API.ARTICLES.READ(pageId), {
             method: 'GET',
         }).catch(handleApiError);
 
@@ -54,6 +55,29 @@
         const minutes = String(date.getMinutes()).padStart(2, '0');
 
         return `${year}.${month}.${day} ${hours}:${minutes}`;
+    }
+
+    async function handleDelete() {
+        const isConfirm = confirm("정말 해당 게시물을 삭제하시겠습니까?");
+        if (!isConfirm) {
+            return;
+        }
+
+        const response = await apiFetch(API.ARTICLES.DELETE(pageId), {
+            method: 'DELETE',
+            body: JSON.stringify({
+                "author": $userInfo,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            alert('게시물이 삭제되었습니다.');
+            window.location.href = PATHS.NEWS.LIST; // TODO 카테고리 별 경로로 수정 필요
+            return;
+        }
+        
+        alert('게시물 삭제에 실패하였습니다.');
+        return;
     }
 </script>
 
@@ -115,9 +139,9 @@
                 <a href="javascript:void(0);" class="btncopy">텍스트복사</a>
             </div>
             <div class="btnst2">
-                <!-- 수정, 삭제는 관리자에게만 보이기 -->
+                <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
                 <a href={`/news/edit/${ article.id }`} id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
-                <a href="javascript:void(0);" id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
+                <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
                 <a href={ PATHS.NEWS.LIST } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          
         </article>

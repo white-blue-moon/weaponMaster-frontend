@@ -5,11 +5,14 @@ export const API = {
     ACCOUNT: {
         JOIN: `${ROOT}/account/join`,
         LOGIN_NORMAL: `${ROOT}/account/login/normal`,
-        EXIST_USER_ID: (userId) => `${ROOT}/account/exist/${userId}`,
+        EXIST_USER: (userId) => `${ROOT}/account/exist/${userId}`,
     },
     ARTICLES: {
-        BASE: `${ROOT}/articles`,
-        LIST: (categoryType, articleType) => `${ROOT}/articles/list/${categoryType}/${articleType}`,
-        PAGE: (id) => `${ROOT}/articles/${id}`,
-    }
+        CREATE: `${ROOT}/articles`,
+        LIST: (categoryType, articleType) =>
+            `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
+        READ: (id) => `${ROOT}/articles/${id}`,
+        UPDATE: (id) => `${ROOT}/articles/${id}`,
+        DELETE: (id) => `${ROOT}/articles/${id}`,
+    },
 };
