@@ -1,32 +1,80 @@
 <script>
-    import FocusBanner from "./FocusBanner.svelte";
+    import { API } from '../constants/api';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { onMount } from "svelte";
+    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../constants/articles';
+    import { PATHS } from '../constants/paths';
 
     export let width = "400px"; // 기본값 설정
     export let height = "280px"; // 기본값 설정
 
     let activeTab = "전체";
-  
-    const tabs = ["전체", "공지사항", "업데이트", "개발자노트"];
-    const newsData = {
-        전체: [
-            "[점검] 12/5(목) 정기점검 안내",
-            "[일반] 12월 우리카드 우리WON페이 캐시백 이벤트",
-            "[일반] [유저와 함께하는 사회공헌 캠페인] 넥슨 히어로가 되어주세요!",
-            "[일반] 넥슨 30주년 기념 ＇파란소녀가 준비한 연말 대축제＇ 진행 안내",
-            "[일반] 넥슨플레이 ＇넥슨 30주년 기념, 파란소녀의 보물상자를 찾아줘!＇ 이벤트 진행 안내",
-            "[일반] 던전앤파이터 20주년 아트 공모전 사전 안내",
-            "[던파ON] (22:15 추가) 11/29(금) 확인된 오류 안내",
-        ],
-        공지사항: ["[점검] 12/5(목) 정기점검 안내"],
-        업데이트: ["[던파ON] 11/28(목) 던파ON 업데이트 안내"],
-        개발자노트: ["지정 PC 기능이 여러분을 찾아뵐 예정입니다."],
+    let articles = [];
+    let newsData = {
+        전체: [],
+        공지사항: [],
+        업데이트: [],
+        개발자노트: []
     };
-  
+
+    const tabs = ["전체", "공지사항", "업데이트", "개발자노트"];
+
+    // TODO -> 홈에서 한번에 가져오게 하기 (지금은 테스트를 위해 임시로 컴포넌트에서 API 호출)
+
+    // 게시물 데이터 가져오기
+    async function fetchArticles() {
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.NEWS, ARTICLE_TYPE.NEWS.NOTICE), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response?.success) {
+            articles = response.articles;
+
+            // newsData 동적 생성
+            newsData = {
+                전체: articles.map((article) => formatArticleTitle(article)),
+                공지사항: articles
+                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.NOTICE)
+                    .map((article) => formatArticleTitle(article)),
+                업데이트: articles
+                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.UPDATE)
+                    .map((article) => formatArticleTitle(article)),
+                개발자노트: articles
+                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.DEV_NOTE)
+                    .map((article) => formatArticleTitle(article)),
+            };
+
+            console.log('newsData: ', newsData)
+        }
+    }
+
+    // 게시물 제목 포맷
+    function formatArticleTitle(article) {
+        // articleDetailType에 따른 접두사 결정
+        const prefix =
+            article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL
+                ? "[일반]"
+                : "[점검]";
+
+        // 접두사를 기존 제목 앞에 추가
+        const title = `${prefix} ${article.title}`.trim();
+
+        return {
+            title,
+            id: article.id,
+        };
+    }
+
+    // 탭 변경
     function setActiveTab(tab) {
         activeTab = tab;
     }
+
+    onMount(async () => {
+        await fetchArticles();
+    });
 </script>
-  
+
 <section
     class="news_bnrs"
     style="--news-width: {width}; --news-height: {height};"
@@ -45,17 +93,22 @@
             {/each}
         </p>
     </div>
-    <div class="divider"></div>
     <ul class="news_con">
-        {#each newsData[activeTab] as news}
-            <li>
-                <a href="/">{news}</a>
-            </li>
-        {/each}
+        <li>
+            {#each newsData[activeTab] as news}
+                <a href="{PATHS.NEWS.READ.replace(':id', news.id)}">{news.title}</a>
+            {/each}
+        </li>   
     </ul>
 </section>
+
   
 <style>
+    * {
+        margin: 0;
+        font-family: 'Noto Sans KR', sans-serif;
+    }
+
     .news_bnrs {
         font-family: Arial, sans-serif;
         width: var(--news-width);
@@ -67,15 +120,17 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid #eeedf2;
     }
 
     .news_header h3 {
-        font-size: 1.3em;
-        font-weight: 390;
+        font-size: 20px;
+        font-weight: 400;
         color: #151518;
         margin: 0;
-        line-height: 1.5;
+        height: 43px;
+        line-height: 38px;
     }
 
     .news_tab {
@@ -95,16 +150,11 @@
     }
 
     .news_tab a:hover {
-        color: #007aff;
+        color: #3392ff;
     }
 
     .news_tab a.on {
-        color: #007aff;
-    }
-
-    .divider {
-        border-bottom: 1px solid #ddd;
-        margin-top: 10px;
+        color: #3392ff;
     }
   
     .news_con {
@@ -114,24 +164,24 @@
     }
   
     .news_con li {
-        margin-bottom: 10px;
         width: 100%; /* 부모 리스트에 너비 추가 */
     }
 
     .news_con li a {
         text-decoration: none;
         color: #6a6e76;
-        font-size: 0.98em;
+        font-size: 15px;
+        line-height: 32px;
         
         /* 텍스트 줄임표 처리 */
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: calc(var(--news-width) - 15px); /* 최대 너비 설정 */
-        display: inline-block;
+        display: block;
     }
 
     .news_con li a:hover {
-        text-decoration: underline;
+        color: #3392ff;
     }
 </style>

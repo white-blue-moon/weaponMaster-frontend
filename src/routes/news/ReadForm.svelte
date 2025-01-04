@@ -364,6 +364,7 @@
     
     .bdview_btnarea .btnst2 a {
         margin-left: 4px;
+        cursor: pointer;
     }
     
     .btntype_bk46 {
