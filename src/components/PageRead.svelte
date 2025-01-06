@@ -1,22 +1,19 @@
 <script>
-    import { DF_UI } from '../../constants/resourcePath';
-    import { API } from '../../constants/api';
-    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { API } from '../constants/api';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { ARTICLE_DETAIL_TYPE } from '../../constants/articles'
-    import { PATHS } from '../../constants/paths';
-    import { userInfo, isLoggedIn } from "../../utils/auth";
+    import { getPage, getDetailTypeText } from '../constants/page';
+    import { userInfo, isLoggedIn } from "../utils/auth";
     
-    import GnbPublisher from "../../components/GnbPublisher.svelte";
-    import Gnb from "../../components/Gnb.svelte";
-    import HeaderBanner from "../../components/HeaderBanner.svelte";
-    import Footer from '../../components/Footer.svelte';
+    import GnbPublisher from "../components/GnbPublisher.svelte";
+    import Gnb from "../components/Gnb.svelte";
+    import HeaderBanner from "../components/HeaderBanner.svelte";
+    import Menu2nd from './Menu2nd.svelte';
+    import Footer from '../components/Footer.svelte';
 
-    // 현재 URL 경로 가져오기
     let url = window.location.pathname;
-
-    // 슬래시(`/`)로 구분하여 배열로 분리하고 마지막 부분 가져오기
     let pageId = url.split('/').pop();
+    let page = {};
     let article = null;
 
     async function fetchArticle() {
@@ -26,6 +23,7 @@
 
         if (response.success) {
             article = response.articles[0];
+            page = getPage(article.categoryType, article.articleType);
         }
     }
 
@@ -33,21 +31,8 @@
         await fetchArticle();
     });
 
-    function getDetailTypeText(detailType) {
-        if (detailType == ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL) {
-            return '일반';
-        }
-
-        if (detailType == ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION) {
-            return '점검';
-        }
-
-        return '분류 없음';
-    }
-
     function formatDate(inputDate) {
         const date = new Date(inputDate); // 문자열을 Date 객체로 변환
-
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() 값이 0부터 시작하므로 +1
         const day = String(date.getDate()).padStart(2, '0');
@@ -72,7 +57,7 @@
 
         if (response.success) {
             alert('게시물이 삭제되었습니다.');
-            window.location.href = PATHS.NEWS.LIST; // TODO 카테고리 별 경로로 수정 필요
+            window.location.href = page.listPath;
             return;
         }
         
@@ -82,46 +67,33 @@
 </script>
 
 
-
 <GnbPublisher />
-<div class="menu">
-    <Gnb />
-    <div class="header-banner">
-        <HeaderBanner
-            headerText="새소식"
-            isLogoVisible={false}
-            bannerBackground="{ DF_UI }/img/visual/bg_news.jpg"
-        />
+{#if article}
+    <div class="menu">
+        <Gnb /> 
+        <div class="header-banner">
+            <HeaderBanner
+                bannerText={ page.bannerText }
+                isLogoVisible={ false }
+                bannerBackground={ page.bannerBackground }
+            />
+        </div>
     </div>
-</div>
+    <Menu2nd categoryType={ article.categoryType } articleType={ article.articleType }/>
 
-<section class="menu2nd">
-    <a class="active" href={ PATHS.NEWS.LIST }>공지사항</a>
-    <a href="#">업데이트</a>
-    <a href="/news/devnote/list">개발자노트</a>
-</section>
-
-
-<section class="content news">
-    {#if article}
-        <!-- article_type -->
-        <h3>공지사항</h3>
+    <section class="content news">
+        <h3>{ page.articleTypeText }</h3>
         <div class="board_view news_view">
             <dl>
-                <!-- article_detail_type -->
                 <dt>{ getDetailTypeText(article.articleDetailType) }</dt>
                 <dd>
-                    <!-- title -->
                     <p>{ article.title }</p>
                     <p class="sinfo">
-                        <!-- createDate -->
                         <span class="date">{ formatDate(article.createDate) }</span>
-                        <!-- viewCount -->
                         <span class="hits">{ article.viewCount }</span>
                     </p>
                 </dd>
             </dl>
-            <!-- contents -->
             <div class="bd_viewcont">
                 <div class="operation_guide">
                     { @html article.contents }
@@ -129,6 +101,7 @@
             </div>
         </div>
 
+        <!-- TODO 랜덤으로 배너 이미지 띄우도록 바꾸기 -->
         <article class="bdview_bnrarea">
             <a href="/community/news/notice/2838879">
                 <img src="https://bbscdn.df.nexon.com/data6/commu/202408/3619ee93-0fa1-455d-ed97-34e61638f387.jpg" alt="지인 사칭 피싱 방지 배너 1">
@@ -140,17 +113,15 @@
             </div>
             <div class="btnst2">
                 <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
-                <a href={`/news/edit/${ article.id }`} id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
+                <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
                 <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
-                <a href={ PATHS.NEWS.LIST } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
+                <a href={ page.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          
         </article>
-    {/if}
-</section>
-
+    </section>
+{/if}
 
 <!-- TODO 하단에 게시물 목록 출력하기 -->
-
 
 <div class="footer">
     <Footer />
@@ -172,29 +143,6 @@
         position: absolute;
         width: 100%;
         top: 0;
-    }
-
-    .menu2nd {
-        position: relative;
-        width: 100%;
-        height: 80px;
-        background: #f8f9fb;
-        border: 1px solid #e0e2ec;
-        text-align: center;
-        font-size: 0;
-    }
-
-    .menu2nd a.active {
-        color: #36393f;
-        border-bottom: 2px solid #36393f;
-    }
-
-    .menu2nd a {
-        display: inline-block;
-        margin: 0 25px;
-        color: #898c92;
-        font-size: 16px;
-        line-height: 77px;
     }
 
     a {

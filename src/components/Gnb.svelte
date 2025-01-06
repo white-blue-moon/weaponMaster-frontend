@@ -13,8 +13,8 @@
 <section class="gnb">
   <nav>
     <ul class="main-menu">
-      <li><a class="logo" href="/"><img src="https://resource.df.nexon.com/ui/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
-      <li><a href="{ PATHS.NEWS.LIST }">새소식</a></li>
+      <li><a class="logo" href="/"><img src="{ DF_UI }/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
+      <li><a href="{ PATHS.NEWS.NOTICE.LIST }">새소식</a></li>
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
       <li><a href="/">커뮤니티</a></li>
@@ -29,10 +29,9 @@
         <!-- 로고 밑은 비워둠 -->
       </div> 
       <div>
-        <a href="{ PATHS.NEWS.LIST }">공지사항</a>
-        <a href="/update/list">업데이트</a>
-        <!-- <a href="/event/list">이벤트</a> -->
-        <a href="/devnote/list">개발자노트</a>
+        <a href={ PATHS.NEWS.NOTICE.LIST }>공지사항</a>
+        <a href={ PATHS.NEWS.UPDATE.LIST }>업데이트</a>
+        <a href={ PATHS.NEWS.DEV_NOTE.LIST }>개발자노트</a>
       </div>
       <div>
         <a href="/pg/aboutPurpose">페이지 용도</a>

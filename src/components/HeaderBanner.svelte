@@ -1,9 +1,11 @@
 <script>
+    import { DF_UI } from "../constants/resourcePath";
+
     export let homeName = "weaponMaster";
-    export let headerText = "HEADER TEXT";
+    export let bannerText = "BANNER TEXT";
     export let isLogoVisible = true;
-    export let bannerBackground = "https://resource.df.nexon.com/ui/img/mem/bg.png";
-    const logoBackground = "https://resource.df.nexon.com/ui/img/mem/logo.png";
+    export let bannerBackground = `${DF_UI}/img/mem/bg.png`;
+    const logoBackground = `${DF_UI}/img/mem/logo.png`;
 </script>
 
 <header class="banner" style="--banner-background: url({ bannerBackground })">
@@ -13,7 +15,7 @@
     </h1>
     {/if}
     <h2 class:isLogoVisible={ isLogoVisible } class:notLogoVisible={ !isLogoVisible }>
-        { headerText }
+        { bannerText }
     </h2>
 </header>
 

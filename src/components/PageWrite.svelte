@@ -1,45 +1,39 @@
 <script>
-    import { DF_UI } from "../../constants/resourcePath";
-    import { API } from '../../constants/api';
-    import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn } from "../../utils/auth";
+    import { DF_UI } from "../constants/resourcePath";
+    import { API } from '../constants/api';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { userInfo, isLoggedIn } from "../utils/auth";
     import { onMount } from 'svelte';
-    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE, CATEGORY_TYPE } from "../../constants/articles";
-    import { PATHS } from "../../constants/paths";
+    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE, CATEGORY_TYPE } from "../constants/articles";
+    import { PATHS } from "../constants/paths";
+    import { getPage, getCategoryTypeByURL } from "../constants/page";
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
-    import GnbPublisher from "../../components/GnbPublisher.svelte";
-    import HeaderBanner from "../../components/HeaderBanner.svelte";
-    import Gnb from "../../components/Gnb.svelte";
-    import Footer from "../../components/Footer.svelte";
+    import GnbPublisher from "../components/GnbPublisher.svelte";
+    import HeaderBanner from "../components/HeaderBanner.svelte";
+    import Gnb from "../components/Gnb.svelte";
+    import Menu2nd from "./Menu2nd.svelte";
+    import Footer from "../components/Footer.svelte";
 
     const url = window.location.pathname;
-    let isEditPage = false;
-    let article = null;
-    let pageId;
 
-    // 마지막 문자열이 숫자인지 확인하는 정규식
-    if (/\d+$/.test(url)) {
-        isEditPage = true;
-        pageId = url.split('/').pop();
-    }
-
-    export let categoryType = CATEGORY_TYPE.NEWS;
+    let categoryType = getCategoryTypeByURL(url);
     let articleType = 0;
     let articleDetailType;
     let title = ''; // 제목 입력 값
     let contents = ''; // 본문 내용 HTML
     let editor;
 
-    async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.READ(pageId), {
-            method: 'GET',
-        }).catch(handleApiError);
+    let isEditPage = false;
+    let article = null;
+    let pageId;
+    let page = getPage(categoryType, articleType);
 
-        if (response.success) {
-            article = response.articles[0];
-        }
+    // 마지막 문자열이 숫자인지 확인하는 정규식
+    if (/\d+$/.test(url)) {
+        isEditPage = true;
+        pageId = url.split('/').pop();
     }
 
     onMount(async () => {
@@ -60,17 +54,8 @@
             }
         });
 
-        // DOM 조작을 통한 툴바 정렬
-        const toolbar = document.querySelector('.ql-toolbar');
-        if (toolbar) {
-            toolbar.style.display = 'flex';
-            toolbar.style.paddingBottom = 0;
-        }
-
         const ql_editor = document.querySelector('.ql-editor');
         if (ql_editor) {
-            ql_editor.style.height = '400px';
-
             // 영문과 달리 한글을 한 글자만 입력했을 때에는 placeholder 가 사라지지 않는 현상이 있어서 직접 추가
             ql_editor.addEventListener('compositionstart', () => {
                 ql_editor.classList.remove('ql-blank');
@@ -104,6 +89,16 @@
             contents = article.contents;
         }
     });
+
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.READ(pageId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article = response.articles[0];
+        }
+    }
 
     function isArticleValid() {
         if (!$isLoggedIn) {
@@ -162,7 +157,7 @@
 
         if (response.success) {
             alert('게시물 등록이 완료되었습니다.');
-            window.location.href = PATHS.NEWS.LIST; // TODO 카테고리 별 경로로 수정 필요
+            window.location.href = page.listPath;
             return;
         }
 
@@ -173,7 +168,12 @@
     function handleCancle() {
         const isConfirm = confirm("정말 게시물 작성을 취소하시겠습니까?");
         if (isConfirm) {
-            window.location.href = `/news/${article.id}`;
+            if (isEditPage) {
+                window.location.href = page.readPath(pageId);
+                return;
+            }
+            
+            window.location.href = page.listPath;
             return;
         }
 
@@ -186,24 +186,21 @@
     <Gnb />
     <div class="header-banner">
         <HeaderBanner
-            headerText="새소식"
-            isLogoVisible={false}
-            bannerBackground="{DF_UI}/img/visual/bg_news.jpg"
+            bannerText={ page.bannerText }
+            isLogoVisible={ false }
+            bannerBackground={ page.bannerBackground }
         />
     </div>
 </div>
+<Menu2nd categoryType={categoryType } isActiveOn={ false }/>
 
-<section class="menu2nd">
-    <a class="active" href="/news/notice/list">공지사항</a>
-    <a href="#">업데이트</a>
-    <a href="/news/devnote/list">개발자노트</a>
-</section>
 
 <section class="content">
     <article class="community_header h_wrt">
         <div class="category_wrt">
             <div class="split_cont">
                 <div class="split_left_controls">
+                    <!-- TODO 카테고리 별 분류 필요 -->
                     <p><input type="radio" name="articleType" id="01" value={ ARTICLE_TYPE.NEWS.NOTICE } bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
                     <p><input type="radio" name="articleType" id="02" value={ ARTICLE_TYPE.NEWS.UPDATE } bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
                     <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.DEV_NOTE } bind:group={ articleType }><label for="03"><span></span>개발자노트</label></p>
@@ -213,6 +210,7 @@
     </article>
     
     <article class="article_slt" style="padding:13px 0">
+        <!-- TODO 카테고리 별 분류 필요 -->
         <select bind:value={ articleDetailType }>
             <option value="0" disabled selected>분류 항목 선택</option>
             <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL }>일반</option>
@@ -232,7 +230,7 @@
 
     <article class="btnarea mt40">
         <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
-        <a href="" class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
+        <a class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
 </section>
 
@@ -258,29 +256,6 @@
         top: 0;
     }
 
-    .menu2nd {
-        position: relative;
-        width: 100%;
-        height: 80px;
-        background: #f8f9fb;
-        border: 1px solid #e0e2ec;
-        text-align: center;
-        font-size: 0;
-    }
-
-    .menu2nd a.active {
-        color: #36393f;
-        border-bottom: 2px solid #36393f;
-    }
-
-    .menu2nd a {
-        display: inline-block;
-        margin: 0 25px;
-        color: #898c92;
-        font-size: 16px;
-        line-height: 77px;
-    }
-
     a {
         text-decoration: none;
     }
@@ -290,7 +265,6 @@
         width: 1300px;
         min-height: 500px;
     }
-
 
     /* 게시물 타입 선택 */
     .community_header.h_wrt {
@@ -460,6 +434,16 @@
         background: #fff;
     }
 
+    // Quill 에디터
+    :global(.ql-toolbar) {
+        display: flex;
+        padding-bottom: 0 !important;
+    }
+
+    :global(.ql-editor) {
+        height: 400px;
+    }
+
     /* 버튼 영역 */
     .btnarea {
         text-align: center;
@@ -487,6 +471,7 @@
         display: inline-block;
         min-width: 90px;
         text-align: center;
+        cursor: pointer;
     }
 
     .bold {

@@ -96,7 +96,7 @@
     <ul class="news_con">
         <li>
             {#each newsData[activeTab] as news}
-                <a href="{PATHS.NEWS.READ.replace(':id', news.id)}">{news.title}</a>
+                <a href={ PATHS.NEWS.READ(news.id) }>{news.title}</a>
             {/each}
         </li>   
     </ul>
