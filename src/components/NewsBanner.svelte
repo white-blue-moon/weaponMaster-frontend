@@ -85,7 +85,7 @@
             {#each tabs as tab}
                 <a
                     href="#"
-                    class="{activeTab === tab ? 'on' : ''}"
+                    class:on={activeTab === tab}
                     on:click|preventDefault={() => setActiveTab(tab)}
                 >
                     #{tab}

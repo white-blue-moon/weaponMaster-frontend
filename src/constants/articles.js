@@ -13,7 +13,9 @@ export const ARTICLE_TYPE = {
     },
 
     COMMUNITY: {
-
+        ALL: 0,
+        ASK: 1,
+        TALK: 2,
     },
 
     SERVICE_CENTER: {

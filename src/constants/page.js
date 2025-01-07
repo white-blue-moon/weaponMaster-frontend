@@ -19,6 +19,18 @@ export function getPage(categoryType, articleType) {
             };
             return page;
 
+        case CATEGORY_TYPE.COMMUNITY:
+            page = {
+                bannerText: "커뮤니티",
+                bannerBackground:   `${DF_UI}/img/visual/bg_community.jpg`,
+                articleTypeText:    getArticleTypeText(categoryType, articleType),
+                listPath:           getListPath(categoryType, articleType),
+                readPath:   PATHS.COMMUNITY.READ,
+                writePath:  PATHS.COMMUNITY.WRITE,
+                editPath:   PATHS.COMMUNITY.EDIT,
+            };
+            return page;
+
         default:
             page = { bannerText: "존재하지 않는 카테고리 타입" };
             return page;
@@ -27,16 +39,20 @@ export function getPage(categoryType, articleType) {
 
 export function getArticleTypeText(categoryType, articleType) {
     if (categoryType == CATEGORY_TYPE.NEWS) {
-        if (articleType == ARTICLE_TYPE.NEWS.NOTICE) {
-            return "공지사항";
+        switch (articleType) {
+            case ARTICLE_TYPE.NEWS.NOTICE:      return "공지사항";
+            case ARTICLE_TYPE.NEWS.UPDATE:      return "업데이트";
+            case ARTICLE_TYPE.NEWS.DEV_NOTE:    return "개발자노트";
+            default: return "존재하지 않는 게시물 타입";
         }
+    }
 
-        if (articleType == ARTICLE_TYPE.NEWS.UPDATE) {
-            return "업데이트";
-        }
-
-        if (articleType == ARTICLE_TYPE.NEWS.DEV_NOTE) {
-            return "개발자노트";
+    if (categoryType == CATEGORY_TYPE.COMMUNITY) {
+        switch (articleType) {
+            case ARTICLE_TYPE.COMMUNITY.ALL: return "전체";
+            case ARTICLE_TYPE.COMMUNITY.ASK: return "질문";
+            case ARTICLE_TYPE.COMMUNITY.TALK:return "수다";
+            default: return "존재하지 않는 게시물 타입";
         }
     }
 
@@ -57,23 +73,26 @@ export function getDetailTypeText(detailType) {
 
 export function getListPath(categoryType, articleType) {
     if (categoryType == CATEGORY_TYPE.NEWS) {
-        if (articleType == ARTICLE_TYPE.NEWS.NOTICE) {
-            return PATHS.NEWS.NOTICE.LIST;
+        switch (articleType) {
+            case ARTICLE_TYPE.NEWS.NOTICE:      return PATHS.NEWS.NOTICE.LIST;
+            case ARTICLE_TYPE.NEWS.UPDATE:      return PATHS.NEWS.UPDATE.LIST;
+            case ARTICLE_TYPE.NEWS.DEV_NOTE:    return PATHS.NEWS.DEV_NOTE.LIST;
+            default:                            return PATHS.NEWS.NOTICE.LIST;
         }
+    }
 
-        if (articleType == ARTICLE_TYPE.NEWS.UPDATE) {
-            return PATHS.NEWS.UPDATE.LIST;
+    if (categoryType == CATEGORY_TYPE.COMMUNITY) {
+        switch (articleType) {
+            case ARTICLE_TYPE.COMMUNITY.ALL:    return PATHS.COMMUNITY.ALL.LIST;
+            case ARTICLE_TYPE.COMMUNITY.ASK:    return PATHS.COMMUNITY.ASK.LIST;
+            case ARTICLE_TYPE.COMMUNITY.TALK:   return PATHS.COMMUNITY.TALK.LIST;
+            default:                            return PATHS.COMMUNITY.ALL.LIST;
         }
-
-        if (articleType == ARTICLE_TYPE.NEWS.DEV_NOTE) {
-            return PATHS.NEWS.DEV_NOTE.LIST;
-        }
-
-        return PATHS.NEWS.NOTICE.LIST;
     }
 
     return "";
 }
+
 
 export function getCategoryTypeByURL(url) {
     if (url.startsWith('/news')) {
@@ -103,6 +122,14 @@ export function getMenu2nd(categoryType, articleType) {
                 isActive: articleType == artice_type,
             }))
             return menu2nd;
+
+        case CATEGORY_TYPE.COMMUNITY: 
+            menu2nd = Object.values(ARTICLE_TYPE.COMMUNITY).map((artice_type) => ({
+                text: getArticleTypeText(categoryType, artice_type),
+                url: getListPath(categoryType, artice_type),
+                isActive: articleType == artice_type,
+            }))
+            return menu2nd; 
             
         default:
             menu2nd = [{ text: "존재하지 않는 카테고리 타입", url: PATHS.HOME }];

@@ -2,7 +2,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../constants/articles';
+    import { ARTICLE_DETAIL_TYPE } from '../constants/articles';
     import { getPage } from '../constants/page';
 
     import GnbPublisher from "./GnbPublisher.svelte";

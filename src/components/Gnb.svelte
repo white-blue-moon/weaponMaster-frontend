@@ -14,10 +14,10 @@
   <nav>
     <ul class="main-menu">
       <li><a class="logo" href="/"><img src="{ DF_UI }/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
-      <li><a href="{ PATHS.NEWS.NOTICE.LIST }">새소식</a></li>
+      <li><a href={ PATHS.NEWS.NOTICE.LIST }>새소식</a></li>
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
-      <li><a href="/">커뮤니티</a></li>
+      <li><a href={ PATHS.COMMUNITY.ALL.LIST }>커뮤니티</a></li>
       <li><a href="/">서비스센터</a></li>
       <li> <!-- 빈 영역 --> </li>
       <li> <!-- 빈 영역 --> </li>
@@ -40,8 +40,9 @@
         <a href="/guide">제작가이드</a>
       </div>
       <div>
-        <a href="/community/question">질문</a>
-        <a href="/community/talk">수다</a>
+        <a href={ PATHS.COMMUNITY.ALL.LIST }>전체</a>
+        <a href={ PATHS.COMMUNITY.ASK.LIST }>질문</a>
+        <a href={ PATHS.COMMUNITY.TALK.LIST }>수다</a>
       </div>
       <div>
         <a href="/customer/faq">FAQ</a>
