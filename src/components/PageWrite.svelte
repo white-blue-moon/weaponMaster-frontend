@@ -4,9 +4,9 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../utils/auth";
     import { onMount } from 'svelte';
-    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE, CATEGORY_TYPE } from "../constants/articles";
+    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
-    import { getPage, getCategoryTypeByURL } from "../constants/page";
+    import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../constants/page";
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
@@ -20,7 +20,7 @@
 
     let categoryType = getCategoryTypeByURL(url);
     let articleType = 0;
-    let articleDetailType;
+    let articleDetailType = 0;
     let title = ''; // 제목 입력 값
     let contents = ''; // 본문 내용 HTML
     let editor;
@@ -179,6 +179,16 @@
 
         return;
     }
+
+    const articleTypes = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
+    let articleDetailTypes = [];
+    $: {
+        if (articleType != 0 && isDetailTypeExist(categoryType, articleType)) {
+            articleDetailTypes = Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]);
+        } else {
+            articleDetailTypes = [];
+        }
+    }
 </script>
 
 <GnbPublisher />
@@ -194,32 +204,47 @@
 </div>
 <Menu2nd categoryType={categoryType } isActiveOn={ false }/>
 
-
 <section class="content">
     <article class="community_header h_wrt">
         <div class="category_wrt">
             <div class="split_cont">
                 <div class="split_left_controls">
-                    <!-- TODO 카테고리 별 분류 필요 -->
-                    <p><input type="radio" name="articleType" id="01" value={ ARTICLE_TYPE.NEWS.NOTICE } bind:group={ articleType }><label for="01"><span></span>공지사항</label></p>
-                    <p><input type="radio" name="articleType" id="02" value={ ARTICLE_TYPE.NEWS.UPDATE } bind:group={ articleType }><label for="02"><span></span>업데이트</label></p>
-                    <p><input type="radio" name="articleType" id="03" value={ ARTICLE_TYPE.NEWS.DEV_NOTE } bind:group={ articleType }><label for="03"><span></span>개발자노트</label></p>
+                    {#each articleTypes as type, idx}
+                        {#if ARTICLE_TYPE_TEXT[categoryType][type] != "전체"}
+                            <p>
+                                <input 
+                                    type="radio" 
+                                    name="articleType" 
+                                    id="0{ idx }" 
+                                    value={ type } 
+                                    bind:group={ articleType }
+                                >
+                                <label for="0{ idx }">
+                                    <span></span>{ ARTICLE_TYPE_TEXT[categoryType][type] }
+                                </label>
+                            </p>
+                        {/if}
+                    {/each}
                 </div>
             </div>
         </div>
     </article>
     
-    <article class="article_slt" style="padding:13px 0">
-        <!-- TODO 카테고리 별 분류 필요 -->
-        <select bind:value={ articleDetailType }>
-            <option value="0" disabled selected>분류 항목 선택</option>
-            <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL }>일반</option>
-            <option value={ ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION }>점검</option>
-        </select>
-        <dl>
-            <dt class="infotxt">일반과 점검 중 한 가지를 선택해 주세요.</dt>
-        </dl>
-    </article>
+    {#if isDetailTypeExist(categoryType, articleType)}
+        <article class="article_slt" style="padding:13px 0">      
+            <select bind:value={ articleDetailType }>
+                <option value="0" disabled selected>분류 항목 선택</option>
+                {#each articleDetailTypes as type}
+                    <option value={type}>
+                        { ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][type] }
+                    </option>
+                {/each}  
+            </select>  
+            <dl>
+                <dt class="infotxt">분류 항목을 선택해 주세요.</dt>
+            </dl>
+        </article>
+    {/if}
 
     <article class="board_write">
         <ul>

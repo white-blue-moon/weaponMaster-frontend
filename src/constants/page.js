@@ -59,6 +59,20 @@ export function getArticleTypeText(categoryType, articleType) {
     return "존재하지 않는 게시물 타입";
 }
 
+export function isDetailTypeExist(categoryType, articleType) {
+    if (categoryType == CATEGORY_TYPE.NEWS) {
+        if (articleType == ARTICLE_TYPE.NEWS.NOTICE) {
+            return true;
+        }
+
+        if (articleType == ARTICLE_TYPE.NEWS.UPDATE) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 export function getDetailTypeText(detailType) {
     if (detailType == ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL) {
         return '일반';
@@ -69,6 +83,10 @@ export function getDetailTypeText(detailType) {
     }
 
     return '분류 없음';
+}
+
+export function getArticleFilterText(categoryType) {
+
 }
 
 export function getListPath(categoryType, articleType) {
