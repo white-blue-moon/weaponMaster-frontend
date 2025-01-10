@@ -16,6 +16,7 @@
 	import AllList from './routes/community/all/AllList.svelte';
 	import AskList from './routes/community/ask/AskList.svelte';
 	import TalkList from './routes/community/talk/TalkList.svelte';
+  	import PrivateContactList from './routes/service/private_contact/PrivateContactList.svelte';
 </script>
   
   
@@ -45,6 +46,12 @@
 	<Route path={ PATHS.COMMUNITY.WRITE } component={ PageWrite } />
 	<Route path={ PATHS.COMMUNITY.READ_TEPLATE } component={ PageRead } />
 	<Route path={ PATHS.COMMUNITY.EDIT_TEMPLATE } component={ PageWrite } />
+
+	<!-- 서비스센터 -->
+	<Route path={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST } component={ PrivateContactList } />
+	<Route path={ PATHS.SERVICE_CENTER.WRITE } component={ PageWrite } />
+	<Route path={ PATHS.SERVICE_CENTER.READ_TEPLATE } component={ PageRead } />
+	<Route path={ PATHS.SERVICE_CENTER.EDIT_TEMPLATE } component={ PageWrite } />
 </Router>
   
 

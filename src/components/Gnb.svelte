@@ -18,17 +18,16 @@
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
       <li><a href={ PATHS.COMMUNITY.ALL.LIST }>커뮤니티</a></li>
-      <li><a href="/">서비스센터</a></li>
-      <li> <!-- 빈 영역 --> </li>
-      <li> <!-- 빈 영역 --> </li>
-      <li> <!-- 빈 영역 --> </li>
+      <li><a href={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST }>서비스센터</a></li>
+      <li> <!-- 공간 확보를 위해 비워둠 --> </li>
+      <li> <!-- 공간 확보를 위해 비워둠 --> </li>
+      <li> <!-- 공간 확보를 위해 비워둠 --> </li>
     </ul>
 
     <div class="submenu">
-      <div class="empty">
-        <!-- 로고 밑은 비워둠 -->
-      </div> 
+      <div><!-- 로고 밑 비워둠 --></div> 
       <div>
+        <!-- TODO 텍스트들도 상수로 할당할지 고민 중 -->
         <a href={ PATHS.NEWS.NOTICE.LIST }>공지사항</a>
         <a href={ PATHS.NEWS.UPDATE.LIST }>업데이트</a>
         <a href={ PATHS.NEWS.DEV_NOTE.LIST }>개발자노트</a>
@@ -45,18 +44,11 @@
         <a href={ PATHS.COMMUNITY.TALK.LIST }>수다</a>
       </div>
       <div>
-        <a href="/customer/faq">FAQ</a>
-        <a href="/customer/personalQuestion">1:1문의</a>
+        <a href={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST }>1:1문의</a>
       </div>
-      <div>
-        <!-- 빈 영역 아래 비워둠 -->
-      </div>
-      <div>
-        <!-- 로그인 밑은 비워둠 -->
-      </div>
-      <div>
-        <!-- GAME INFO 밑은 비워둠 -->
-      </div>
+      <div><!-- 공간 확보를 위해 비워둠 --></div>
+      <div><!-- 로그인 밑 비워둠 --></div>
+      <div><!-- GAME INFO 밑 비워둠 --></div>
     </div>
   </nav>
 
@@ -68,8 +60,7 @@
         {#if !isLoginAreaVisible}
           {#if !$isLoggedIn}
             로그인
-          {/if}
-          {#if $isLoggedIn}
+          {:else}
             MY
           {/if}
         {/if}
@@ -84,6 +75,7 @@
                 <a href="#">관리자모드 로그인</a>
                 <a href={ PATHS.ACCOUNT.LOGIN } class="blue">일반모드 로그인</a>
               </li>
+              
               <li class="txt_before">
                 <a href={ PATHS.ACCOUNT.JOIN }>처음 오셨나요? 회원가입</a>
               </li>
@@ -117,21 +109,20 @@
 
 
 <style lang="scss">
-  /* Gnb 스타일 설정 */
   .gnb {
-      position: relative;
-      height: 300px;
-      z-index: 2; /* Banner보다 위에 위치하도록 설정 */
+    position: relative;
+    height: 300px;
+    z-index: 2; /* Banner보다 위에 위치하도록 설정 */
   }
 
   nav {
-    background-color: rgba(0,0,0,.5);
+    background-color: rgba(0, 0, 0, 0.5);
     position: relative;
     height: 100px;
   }
 
   nav:hover {
-    background-color: #22252d; /* 배경색 설정 */
+    background-color: #22252d;
   }
 
   .main-menu {
@@ -152,9 +143,8 @@
     align-items: center;
   }
 
-  /* 기본 메인 메뉴 텍스트 색상 */
   .main-menu a {
-    color: white; /* 기본 색상 */
+    color: white; /* 기본 텍스트 색상 */
     text-decoration: none;
     display: inline-block;
     font-size: 18px;
@@ -162,31 +152,6 @@
 
   .main-menu .logo {
     margin-top: 7px;
-  }
-
-  /* 기본 서브 메뉴 텍스트 색상 */
-  .submenu a {
-    position: relative;
-    display: block;
-    padding: 0;
-    height: inherit;
-    color: #898c92;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 32px;
-  }
-
-  /* nav:hover 상태에서 모든 텍스트는 기본적으로 #898c92 */
-  nav:hover .main-menu a,
-  nav:hover .submenu a {
-    color: #898c92;
-  }
-
-  /* 마우스가 올라가 있는 항목만 흰색으로 변경 */
-  .main-menu a:hover, 
-  .submenu a:hover {
-    color: white !important;; /* 강조 색상 (강제 적용 -> 우선순위 높임) */
-    text-decoration: none; /* 밑줄 제거 */
   }
 
   .submenu {
@@ -199,31 +164,47 @@
     border-top: 0.5px solid #444;
   }
 
-  .gnb nav ul li div {
-    display: none;
-    position: relative;
+  .submenu div {
+    flex: 1; /* 메인 메뉴 항목과 동일한 너비 */
+    display: flex;
+    flex-direction: column; /* 메뉴를 세로로 정렬 */
+    align-items: center; /* 텍스트를 중앙 정렬 */
+    text-align: center;
     padding: 24px 0 29px 0;
-}
+  }
+
+  .submenu a {
+    position: relative;
+    display: block;
+    padding: 0;
+    height: inherit;
+    color: #898c92; /* 기본 텍스트 색상 */
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 32px;
+  }
 
   nav:hover .submenu {
     display: flex;
     justify-content: space-between;
   }
 
-  .submenu .empty {
-    visibility: hidden; /* 보이지 않게 처리 */
+  nav:hover .main-menu a,
+  nav:hover .submenu a {
+    color: #898c92; /* 기본 텍스트 색상 */
   }
 
-  .submenu div {
-    flex: 1; /* 메인 메뉴 항목과 동일한 너비 */
-    display: flex;
-    flex-direction: column; /* 메뉴를 세로로 정렬 */
-    align-items: center; /* 텍스트를 가로로 중앙 정렬 */
-    text-align: center;
+  .main-menu a:hover,
+  .submenu a:hover {
+    color: white !important; /* 강조 텍스트 색상 */
+    text-decoration: none; /* 밑줄 제거 */
+  }
+
+  .gnb nav ul li div {
+    display: none;
+    position: relative;
     padding: 24px 0 29px 0;
   }
-
-
 
   /* ================================== */
   /* 로그인, GAME INFO 영역 */

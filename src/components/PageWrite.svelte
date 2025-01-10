@@ -1,10 +1,9 @@
 <script>
-    import { DF_UI } from "../constants/resourcePath";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../utils/auth";
     import { onMount } from 'svelte';
-    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
+    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT, CATEGORY_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
     import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
     import Quill from 'quill';
@@ -196,8 +195,8 @@
     <Gnb />
     <div class="header-banner">
         <HeaderBanner
-            bannerText={ page.bannerText }
             isLogoVisible={ false }
+            bannerText={ CATEGORY_TYPE_TEXT[categoryType] }
             bannerBackground={ page.bannerBackground }
         />
     </div>

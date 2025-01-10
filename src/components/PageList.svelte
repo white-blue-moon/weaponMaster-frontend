@@ -2,7 +2,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT, CATEGORY_TYPE_TEXT } from '../constants/articles';
     import { getArticleFilter, getArticleFilterText, getPage } from '../utils/page';
 
     import GnbPublisher from "./GnbPublisher.svelte";
@@ -40,7 +40,7 @@
     <div class="header-banner">
         <HeaderBanner
             isLogoVisible={ false }
-            bannerText={ page.bannerText }
+            bannerText={ CATEGORY_TYPE_TEXT[categoryType] }
             bannerBackground={ page.bannerBackground }
         />
     </div>

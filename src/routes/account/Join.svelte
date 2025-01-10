@@ -89,7 +89,7 @@
 </script>
 
 <GnbPublisher />
-<HeaderBanner headerText="회원가입" bannerBackground="https://resource.df.nexon.com/ui/img/mem/bg.png"/>
+<HeaderBanner bannerText="회원가입" bannerBackground="https://resource.df.nexon.com/ui/img/mem/bg.png"/>
 <main>
     <form on:submit={onSubmitJoin}>
         <div class="form-row">

@@ -7,8 +7,8 @@ export const PATHS = {
     },
     NEWS: {    
         READ:   (id) => `/news/${id}`,
-        WRITE:  '/news/write',
         EDIT:   (id) => `/news/edit/${id}`,
+        WRITE:  '/news/write',
 
         READ_TEPLATE:   '/news/:id',
         EDIT_TEMPLATE:  '/news/edit/:id',
@@ -19,8 +19,8 @@ export const PATHS = {
     },
     COMMUNITY: {
         READ:   (id) => `/community/${id}`,
-        WRITE:  '/community/write',
         EDIT:   (id) => `/community/edit/${id}`,
+        WRITE:  '/community/write',
 
         READ_TEPLATE:   '/community/:id',
         EDIT_TEMPLATE:  '/community/edit/:id',
@@ -28,5 +28,15 @@ export const PATHS = {
         ALL:     { LIST: '/community/all/list' },
         ASK:     { LIST: '/community/ask/list' },
         TALK:   { LIST: '/community/talk/list' },
+    },
+    SERVICE_CENTER: {
+        READ:   (id) => `/service/${id}`,
+        EDIT:   (id) => `/service/edit/${id}`,
+        WRITE:  '/service/write',
+
+        READ_TEPLATE:   '/service/:id',
+        EDIT_TEMPLATE:  '/service/edit/:id',
+
+        PRIVATE_CONTACT: { LIST: '/service/private_contact/list' },
     },
 };

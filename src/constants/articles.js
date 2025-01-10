@@ -1,25 +1,31 @@
 
 export const CATEGORY_TYPE = {
-    NEWS: 1,
-    COMMUNITY: 2,
+    NEWS:           1,
+    COMMUNITY:      2,
     SERVICE_CENTER: 3,
+};
+
+export const CATEGORY_TYPE_TEXT = {
+    [CATEGORY_TYPE.NEWS]:           "새소식",
+    [CATEGORY_TYPE.COMMUNITY]:      "커뮤니티",
+    [CATEGORY_TYPE.SERVICE_CENTER]: "서비스센터",
 };
 
 export const ARTICLE_TYPE = {
     NEWS: {
-        NOTICE: 1,
-        UPDATE: 2,
+        NOTICE:   1,
+        UPDATE:   2,
         DEV_NOTE: 3,
     },
 
     COMMUNITY: {
-        ALL: 0,
-        ASK: 1,
+        ALL:  0,
+        ASK:  1,
         TALK: 2,
     },
 
     SERVICE_CENTER: {
-
+        PRIVATE_CONTACT: 1,
     },
 }
 
@@ -35,17 +41,21 @@ export const ARTICLE_TYPE_TEXT = {
         [ARTICLE_TYPE.COMMUNITY.ASK]:  "질문",
         [ARTICLE_TYPE.COMMUNITY.TALK]: "수다",
     },
+
+    [CATEGORY_TYPE.SERVICE_CENTER]: {
+        [ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT]:  "1:1문의",
+    },
 }
 
 export const ARTICLE_DETAIL_TYPE = {
     NEWS: {
         NOTICE: {
-            NORMAL: 1,
+            NORMAL:     1,
             INSPECTION: 2,
         },
 
         UPDATE: {
-            NORMAL: 1,
+            NORMAL:     1,
             ADMIN_TOOL: 2,
         }
     }

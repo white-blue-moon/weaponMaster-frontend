@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { getPage, getArticleFilterText } from '../utils/page';
     import { userInfo, isLoggedIn } from "../utils/auth";
-    import { ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
     
     import GnbPublisher from "../components/GnbPublisher.svelte";
     import Gnb from "../components/Gnb.svelte";
@@ -74,8 +74,8 @@
         <Gnb /> 
         <div class="header-banner">
             <HeaderBanner
-                bannerText={ page.bannerText }
                 isLogoVisible={ false }
+                bannerText={ CATEGORY_TYPE_TEXT[article.categoryType] }
                 bannerBackground={ page.bannerBackground }
             />
         </div>

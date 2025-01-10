@@ -1,38 +1,37 @@
-import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT } from '../constants/articles';
+import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT, CATEGORY_TYPE_TEXT } from '../constants/articles';
 import { PATHS } from '../constants/paths';
 import { DF_UI } from '../constants/resourcePath';
 
 // categoryType 별 페이지 정보 조회 함수
 export function getPage(categoryType, articleType) {
-    let page = {};
+    const categoryConfig = {
+        [CATEGORY_TYPE.NEWS]: {
+            bannerBackground: `${DF_UI}/img/visual/bg_news.jpg`,
+            paths: PATHS.NEWS,
+        },
+        [CATEGORY_TYPE.COMMUNITY]: {
+            bannerBackground: `${DF_UI}/img/visual/bg_community.jpg`,
+            paths: PATHS.COMMUNITY,
+        },
+        [CATEGORY_TYPE.SERVICE_CENTER]: {
+            bannerBackground: `${DF_UI}/img/visual/bg_customer.jpg`,
+            paths: PATHS.SERVICE_CENTER,
+        },
+    };
 
-    switch(categoryType) {
-        case CATEGORY_TYPE.NEWS:
-            page = {
-                bannerText: "새소식",
-                bannerBackground:   `${DF_UI}/img/visual/bg_news.jpg`,
-                listPath:           getListPath(categoryType, articleType),
-                readPath:   PATHS.NEWS.READ,
-                writePath:  PATHS.NEWS.WRITE,
-                editPath:   PATHS.NEWS.EDIT,
-            };
-            return page;
-
-        case CATEGORY_TYPE.COMMUNITY:
-            page = {
-                bannerText: "커뮤니티",
-                bannerBackground:   `${DF_UI}/img/visual/bg_community.jpg`,
-                listPath:           getListPath(categoryType, articleType),
-                readPath:   PATHS.COMMUNITY.READ,
-                writePath:  PATHS.COMMUNITY.WRITE,
-                editPath:   PATHS.COMMUNITY.EDIT,
-            };
-            return page;
-
-        default:
-            page = { bannerText: "존재하지 않는 카테고리 타입" };
-            return page;
+    const config = categoryConfig[categoryType];
+    if (!config) {
+        alert('존재하지 않는 카테고리 타입');
+        return;
     }
+
+    return {
+        bannerBackground: config.bannerBackground,
+        listPath:   getListPath(categoryType, articleType),
+        readPath:   config.paths.READ,
+        writePath:  config.paths.WRITE,
+        editPath:   config.paths.EDIT,
+    };
 }
 
 export function isDetailTypeExist(categoryType, articleType) {
@@ -114,6 +113,13 @@ export function getListPath(categoryType, articleType) {
         }
     }
 
+    if (categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
+        switch (articleType) {
+            case ARTICLE_TYPE.SERVICE_CENTER.ALL:   return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
+            default:                                return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
+        }
+    }
+
     return "";
 }
 
@@ -136,27 +142,9 @@ export function getCategoryTypeByURL(url) {
 
 // Menu2nd 에서의 텍스트, url 정보 할당
 export function getMenu2nd(categoryType, articleType) {
-    let menu2nd = [];
-
-    switch (categoryType) {
-        case CATEGORY_TYPE.NEWS: 
-            menu2nd = Object.values(ARTICLE_TYPE.NEWS).map((artice_type) => ({
-                text: ARTICLE_TYPE_TEXT[categoryType][artice_type],
-                url: getListPath(categoryType, artice_type),
-                isActive: articleType == artice_type,
-            }))
-            return menu2nd;
-
-        case CATEGORY_TYPE.COMMUNITY: 
-            menu2nd = Object.values(ARTICLE_TYPE.COMMUNITY).map((artice_type) => ({
-                text: ARTICLE_TYPE_TEXT[categoryType][artice_type],
-                url: getListPath(categoryType, artice_type),
-                isActive: articleType == artice_type,
-            }))
-            return menu2nd; 
-            
-        default:
-            menu2nd = [{ text: "존재하지 않는 카테고리 타입", url: PATHS.HOME }];
-            return menu2nd;
-    }
+    return Object.keys(ARTICLE_TYPE_TEXT[categoryType]).map((article_type) => ({
+        text: ARTICLE_TYPE_TEXT[categoryType][article_type],
+        url: getListPath(categoryType, Number(article_type)),
+        isActive: articleType == article_type,
+    }));
 }

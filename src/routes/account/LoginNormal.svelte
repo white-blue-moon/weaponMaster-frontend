@@ -54,7 +54,7 @@
 </script>
 
 <GnbPublisher />
-<HeaderBanner headerText="로그인" bannerBackground="https://resource.df.nexon.com/ui/img/login/bg.png"/>
+<HeaderBanner bannerText="로그인" bannerBackground="https://resource.df.nexon.com/ui/img/login/bg.png"/>
 <section class="content">
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
