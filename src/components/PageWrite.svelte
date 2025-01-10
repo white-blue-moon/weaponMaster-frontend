@@ -182,12 +182,11 @@
 
     const articleTypes = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
     let articleDetailTypes = [];
-    $: {
-        if (articleType != 0 && isDetailTypeExist(categoryType, articleType)) {
-            articleDetailTypes = Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]);
-        } else {
-            articleDetailTypes = [];
-        }
+
+    // articleType 변경 시 articleDetailType 초기화
+    $: if (articleType) {
+        articleDetailType = 0;
+        articleDetailTypes = isDetailTypeExist(categoryType, articleType)? Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
     }
 </script>
 
@@ -209,18 +208,18 @@
         <div class="category_wrt">
             <div class="split_cont">
                 <div class="split_left_controls">
-                    {#each articleTypes as type, idx}
-                        {#if ARTICLE_TYPE_TEXT[categoryType][type] != "전체"}
+                    {#each articleTypes as article_type, idx}
+                        {#if ARTICLE_TYPE_TEXT[categoryType][article_type] != "전체"}
                             <p>
                                 <input 
                                     type="radio" 
                                     name="articleType" 
                                     id="0{ idx }" 
-                                    value={ type } 
+                                    value={ article_type } 
                                     bind:group={ articleType }
                                 >
                                 <label for="0{ idx }">
-                                    <span></span>{ ARTICLE_TYPE_TEXT[categoryType][type] }
+                                    <span></span>{ ARTICLE_TYPE_TEXT[categoryType][article_type] }
                                 </label>
                             </p>
                         {/if}
@@ -233,10 +232,10 @@
     {#if isDetailTypeExist(categoryType, articleType)}
         <article class="article_slt" style="padding:13px 0">      
             <select bind:value={ articleDetailType }>
-                <option value="0" disabled selected>분류 항목 선택</option>
-                {#each articleDetailTypes as type}
-                    <option value={type}>
-                        { ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][type] }
+                <option value={ 0 } disabled selected>분류 항목 선택</option>
+                {#each articleDetailTypes as article_detail_type}
+                    <option value={ article_detail_type }>
+                        { ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][article_detail_type] }
                     </option>
                 {/each}  
             </select>  
