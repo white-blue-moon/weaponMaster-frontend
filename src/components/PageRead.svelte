@@ -4,13 +4,14 @@
     import { onMount } from "svelte";
     import { getPage, getArticleFilterText } from '../utils/page';
     import { userInfo, isLoggedIn } from "../utils/auth";
-    import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
     
     import GnbPublisher from "../components/GnbPublisher.svelte";
     import Gnb from "../components/Gnb.svelte";
     import HeaderBanner from "../components/HeaderBanner.svelte";
     import Menu2nd from './Menu2nd.svelte';
     import Footer from '../components/Footer.svelte';
+    import Comment from './Comment.svelte';
     
     let url = window.location.pathname;
     let pageId = url.split('/').pop();
@@ -119,6 +120,10 @@
                 <a href={ page.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          
         </article>
+
+        {#if article.categoryType != CATEGORY_TYPE.NEWS}
+            <Comment />
+        {/if}
     </section>
 {/if}
 

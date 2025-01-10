@@ -12,6 +12,8 @@ export const CATEGORY_TYPE_TEXT = {
 };
 
 export const ARTICLE_TYPE = {
+    ALL: 0,
+
     NEWS: {
         NOTICE:   1,
         UPDATE:   2,

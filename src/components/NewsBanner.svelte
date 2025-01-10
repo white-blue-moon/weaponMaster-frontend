@@ -24,7 +24,7 @@
 
     // 게시물 데이터 가져오기
     async function fetchArticles() {
-        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.NEWS, ARTICLE_TYPE.NEWS.NOTICE), {
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.NEWS, ARTICLE_TYPE.ALL), {
             method: 'GET',
         }).catch(handleApiError);
 

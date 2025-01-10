@@ -110,9 +110,8 @@
             alert('게시물 위치를 선택하지 않았습니다.');
             return false;
         }
-
-        // (새소식 - 공지사항) : 분류 항목 선택 필수
-        if (categoryType == CATEGORY_TYPE.NEWS && articleType == ARTICLE_TYPE.NEWS.NOTICE && articleDetailType == 0) {
+        
+        if (isDetailTypeExist(categoryType, articleType)) {
             alert('게시물 분류 항목을 선택해 주세요.');
             return false;
         }
