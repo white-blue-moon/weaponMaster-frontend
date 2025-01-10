@@ -2,15 +2,16 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { getPage, getDetailTypeText } from '../constants/page';
+    import { getPage, getArticleFilterText } from '../utils/page';
     import { userInfo, isLoggedIn } from "../utils/auth";
+    import { ARTICLE_TYPE_TEXT } from '../constants/articles';
     
     import GnbPublisher from "../components/GnbPublisher.svelte";
     import Gnb from "../components/Gnb.svelte";
     import HeaderBanner from "../components/HeaderBanner.svelte";
     import Menu2nd from './Menu2nd.svelte';
     import Footer from '../components/Footer.svelte';
-
+    
     let url = window.location.pathname;
     let pageId = url.split('/').pop();
     let page = {};
@@ -82,10 +83,10 @@
     <Menu2nd categoryType={ article.categoryType } articleType={ article.articleType }/>
 
     <section class="content news">
-        <h3>{ page.articleTypeText }</h3>
+        <h3>{ ARTICLE_TYPE_TEXT[article.categoryType][article.articleType] }</h3>
         <div class="board_view news_view">
             <dl>
-                <dt>{ getDetailTypeText(article.articleDetailType) }</dt>
+                <dt>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</dt>
                 <dd>
                     <p>{ article.title }</p>
                     <p class="sinfo">

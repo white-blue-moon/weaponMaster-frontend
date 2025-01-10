@@ -6,7 +6,7 @@
     import { onMount } from 'svelte';
     import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
-    import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../constants/page";
+    import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
@@ -186,7 +186,8 @@
     // articleType 변경 시 articleDetailType 초기화
     $: if (articleType) {
         articleDetailType = 0;
-        articleDetailTypes = isDetailTypeExist(categoryType, articleType)? Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
+        articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
+            Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
     }
 </script>
 
@@ -201,7 +202,7 @@
         />
     </div>
 </div>
-<Menu2nd categoryType={categoryType } isActiveOn={ false }/>
+<Menu2nd categoryType={ categoryType } isActiveOn={ false }/>
 
 <section class="content">
     <article class="community_header h_wrt">
@@ -215,7 +216,7 @@
                                     type="radio" 
                                     name="articleType" 
                                     id="0{ idx }" 
-                                    value={ article_type } 
+                                    value={ Number(article_type) } 
                                     bind:group={ articleType }
                                 >
                                 <label for="0{ idx }">

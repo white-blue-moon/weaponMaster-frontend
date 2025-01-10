@@ -4,6 +4,7 @@
     import { onMount } from "svelte";
     import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../constants/articles';
     import { PATHS } from '../constants/paths';
+  import { getArticleFilterText } from '../utils/page';
 
     export let width = "400px"; // 기본값 설정
     export let height = "280px"; // 기본값 설정
@@ -43,18 +44,13 @@
                     .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.DEV_NOTE)
                     .map((article) => formatArticleTitle(article)),
             };
-
-            console.log('newsData: ', newsData)
         }
     }
 
     // 게시물 제목 포맷
     function formatArticleTitle(article) {
-        // articleDetailType에 따른 접두사 결정
-        const prefix =
-            article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL
-                ? "[일반]"
-                : "[점검]";
+        // 접두사 확인
+        const prefix = `[${getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType)}]`;
 
         // 접두사를 기존 제목 앞에 추가
         const title = `${prefix} ${article.title}`.trim();

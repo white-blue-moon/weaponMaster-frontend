@@ -1,5 +1,5 @@
 <script>
-    import { getMenu2nd } from '../constants/page'
+    import { getMenu2nd } from '../utils/page'
 
     export let categoryType = 0;
     export let articleType = 0;

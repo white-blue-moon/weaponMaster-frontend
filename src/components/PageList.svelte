@@ -2,8 +2,8 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { ARTICLE_DETAIL_TYPE } from '../constants/articles';
-    import { getPage } from '../constants/page';
+    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { getArticleFilter, getArticleFilterText, getPage } from '../utils/page';
 
     import GnbPublisher from "./GnbPublisher.svelte";
     import Gnb from "./Gnb.svelte";
@@ -29,6 +29,8 @@
     onMount(async ()=> {
         await fetchArticles();
     });
+
+    const articleFilters = getArticleFilter(categoryType, articleType);
 </script>
 
 
@@ -46,14 +48,15 @@
 <Menu2nd categoryType={ categoryType } articleType={ articleType }/>
 
 <section class="content news">
-    <h3>{ page.articleTypeText }</h3>
+    <h3>{ ARTICLE_TYPE_TEXT[categoryType][articleType] }</h3>
     <article class="news_header">
-        <!-- TODO 새소식 > 공지사항 에서만 보이도록 필터링하기 -->
         <div class="category_type_c">
-            <a>점검</a>
-            <a>일반</a>
-        </div>
-
+            {#each articleFilters as articleFilter}
+                    <a has-detail-type={ articleFilter.hasDetailType } filter-type={ articleFilter.filterType }>
+                        { articleFilter.filterText }
+                    </a>
+            {/each}
+        </div> 
         <div class="board_srch">
             <div class="select_gy" style="width:120px">
                 <div class="select">
@@ -85,9 +88,9 @@
             <ul class:notice={ article.isPinned }>
                 <li class="category">
                     {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
-                        <b>점검</b>
+                        <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
                     {:else}
-                        일반
+                        { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
                     {/if}
                 </li>
                 <li class="title" data-no={ article.id }>
