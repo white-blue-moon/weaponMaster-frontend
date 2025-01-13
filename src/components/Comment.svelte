@@ -4,6 +4,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
+    import { formatDate } from "../utils/time";
 
     let placeHolder = "비방, 욕설, 도배글 등은 서비스 이용제한 사유가 될 수 있습니다.";
     if (!$isLoggedIn) {
@@ -16,7 +17,7 @@
     const url = window.location.pathname;
     let articleId = 0;
     let reCommentId = 0;
-
+    let comments = [];
     if (/\d+$/.test(url)) {
         articleId = url.split('/').pop();
     }
@@ -50,6 +51,8 @@
             alert("댓글 내용을 기재하여 주세요.");
             return false;
         }
+
+        return true;
     }
 
     async function handleRegister() {
@@ -77,8 +80,18 @@
         return;
     }
 
+    async function fetchComments() {
+        const response = await apiFetch(API.COMMENTS.LIST(articleId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            comments = response.comments;
+        }
+    }
+
     onMount(async () => {
-        // 댓글 목록 들고오기
+        await fetchComments();
     })
 </script>
 
@@ -86,7 +99,7 @@
 <article class="comment">
     <div class="comment_top">
         <dl>
-            <dt id="comment_count_dt">댓글 <b>0</b></dt>
+            <dt id="comment_count_dt">댓글 <b>{ comments.length }</b></dt>
             <dd>
                 <a class="go_reply">댓글 쓰러 가기</a>
                 <a href="javascript:void(0);" id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
@@ -98,7 +111,25 @@
     <div class="comment_best" id="comment_best_area"></div>
 
     <div class="comment_list">
-        <div id="comment_group_area"></div>
+        <div id="comment_group_area">
+            {#each comments as comment}
+                <div class="cmt_group" data-comment_id={comment.id} id={"nor_cmt_div_" + comment.id}>
+                    <ul>
+                        <li>
+                            <!-- userId -->
+                            <a class="name dnf_charac_name_tag" data-sv="1" data-key="{comment.id}" data-characname={comment.userId}>
+                                { comment.userId }
+                            </a>
+                        </li>
+                        <li>{comment.contents}</li>
+                        <li>
+                            <a>{ formatDate(comment.createDate) }</a>
+                        </li>
+                    </ul>
+                </div>
+            {/each}
+        </div>
+        
         <div class="comment_enter" id="newCommentArea">
             <ul id="uiSticker" class="textarea">
                 <li class="mrt">
@@ -113,7 +144,7 @@
                             <span class="pNode">{ placeHolder }</span>
                         {/if}
                     </div>
-                    <a href="javascript:void(0);" class="reg" on:click={ handleRegister }>등록</a>
+                    <a class="reg" on:click={ handleRegister }>등록</a>
                 </li>
             </ul>
         </div>
@@ -271,10 +302,73 @@
         color: #fff;
         font-size: 13px;
         font-weight: 500;
+        cursor: pointer;
     }
 
     .comment_enter ul li a {
         display: block;
         float: left;
+    }
+
+    /* 댓글 리스트 스타일 */
+    .cmt_group {
+        display: flex;
+        align-items: center;
+        position: relative;
+        border-top: 1px solid #eeedf2;
+    }
+
+    .cmt_group ul {
+        padding: 35px 0 35px 30px;
+        position: relative;
+        width: 1100px;
+    }
+
+    .cmt_group ul li {
+        position: relative;
+        clear: both;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .cmt_group ul li a {
+        display: block;
+        float: left;
+        height: 28px;
+        line-height: 26px;
+        color: #898c92;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .cmt_group ul li a.name {
+        color: #36393f;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .cmt_group ul li a {
+        line-height: 28px;
+    }
+
+    .cmt_group ul li:nth-child(2) {
+        display: block;
+        padding: 11px 0;
+        color: #36393f;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 28px;
+        overflow: hidden;
+    }
+
+    .cmt_group ul li {
+        position: relative;
+        clear: both;
+        word-break: break-all;
+        word-wrap: break-word;
+    }
+
+    .cmt_group ul li:nth-child(3) a:nth-child(1) {
+        margin-right: 30px;
     }
 </style>

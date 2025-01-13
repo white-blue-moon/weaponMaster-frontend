@@ -3,19 +3,19 @@ const ROOT = 'http://localhost:7070'; // TODO .env 파일을 통한 경로 관�
 export const API = {
     HOME: ROOT,
     ACCOUNT: {
-        JOIN: `${ROOT}/account/join`,
+        JOIN:         `${ROOT}/account/join`,
         LOGIN_NORMAL: `${ROOT}/account/login/normal`,
         EXIST_USER: (userId) => `${ROOT}/account/exist/${userId}`,
     },
     ARTICLES: {
         CREATE: `${ROOT}/articles`,
-        LIST: (categoryType, articleType) =>
-            `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
-        READ: (id) => `${ROOT}/articles/${id}`,
+        LIST: (categoryType, articleType) => `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
+        READ:   (id) => `${ROOT}/articles/${id}`,
         UPDATE: (id) => `${ROOT}/articles/${id}`,
         DELETE: (id) => `${ROOT}/articles/${id}`,
     },
     COMMENTS: {
         CREATE: `${ROOT}/comments`,
+        LIST: (id) => `${ROOT}/comments/${id}`,
     },
 };
