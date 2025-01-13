@@ -36,6 +36,7 @@
     let pageId;
     let page = getPage(categoryType, articleType);
 
+    // TODO url 확인 로직 -> 함수화 하기
     // 마지막 문자열이 숫자인지 확인하는 정규식
     if (/\d+$/.test(url)) {
         isEditPage = true;
@@ -160,7 +161,7 @@
                 "articleDetailType": articleDetailType,
                 "title": title,
                 "contents": contents,
-                "author": $userInfo,
+                "userId": $userInfo,
             }),
         }).catch(handleApiError);
 

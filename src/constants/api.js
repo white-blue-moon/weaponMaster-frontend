@@ -15,4 +15,7 @@ export const API = {
         UPDATE: (id) => `${ROOT}/articles/${id}`,
         DELETE: (id) => `${ROOT}/articles/${id}`,
     },
+    COMMENTS: {
+        CREATE: `${ROOT}/comments`,
+    },
 };
