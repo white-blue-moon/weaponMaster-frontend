@@ -3,9 +3,10 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../utils/auth";
     import { onMount } from 'svelte';
-    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE, ARTICLE_DETAIL_TYPE_TEXT, CATEGORY_TYPE_TEXT } from "../constants/articles";
+    import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
     import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
+    
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
@@ -20,11 +21,17 @@
     let categoryType = getCategoryTypeByURL(url);
     let articleType = 0;
     let articleDetailType = 0;
-    let title = ''; // 제목 입력 값
-    let contents = ''; // 본문 내용 HTML
+
+    const articleTypes = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
+    let articleDetailTypes = [];
+
+    let title = '';
+    let contents = '';
     let editor;
 
     let isEditPage = false;
+    let cachedArticleType = 0;
+
     let article = null;
     let pageId;
     let page = getPage(categoryType, articleType);
@@ -86,6 +93,10 @@
             title = article.title;
             editor.root.innerHTML = article.contents;
             contents = article.contents;
+
+            cachedArticleType = articleType;
+            articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
+                Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
         }
     });
 
@@ -111,7 +122,7 @@
             return false;
         }
         
-        if (isDetailTypeExist(categoryType, articleType)) {
+        if (isDetailTypeExist(categoryType, articleType) && articleDetailType == 0) {
             alert('게시물 분류 항목을 선택해 주세요.');
             return false;
         }
@@ -178,16 +189,16 @@
         return;
     }
 
-    const articleTypes = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
-    let articleDetailTypes = [];
-
-    // articleType 변경 시 articleDetailType 초기화
-    $: if (articleType) {
+    // articleType 변경 시 articleDetailTypes 초기화
+    $: if (articleType !== cachedArticleType) {
         articleDetailType = 0;
         articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
             Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
+
+        cachedArticleType = articleType;
     }
 </script>
+
 
 <GnbPublisher />
 <div class="menu">
@@ -233,7 +244,7 @@
             <select bind:value={ articleDetailType }>
                 <option value={ 0 } disabled selected>분류 항목 선택</option>
                 {#each articleDetailTypes as article_detail_type}
-                    <option value={ article_detail_type }>
+                    <option value={ Number(article_detail_type) }>
                         { ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][article_detail_type] }
                     </option>
                 {/each}  
