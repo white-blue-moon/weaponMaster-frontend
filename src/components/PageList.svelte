@@ -95,6 +95,9 @@
                 </li>
                 <li class="title" data-no={ article.id }>
                     <a href={ page.readPath(article.id) }>{ article.title }</a>
+                    {#if article.commentCount > 0}
+                        <b>({ article.commentCount })</b>
+                    {/if}
                     <div class="iconset"></div>
                 </li>
                 <li class="date">{ article.createDate.split('T')[0] }</li>
@@ -414,6 +417,10 @@
         color: #36393f;
     }
 
+    .board_list ul li.title b {
+        color: #3392ff;
+        font-weight: 500;
+    }
 
     .news_list ul li.date {
         width: 200px;

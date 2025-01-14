@@ -79,8 +79,14 @@
             <dl>
                 <dt>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</dt>
                 <dd>
-                    <p>{ article.title }</p>
+                    <p>
+                        { article.title }
+                        {#if article.commentCount > 0}
+                            <span class="comment-count">({article.commentCount})</span>
+                        {/if}
+                    </p>
                     <p class="sinfo">
+                        <span class="arthor">{ article.userId }</span>
                         <span class="date">{ formatDate(article.createDate) }</span>
                         <span class="hits">{ article.viewCount }</span>
                     </p>
@@ -166,6 +172,11 @@
         position: relative;
         margin-top: 23px;
         width: 1300px;
+    }
+
+    .comment-count {
+        margin-left: 5px !important;
+        color: #3392ff;
     }
     
     .board_view dl {
