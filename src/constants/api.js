@@ -17,5 +17,6 @@ export const API = {
     COMMENTS: {
         CREATE: `${ROOT}/comments`,
         LIST: (id) => `${ROOT}/comments/${id}`,
+        DELETE: (id) => `${ROOT}/comments/${id}`,
     },
 };

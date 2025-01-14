@@ -80,6 +80,30 @@
         return;
     }
 
+    async function handleDelete(commentId) {
+        const isConfirm = confirm("정말 해당 댓글을 삭제하시겠습니까?");
+        if (!isConfirm) {
+            return;
+        }
+
+        const response = await apiFetch(API.COMMENTS.DELETE(commentId), {
+            method: 'DELETE',
+            body: JSON.stringify({
+                "userId": $userInfo,
+                "articleId": articleId,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            alert('댓글이 삭제되었습니다.');
+            location.reload();
+            return;
+        }
+        
+        alert('댓글 삭제에 실패하였습니다.');
+        return;
+    }
+
     async function fetchComments() {
         const response = await apiFetch(API.COMMENTS.LIST(articleId), {
             method: 'GET',
@@ -116,14 +140,14 @@
                 <div class="cmt_group" data-comment_id={comment.id} id={"nor_cmt_div_" + comment.id}>
                     <ul>
                         <li>
-                            <a class="name dnf_charac_name_tag" data-sv="1" data-key="{ comment.id }" data-characname={ comment.userId }>
+                            <a class="name dnf_charac_name_tag">
                                 { comment.userId }
                             </a>
                         </li>
                         <li>{comment.contents}</li>
                         <li>
                             <a>{ formatDate(comment.createDate) }</a>
-                            <a href="javascript:void(0);" class="del">삭제</a>
+                            <a class="del" on:click={ handleDelete(comment.id) }>삭제</a>
                         </li>
                     </ul>
                     <div class="cmt_btnarea">
@@ -370,6 +394,7 @@
     .cmt_group ul li a.del {
         color: #36393f;
         font-weight: 500;
+        cursor: pointer;
     }
 
     .cmt_group ul li:nth-child(2) {
