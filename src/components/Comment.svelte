@@ -108,7 +108,7 @@
         </dl>
     </div>
 
-    <div class="comment_best" id="comment_best_area"></div>
+    <!-- <div class="comment_best" id="comment_best_area"></div> -->
 
     <div class="comment_list">
         <div id="comment_group_area">
@@ -116,22 +116,32 @@
                 <div class="cmt_group" data-comment_id={comment.id} id={"nor_cmt_div_" + comment.id}>
                     <ul>
                         <li>
-                            <!-- userId -->
-                            <a class="name dnf_charac_name_tag" data-sv="1" data-key="{comment.id}" data-characname={comment.userId}>
+                            <a class="name dnf_charac_name_tag" data-sv="1" data-key="{ comment.id }" data-characname={ comment.userId }>
                                 { comment.userId }
                             </a>
                         </li>
                         <li>{comment.contents}</li>
                         <li>
                             <a>{ formatDate(comment.createDate) }</a>
+                            <a href="javascript:void(0);" class="del">삭제</a>
                         </li>
                     </ul>
+                    <div class="cmt_btnarea">
+                        <div class="vam">
+                            <!-- <a class="like ">0</a> -->
+                            <a class="gocmt">답글쓰기</a>
+                        </div>
+                    </div>
                 </div>
             {/each}
         </div>
         
         <div class="comment_enter" id="newCommentArea">
             <ul id="uiSticker" class="textarea">
+                <li>
+                    <a class="name">{ $userInfo }</a>
+                    <!-- <a>힐더</a> -->
+                </li>
                 <li class="mrt">
                     <div
                         contenteditable="true"
@@ -225,10 +235,10 @@
         max-width: 100%;
     }
 
-    .comment_best {
+    /* .comment_best {
         position: relative;
         background: #f4f9ff;
-    }
+    } */
 
     .comment_enter {
         position: relative;
@@ -310,6 +320,12 @@
         float: left;
     }
 
+    .comment_enter ul li a.name {
+        color: #36393f;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
     /* 댓글 리스트 스타일 */
     .cmt_group {
         display: flex;
@@ -351,6 +367,11 @@
         line-height: 28px;
     }
 
+    .cmt_group ul li a.del {
+        color: #36393f;
+        font-weight: 500;
+    }
+
     .cmt_group ul li:nth-child(2) {
         display: block;
         padding: 11px 0;
@@ -370,5 +391,29 @@
 
     .cmt_group ul li:nth-child(3) a:nth-child(1) {
         margin-right: 30px;
+    }
+
+    /* 댓글 좋아요 및 답글 버튼 스타일 */
+    .cmt_group .cmt_btnarea {
+        margin-left: auto;
+        width: 140px;
+    }
+
+    .cmt_group .cmt_btnarea a.gocmt {
+        height: 35px;
+        line-height: 33px;
+        font-size: 12px;
+    }
+
+    .cmt_group .cmt_btnarea a {
+        display: block;
+        width: 110px;
+        background: #f8f9fb;
+        border: 1px solid #e0e2ec;
+        border-radius: 3px;
+        color: #6a6e76;
+        font-weight: 500;
+        text-align: center;
+        cursor: pointer;
     }
 </style>
