@@ -21,7 +21,7 @@
 
     // contenteditable의 텍스트를 contents에 반영
     function updateContents(e) {
-        contents = e.target.innerText.trim();
+        contents = e.target.innerHTML.trim();
     }
 
     function handleFocus() {

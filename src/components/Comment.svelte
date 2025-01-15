@@ -8,13 +8,13 @@
 
     import CommentEnter from "./CommentEnter.svelte";
 
-    let comments = [];
     const url = window.location.pathname;
     let articleId = 0;
     if (/\d+$/.test(url)) {
         articleId = url.split('/').pop();
     }
 
+    let comments = [];
     let normalComments = [];
     let replyComments = [];
     const replyCommentsList = [];
@@ -100,7 +100,7 @@
                         <li>
                             <a class="name dnf_charac_name_tag"> { comment.userId }</a>
                         </li>
-                        <li>{comment.contents}</li>
+                        <li>{ @html comment.contents}</li>
                         <li>
                             <a>{ formatDate(comment.createDate) }</a>
                             <a class="del" on:click={ handleDelete(comment.id) }>삭제</a>
@@ -128,7 +128,7 @@
                                 <li>
                                     <a class="name dnf_charac_name_tag">{ replyComment.userId }</a>
                                 </li>
-                                <li>{ replyComment.contents }</li>
+                                <li>{ @html replyComment.contents }</li>
                                 <li>
                                     <a>{ formatDate(replyComment.createDate) }</a>
                                     <a class="del" on:click={ handleDelete(replyComment.id) }>삭제</a>
