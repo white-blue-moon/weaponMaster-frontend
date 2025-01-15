@@ -258,7 +258,7 @@
 
     <article class="board_write">
         <ul>
-            <li><input type="text" id="title" bind:value={title} placeholder="제목을 입력해 주세요."></li>
+            <li><input type="text" id="title" bind:value={ title } placeholder="제목을 입력해 주세요."></li>
             <li id="editor" class="editor_area"></li>
         </ul>
     </article>

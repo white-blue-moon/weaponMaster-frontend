@@ -15,22 +15,45 @@
     export let articleType;
 
     let page = getPage(categoryType, articleType);
+    const articleFilters = getArticleFilter(categoryType, articleType);
+
+    const PAGE_SIZE = 20; // 한 페이지에 표시할 게시물 수
+    const GROUP_PAGING_SIZE = 10; // 한 그룹에 표시할 페이지 번호 개수
+
     let articles = [];
-    async function fetchArticles() {
+    let totalPageNum = 1;
+    let currentPageNum = 1; // 현재 페이지
+    let displayedArticles = [];
+
+    onMount(async () => {
         const response = await apiFetch(API.ARTICLES.LIST(categoryType, articleType), {
-            method: 'GET',
+            method: "GET",
         }).catch(handleApiError);
 
         if (response.success) {
             articles = response.articles;
+            totalPageNum = Math.ceil(articles.length / PAGE_SIZE);
+            updateDisplayedArticles();
+        }
+    });
+
+    function updateDisplayedArticles() {
+        displayedArticles = articles.slice((currentPageNum - 1) * PAGE_SIZE, currentPageNum * PAGE_SIZE);
+    }
+
+    function changePage(pageNum) {
+        if (pageNum >= 1 && pageNum <= totalPageNum) {
+            currentPageNum = pageNum;
+            updateDisplayedArticles();
         }
     }
 
-    onMount(async ()=> {
-        await fetchArticles();
-    });
-
-    const articleFilters = getArticleFilter(categoryType, articleType);
+    $: currentGroupStart = Math.floor((currentPageNum - 1) / GROUP_PAGING_SIZE) * GROUP_PAGING_SIZE + 1; // 첫번째 페이징 번호를 1단위로 끊으려면 -1 필요, Math.floor(1.6) = 1
+    $: currentGroupEnd   = Math.min(currentGroupStart + GROUP_PAGING_SIZE - 1, totalPageNum); // 마지막 페이징 번호를 10 단위로 끊으려면 -1 필요
+    $: currentGroupPages = Array.from(
+        { length: currentGroupEnd - currentGroupStart + 1 }, // ex. 1 ~ 10 을 표현하려면 + 1 해야 함 (start ~ end 모두 표현하려면 +1 필요)
+        (_, i) => currentGroupStart + i
+    );
 </script>
 
 
@@ -84,7 +107,7 @@
     </article>
 
     <article class="board_list news_list">
-        {#each articles as article}
+        {#each displayedArticles as article}
             <ul class:notice={ article.isPinned }>
                 <li class="category">
                     {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
@@ -106,29 +129,25 @@
         {/each}
     </article>
     
-
-    <!-- TODO 관리자모드 접속자에게만 보이도록 하기 -->
+    <!-- TODO 권한 있는 상태에서만 보이도록 하기 -->
     <article class="btnarea_r mt30">
         <a href="{ page.writePath }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
     </article>
 
     <article class="paging mt60">
-        <a href="javascript:void(0);" class="first" data-page="1">FIRST</a>
-        <a href="javascript:void(0);" class="prev" data-page="1">PREV</a>
+        <a class="first" on:click={ () => changePage(1) }>FIRST</a>
+        <a class="prev" on:click={ () => changePage(currentPageNum - 1) }>PREV</a>
 
-        <span>1</span>
-        <a href="javascript:void(0);" data-page="2">2</a>
-        <a href="javascript:void(0);" data-page="3">3</a>
-        <a href="javascript:void(0);" data-page="4">4</a>
-        <a href="javascript:void(0);" data-page="5">5</a>
-        <a href="javascript:void(0);" data-page="6">6</a>
-        <a href="javascript:void(0);" data-page="7">7</a>
-        <a href="javascript:void(0);" data-page="8">8</a>
-        <a href="javascript:void(0);" data-page="9">9</a>
-        <a href="javascript:void(0);" data-page="10">10</a>
+        {#each currentGroupPages as pageNum}
+            {#if pageNum === currentPageNum}
+                <span>{ pageNum }</span>
+            {:else}
+                <a on:click={ () => changePage(pageNum) }>{ pageNum }</a>
+            {/if}
+        {/each}
 
-        <a href="javascript:void(0);" class="next" data-page="11">NEXT</a>
-        <a href="javascript:void(0);" class="end" data-page="488">END</a>
+        <a class="next" on:click={ () => changePage(currentGroupEnd + 1) }>NEXT</a>
+        <a class="end" on:click={ () => changePage(totalPageNum) }>END</a>
     </article>
 </section>
 
@@ -159,6 +178,7 @@
 
     a {
         text-decoration: none;
+        cursor: pointer;
     }
 
     .news {
