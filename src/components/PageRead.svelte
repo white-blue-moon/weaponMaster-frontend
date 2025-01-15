@@ -86,7 +86,7 @@
                         {/if}
                     </p>
                     <p class="sinfo">
-                        <span class="arthor">{ article.userId }</span>
+                        <span class="arthor">{ article.userId }</span> <!-- TODO 새소식에서는 안 보이는 게 좋을지 고민중 -->
                         <span class="date">{ formatDate(article.createDate) }</span>
                         <span class="hits">{ article.viewCount }</span>
                     </p>
@@ -233,6 +233,12 @@
     
     .board_view dl dd p span {
         margin-left: 60px;
+    }
+
+    .board_view dl dd p.sinfo .arthor {
+        margin-left: 0; /* 기본 마진 제거 */
+        margin-right: auto; /* 남은 공간을 오른쪽으로 밀어 좌측 정렬 */
+        padding-left: 30px;
     }
     
     .board_view dl dd p span.hits {
