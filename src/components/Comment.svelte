@@ -15,6 +15,10 @@
         articleId = url.split('/').pop();
     }
 
+    let normalComments = [];
+    let replyComments = [];
+    const replyCommentsList = [];
+
     async function handleDelete(commentId) {
         const isConfirm = confirm("정말 해당 댓글을 삭제하시겠습니까?");
         if (!isConfirm) {
@@ -46,6 +50,19 @@
 
         if (response.success) {
             comments = response.comments;
+
+            // 1. normalComments와 replyComments 분리
+            normalComments = comments.filter((comment) => comment.reCommentId == 0);
+            replyComments = comments.filter((comment) => comment.reCommentId > 0);
+
+            // 2. replyComments를 reCommentId 기준으로 그룹화
+            replyComments.forEach((comment) => {
+              if (!replyCommentsList[comment.reCommentId]) {
+                replyCommentsList[comment.reCommentId] = [];
+              }
+              replyCommentsList[comment.reCommentId].push(comment);
+            });
+
         }
     }
 
@@ -77,13 +94,11 @@
 
     <div class="comment_list">
         <div id="comment_group_area">
-            {#each comments as comment}
-                <div class="cmt_group" data-comment_id={comment.id} id={"nor_cmt_div_" + comment.id}>
+            {#each normalComments as comment}
+                <div class="cmt_group">
                     <ul>
                         <li>
-                            <a class="name dnf_charac_name_tag">
-                                { comment.userId }
-                            </a>
+                            <a class="name dnf_charac_name_tag"> { comment.userId }</a>
                         </li>
                         <li>{comment.contents}</li>
                         <li>
@@ -100,8 +115,27 @@
                         </div>
                     </div>
                 </div>
+
                 {#if reCommentVisible[comment.id]}
                     <CommentEnter reCommentId={comment.id} />
+                {/if}
+
+                {#if replyCommentsList[comment.id]}
+                    {#each replyCommentsList[comment.id] as replyComment}
+                        <!-- 댓글 출력창 컴포넌트화 하기 -->
+                        <div class="cmt_group reply">
+                            <ul>
+                                <li>
+                                    <a class="name dnf_charac_name_tag">{ replyComment.userId }</a>
+                                </li>
+                                <li>{ replyComment.contents }</li>
+                                <li>
+                                    <a>{ formatDate(replyComment.createDate) }</a>
+                                    <a class="del" on:click={ handleDelete(replyComment.id) }>삭제</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {/each}
                 {/if}
             {/each}
         </div>
@@ -258,6 +292,31 @@
 
     .cmt_group ul li:nth-child(3) a:nth-child(1) {
         margin-right: 30px;
+    }
+
+    /* 대댓글 스타일 */
+    .comment_list .cmt_group.reply {
+        margin-top: -5px;
+        border-top: none;
+    }
+
+    .comment_list .cmt_group.reply ul {
+        padding: 0 0 35px 30px;
+    }
+
+    .comment_list .cmt_group.reply li a.name::before {
+        content: '';
+        display: inline-block;
+        margin: -4px 13px 0 0;
+        width: 8px;
+        height: 8px;
+        border-left: 1px solid #6a6e76;
+        border-bottom: 1px solid #6a6e76;
+        vertical-align: middle;
+    }
+
+    .comment_list .cmt_group.reply li:nth-child(n+2):nth-child(-n+3) {
+        padding-left: 20px;
     }
 
     /* 댓글 좋아요 및 답글 버튼 스타일 */
