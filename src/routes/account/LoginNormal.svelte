@@ -5,6 +5,7 @@
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
+    import Footer from '../../components/Footer.svelte';
 
     let userId = "";
     let password = "";
@@ -89,6 +90,7 @@
         </form>
     </article>
 </section>
+<Footer />
 
 <style>
     a {
