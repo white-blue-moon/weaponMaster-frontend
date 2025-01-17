@@ -186,7 +186,6 @@
         border: none;
         cursor: pointer;
         background: #3392ff;
-        margin-left: 10px;
         white-space: nowrap; /* 텍스트 줄바꿈 방지 */
     }
 
@@ -195,6 +194,7 @@
     }
 
     .secondary-button {
+        margin-left: 10px;
         background: #fff;
         color: #3392ff;
         border: 1px solid #3392ff;
