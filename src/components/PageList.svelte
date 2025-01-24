@@ -355,6 +355,7 @@
         background: #f8f9fb;
         color: #6a6e76;
         font-size: 14px;
+        outline: none; /* 기본 포커스 스타일 제거 */
     }
 
     input[type="text"] {
