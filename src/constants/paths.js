@@ -1,6 +1,6 @@
 export const PATHS = {
     HOME: '/',
-    INSPECTION: '/inspection',
+    INSPECTION: '/',
     ACCOUNT: {
         JOIN:   '/account/join',
         LOGIN:  '/account/login',

@@ -2,6 +2,21 @@
     import FocusBanner from '../components/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
 
+
+    export let endDate;
+
+    const date    = new Date(endDate);
+    let   hours   = date.getHours();
+    const minutes = date.getMinutes();
+
+    const amPm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0이면 12로 변환 (12AM, 12PM)
+    
+    // 두 자리수로 만들기 위해 0 채움
+    const formatHours   = hours   < 10 ? `0${hours}`   : hours; 
+    const formatMinutes = minutes < 10 ? `0${minutes}` : minutes; 
+    
     // 임시 이미지 링크
     const imageUrls = [
         "https://bbscdn.df.nexon.com/data6/commu/202412/3e0a78be-a19f-d2d3-5dbf-540aa173cab5.jpg",
@@ -28,14 +43,14 @@
         <div class="date">
             <span>오픈 예정 시간</span>
             <ul id="openSchedule">
-                <li>10</li>
-                <li>00</li>
-                <li>AM</li>
+                <li>{ formatHours }</li>
+                <li>{ formatMinutes }</li>
+                <li>{ amPm }</li>
             </ul>
         </div>
     </article>
     <article class="focus">
-        <FocusBanner width="650px" height="650px" imageUrls={imageUrls} />
+        <FocusBanner width="650px" height="650px" imageUrls={ imageUrls } />
     </article>
 </section>
 
