@@ -25,7 +25,7 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            article = response.articles[0];
+            article = response.data;
             page = getPage(article.categoryType, article.articleType);
         }
     }

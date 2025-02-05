@@ -29,7 +29,7 @@
         }).catch(handleApiError);
 
         if (response?.success) {
-            articles = response.articles;
+            articles = response.data;
 
             // newsData 동적 생성
             newsData = {

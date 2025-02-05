@@ -25,6 +25,6 @@ export const API = {
 const ADMIN_ROOT = 'http://localhost:7770';
 export const ADMIN_API = {
     INSPECTIOIN: {
-        GET_ACTIVE: `${ADMIN_ROOT}/insepction/active`,
+        GET_ACTIVE: `${ADMIN_ROOT}/inspection/active`,
     }
 };

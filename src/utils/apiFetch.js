@@ -16,6 +16,6 @@ export async function apiFetch(url, options = {}) {
 }
 
 export function handleApiError(error) {
-    console.error('API Error:', error.message);
-    return null; // 에러 발생 시 기본값 반환
+    console.error('API Error: ', error.message);
+    return { success: false };
 }

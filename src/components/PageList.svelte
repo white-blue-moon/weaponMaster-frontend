@@ -31,7 +31,7 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            articles = response.articles;
+            articles = response.data;
             totalPageNum = Math.ceil(articles.length / PAGE_SIZE);
             updateDisplayedArticles();
         }
