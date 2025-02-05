@@ -6,40 +6,37 @@
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
 
-    let userId = "";
-    let isUserIdExist = false;
-    let password = "";
+    let userId          = "";
+    let password        = "";
     let confirmPassword = "";
-    let server = "";
-    let character = "";
+    let server          = "";
+    let character       = "";
 
     // TODO 아래 정보 서버에서 관리하기
     const servers = [
-        { id: 1, serverId: "anton", name: "안톤" },
-        { id: 2, serverId: "bakal", name: "바칼" },
-        { id: 3, serverId: "cain", name: "카인" },
+        { id: 1, serverId: "anton",    name: "안톤" },
+        { id: 2, serverId: "bakal",    name: "바칼" },
+        { id: 3, serverId: "cain",     name: "카인" },
         { id: 4, serverId: "casillas", name: "카시야스" },
-        { id: 5, serverId: "diregie", name: "디레지에" },
-        { id: 6, serverId: "hilder", name: "힐더" },
-        { id: 7, serverId: "prey", name: "프레이" },
-        { id: 8, serverId: "siroco", name: "시로코" }
+        { id: 5, serverId: "diregie",  name: "디레지에" },
+        { id: 6, serverId: "hilder",   name: "힐더" },
+        { id: 7, serverId: "prey",     name: "프레이" },
+        { id: 8, serverId: "siroco",   name: "시로코" }
     ];
 
     // TODO 유저 아이디, 혹은 password 를 다시 입력하는 경우 관련 valid 변수 다시 false 로 바꾸는 함수 필요
-
     async function checkDuplicateId() {
         const response = await apiFetch(API.ACCOUNT.EXIST_USER(userId), {
             method: 'GET',
         }).catch(handleApiError);
 
-        if (response.exist) {
-            alert('이미 존재하는 아이디입니다');
-            isUserIdExist = true;
+        const isUserIdAvailable = response.data;
+        if (isUserIdAvailable) {
+            alert('사용 가능한 아이디입니다');
             return;
         }
 
-        alert('사용 가능한 아이디입니다');
-        isUserIdExist = false;
+        alert('이미 존재하는 아이디입니다');
         return;
     }
 
