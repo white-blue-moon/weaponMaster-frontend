@@ -28,7 +28,7 @@
         const response = await apiFetch(API.COMMENTS.DELETE(commentId), {
             method: 'DELETE',
             body: JSON.stringify({
-                "userId": $userInfo,
+                "userId":    $userInfo,
                 "articleId": articleId,
             }),
         }).catch(handleApiError);
@@ -49,20 +49,20 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            comments = response.comments;
+            comments = response.data;
 
             // 1. normalComments와 replyComments 분리
             normalComments = comments.filter((comment) => comment.reCommentId == 0);
-            replyComments = comments.filter((comment) => comment.reCommentId > 0);
+            replyComments  = comments.filter((comment) => comment.reCommentId > 0);
 
             // 2. replyComments를 reCommentId 기준으로 그룹화
             replyComments.forEach((comment) => {
               if (!replyCommentsList[comment.reCommentId]) {
                 replyCommentsList[comment.reCommentId] = [];
               }
+
               replyCommentsList[comment.reCommentId].push(comment);
             });
-
         }
     }
 

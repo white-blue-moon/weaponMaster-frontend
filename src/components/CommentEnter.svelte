@@ -60,10 +60,10 @@
         const response = await apiFetch(API.COMMENTS.CREATE, {
             method: "POST",
             body: JSON.stringify({
-                "userId": $userInfo,
-                "articleId": articleId,
+                "userId":      $userInfo,
+                "articleId":   articleId,
                 "reCommentId": reCommentId,
-                "contents": contents,
+                "contents":    contents,
             }),
         }).catch(handleApiError);
 
