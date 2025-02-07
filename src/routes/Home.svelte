@@ -10,7 +10,7 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
-  import FullBanner from '../components/FullBanner.svelte';
+    import FullBanner from '../components/FullBanner.svelte';
     
     let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
     let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
@@ -18,19 +18,19 @@
 
     // API 호출
     async function fetchFocusBanners() {
-        const response = await apiFetch(API.HOME, {
+        const response = await apiFetch(API.PAGE.HOME, {
             method: 'POST',
             body: JSON.stringify({
-                "reqBanner": [
-                    {"bannerType": 1},
-                    {"bannerType": 2},
-                    {"bannerType": 3}
+                "bannerTypes": [
+                    FOCUS_BANNER_TYPE.MAIN,
+                    FOCUS_BANNER_TYPE.NEWS_FIRST,
+                    FOCUS_BANNER_TYPE.NEWS_SECOND,
                 ]
             }),
         }).catch(handleApiError);
 
         if (response != null) {
-            focusBanners = response; // 반환 값을 focusBanners에 저장
+            focusBanners = response.data.focusBanners;
             loading = false;  // 로딩이 끝났으므로 로딩 상태를 false로 설정
         }
     }
@@ -40,9 +40,9 @@
         await fetchFocusBanners();  // API 호출 완료될 때까지 기다림
 
         // focusBanners가 업데이트된 후 banners1, banners2, banners3 할당
-        banners1 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
-        banners2 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
-        banners3 = focusBanners.respBanner.banners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
+        banners1 = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+        banners2 = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
+        banners3 = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
     });
 </script>
 
@@ -58,7 +58,6 @@
             <FocusBanner width="1450px" height="600px" imageUrls={banners1} />
         {:else}
             <!-- 로딩 중 상태 -->
-            <p>로딩 중...</p>
         {/if}
     </div>
 </div>
@@ -77,7 +76,6 @@
             </div>
         {:else}
             <!-- 로딩 중 상태 -->
-            <p>로딩 중...</p>
         {/if}
     </div>
 </div>

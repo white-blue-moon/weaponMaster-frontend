@@ -27,7 +27,7 @@ export const PATHS = {
 
         ALL:     { LIST: '/community/all/list' },
         ASK:     { LIST: '/community/ask/list' },
-        TALK:   { LIST: '/community/talk/list' },
+        TALK:    { LIST: '/community/talk/list' },
     },
     SERVICE_CENTER: {
         READ:   (id) => `/service/${id}`,

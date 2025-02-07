@@ -46,7 +46,7 @@
   
   
 <Router>
-	<!-- 점검 중일 때는 모든 경로를 Inspection 으로 리다이렉트 -->
+	<!-- 점검 중일 때는 모든 경로를 INSPECTION 으로 리다이렉트 -->
 	{#if isInspectionOn}
         <Route path={ PATHS.INSPECTION } let:params>
 			<Inspection { endDate }/>

@@ -1,6 +1,9 @@
 const ROOT = 'http://localhost:7070'; // TODO .env 파일을 통한 경로 관리 추후 고려 ex) const ROOT = import.meta.env.API_ROOT
 export const API = {
-    HOME: ROOT,
+    PAGE: {
+        HOME:        `${ROOT}/page/home`,
+        INSPECTIOIN: `${ROOT}/page/inspection`,
+    },
     ACCOUNT: {
         JOIN:         `${ROOT}/account/join`,
         LOGIN_NORMAL: `${ROOT}/account/login/normal`,
