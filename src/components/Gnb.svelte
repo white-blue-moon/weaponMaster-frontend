@@ -3,10 +3,21 @@
   import { DF_UI } from '../constants/resourcePath'
   import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
 
+  import GameInfoPopUp from './GameInfoPopUp.svelte';
+
   let isLoginAreaVisible = false;
+  let isGameInfoPopUpVisible = false;
 
   function toggleLogin() {
     isLoginAreaVisible = !isLoginAreaVisible;
+  }
+
+  function showGameInfoPopUp() {
+    isGameInfoPopUpVisible = true;
+  }
+
+  function closeGameInfoPopUp() {
+    isGameInfoPopUpVisible= false;
   }
 </script>
 
@@ -98,14 +109,17 @@
 
     <!-- GAME INFO -->
     <article class="gameinfo">
-      <a id="gameinfo" href="javascript:$.neople.game.gameStart()">
+      <a id="gameinfo" on:click={ showGameInfoPopUp }>
           <span></span>
           <b>GAME INFO</b>
       </a>
     </article>
   </div>
-
 </section>
+
+{#if isGameInfoPopUpVisible}
+  <GameInfoPopUp on:close={ closeGameInfoPopUp }/>
+{/if}
 
 
 <style lang="scss">
