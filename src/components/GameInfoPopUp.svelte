@@ -1,35 +1,52 @@
 <script>
+    import { onMount } from "svelte";
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
     import { isLoggedIn } from "../utils/auth";
+    import { API, NEOPLE_API } from '../constants/api';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
     
     const dispatch = createEventDispatcher();
     
-    let searchQuery = "";
     let searchResults = [];
-    let watchList = [];
+    let watchList     = [];
+    let searchInput; // 검색창을 참조할 변수
 
-    // TODO
-    // regDate      : 물품 최초 등록일
-    // expireDate   : 물품 등록 만료일
-    // regCount     : 최초 등록 개수
-    // count        : 현재 남은 개수
-    // currentPrice : 현재 일괄 구매 가격
-    // unitPrice    : 개별 가격
+    // 모달이 열리면 검색창 자동 포커스
+    onMount(() => {
+        searchInput?.focus();
+    });
 
-    // 단일 등록 상품 -> count = 1, currentPrice = unitPrice 그리고 regCount 키값 없음
-
-    function searchItems() {
-        const mockData = [
-            { id: 1, itemName: "마법의 검", price: 5000, regDate: "2025-02-01" },
-            { id: 2, itemName: "신비한 갑옷", price: 12000, regDate: "2025-02-02" },
-            { id: 3, itemName: "전설의 방패", price: 8000, regDate: "2025-02-03" },
-            { id: 4, itemName: "마법의 검", price: 4300, regDate: "2025-02-01" },
-            { id: 5, itemName: "마법의 검", price: 4700, regDate: "2025-02-01" },
-            { id: 6, itemName: "마법의 검", price: 3900, regDate: "2025-02-01" },
-        ];
+    async function searchItems() {
+        const searchKeyWord = searchInput?.value.trim();
+        if (!searchKeyWord) {
+            alert('검색할 아이템명을 입력해 주세요.')
+            return;
+        }
         
-        searchResults = mockData.filter(item => item.itemName.includes(searchQuery));
+        const response = await apiFetch(NEOPLE_API.AUCTION.LIST(searchKeyWord), {
+            method: "GET",
+        }).catch(handleApiError);
+
+        if (response.success) {
+            searchResults = response.data;
+
+            // TODO 임시 검색 결과 없음 처리
+            if (searchResults.length == 0) {
+                alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.')
+            }
+
+            return;
+        }
+
+        alert('경매 아이템 검색에 실패하였습니다.');
+        return;
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === "Enter") {
+            searchItems();
+        }
     }
 
     function toggleWatch(item) {
@@ -40,6 +57,11 @@
             watchList = watchList.filter(w => w.id !== item.id);
         }
     }
+
+    // 2025-03-18 16:23:02 -> 03-18 16:23:02
+    function extractTime(datetime) {
+        return datetime.split(" ")[0].slice(5) + " " + datetime.split(" ")[1];
+    }   
 
     function removeCompleted(item) {
         watchList = watchList.filter(w => w.id !== item.id);
@@ -54,13 +76,16 @@
                 <span>로그인 후 이용하여 주세요.<br>경매장에 등록된 아이템의 판매 알림을 받을 수 있습니다.</span>
             </p>
             <p class="btnarea">
-                <a href={PATHS.ACCOUNT.LOGIN} class="btn btn_n">관리자모드 로그인</a>
-                <a href={PATHS.ACCOUNT.LOGIN} class="btn btn_b">일반모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN } class="btn btn_n">관리자모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN } class="btn btn_b">일반모드 로그인</a>
             </p>
         {:else}
             <div class="search-box">
-                <input type="text" bind:value={searchQuery} placeholder="아이템 검색" />
-                <button class="btn-search" on:click={searchItems}>검색</button>
+                <input type="text"
+                       bind:this={ searchInput } 
+                       placeholder="아이템 검색" 
+                       on:keydown={ handleKeyDown } />
+                <button class="btn-search" on:click={ searchItems }>검색</button>
             </div>
 
             <div class="result-list">
@@ -71,16 +96,29 @@
                     <ul>
                         {#each searchResults as item}
                             <li>
-                                <span>{item.itemName} - {item.price} G (등록일: {item.regDate})</span>
-                                <button class={watchList.some(w => w.id === item.id) ? "btn-remove" : ""} on:click={() => toggleWatch(item)}>
-                                    {watchList.some(w => w.id === item.id) ? "판매 알림 해제" : "판매 알림 등록"}
+                                <!-- 아이템 이미지 -->
+                                <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
+            
+                                <!-- 아이템 이름 -->
+                                <span class="item-name">{ item.itemInfo.itemName }</span>
+            
+                                <!-- 가격 -->
+                                <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
+            
+                                <!-- 등록일 -->
+                                <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
+            
+                                <!-- 버튼 -->
+                                <button class={watchList.some(w => w.id === item.id) ? "btn-remove" : ""} 
+                                        on:click={ () => toggleWatch(item) }>
+                                    { watchList.some(w => w.id === item.id) ? "판매 알림 해제" : "판매 알림 등록" }
                                 </button>
                             </li>
                         {/each}
                     </ul>
                 {/if}
             </div>
-
+            
             <div class="watch-list">
                 <h3>판매 알림 등록 목록</h3>
                 {#if watchList.length === 0}
@@ -88,22 +126,33 @@
                 {:else}
                     <ul>
                         {#each watchList as item}
-                            <li class={item.completed ? 'completed' : ''}>
-                                <span>{item.itemName} - {item.price} G (등록일: {item.regDate})</span>
+                            <li class={ item.completed ? 'completed' : '' }>
+                                <!-- 아이템 이미지 -->
+                                <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
+            
+                                <!-- 아이템 이름 -->
+                                <span class="item-name">{ item.itemInfo.itemName }</span>
+                                
+                                <!-- 가격 -->
+                                <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
+                                
+                                <!-- 등록일 -->
+                                <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
+                                
                                 {#if item.completed}
                                     <span class="completed">알림 완료</span>
                                 {:else}
-                                    <button class="btn-remove" on:click={() => toggleWatch(item)}>판매 알림 해제</button>
+                                    <button class="btn-remove" on:click={ () => toggleWatch(item) }>판매 알림 해제</button>
                                 {/if}
                             </li>
                         {/each}
                     </ul>
                 {/if}
             </div>
-
         {/if}
     </div>
 </div>
+
 
 <style lang="scss">
     * {
@@ -149,56 +198,6 @@
         cursor: pointer;
     }
 
-    .ly_login_info .txtarea {
-        display: table;
-        width: 520px;
-        height: 140px;
-        border: 1px solid rgba(225, 230, 238, 0.5);
-        background: #f8f9fb;
-        color: #36393f;
-        font-size: 16px;
-        line-height: 26px;
-        text-align: center;
-        letter-spacing: -1px;
-    }
-
-    .ly_login_info .txtarea span {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    .ly_login_info .btnarea {
-        padding: 0;
-        margin: 30px 0 0 0;
-        text-align: center;
-        font-size: 0;
-    }
-
-    .btn {
-        position: relative;
-    }
-
-    .ly_login_info .btnarea a {
-        display: inline-block;
-        padding: 0;
-        margin: 0;
-        width: 165px;
-        height: 50px;
-        line-height: 50px;
-        font-size: 14px;
-    }
-
-    .ly_login_info .btnarea a.btn_n {
-        background: #303544;
-        color: #fff;
-    }
-
-    .ly_login_info .btnarea a.btn_b {
-        background: #3392ff;
-        color: #fff;
-    }
-
-    /* 검색 박스 */
     .search-box {
         display: flex;
         margin-bottom: 10px;
@@ -207,7 +206,6 @@
     input {
         flex: 1;
         padding: 8px;
-        border-radius: 0;
         border-right: none;
         outline: none;
     }
@@ -221,7 +219,6 @@
         background: #3392ff;
         color: white;
         border: none;
-        border-radius: 0;
         cursor: pointer;
     }
 
@@ -229,50 +226,55 @@
         background: #2673cc;
     }
 
-    .btn-search {
-        width: 60px;
+    .result-list {
+        margin-bottom: 25px;
     }
 
-    /* 검색 결과 및 판매 알림 목록 */
-    .result-list, .watch-list {
-        margin-top: 20px;
-        text-align: left;
-        border: 1px solid #ccc;
-        padding: 10px;
-        background: #f9f9f9;
-    }
-
-    ul {
-        list-style: none;
+    .result-list ul, .watch-list ul {
         padding: 0;
     }
 
-    li {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .result-list ul li, .watch-list ul li {
+        display: grid;
+        grid-template-columns: 50px 2fr 100px 100px auto; /* 이미지 | 이름 (넓게) | 가격 | 등록일 | 버튼 */
+        align-items: start;  /* 자동 줄바꿈 시 UI 정렬 유지 */
+        gap: 10px;
         padding: 10px;
         border-bottom: 1px solid #ddd;
     }
 
-    li:last-child {
+    .result-list ul li:last-child, .watch-list ul li:last-child {
         border-bottom: none;
     }
 
-    /* 알림 완료 스타일 */
-    .completed {
-        color: green;
+    .item-img {
+        width: 46px;
+        height: 46px;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .item-name {
         font-weight: bold;
+        color: #333;
+        white-space: normal;  /* 자동 줄바꿈 허용 */
+        word-wrap: break-word;
     }
 
-    .watch-list .completed {
-        background: #e6ffe6;
+    .item-price {
+        text-align: right;
+        font-weight: bold;
+        color: #2a9d8f;
     }
 
-    /* 버튼 스타일 */
+    .item-date {
+        text-align: right;
+        font-size: 14px;
+        color: #777;
+    }
+
     .btn-remove {
         background: #ff4d4d;
-        color: white;
     }
 
     .btn-remove:hover {

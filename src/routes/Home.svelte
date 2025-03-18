@@ -10,7 +10,6 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
-    import FullBanner from '../components/FullBanner.svelte';
     
     let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
     let loading = true;  // 데이터 로딩 중 상태를 관리할 변수

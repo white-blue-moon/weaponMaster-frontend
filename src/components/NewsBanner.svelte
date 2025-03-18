@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../constants/articles';
     import { PATHS } from '../constants/paths';
-  import { getArticleFilterText } from '../utils/page';
+    import { getArticleFilterText } from '../utils/page';
 
     export let width = "400px"; // 기본값 설정
     export let height = "280px"; // 기본값 설정

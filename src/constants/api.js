@@ -24,6 +24,13 @@ export const API = {
     },
 };
 
+// 네오플 API
+export const NEOPLE_API = {
+    AUCTION: {
+        LIST: (itemName) => `${ROOT}/neople/auction/${itemName}`,
+    },
+}
+
 // 어드민 툴 백엔드 서버 API
 const ADMIN_ROOT = 'http://localhost:7770';
 export const ADMIN_API = {
