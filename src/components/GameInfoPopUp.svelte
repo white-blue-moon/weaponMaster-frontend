@@ -2,14 +2,14 @@
     import { onMount } from "svelte";
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
-    import { isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn } from "../utils/auth";
     import { API, NEOPLE_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     
     const dispatch = createEventDispatcher();
     
     let searchResults = [];
-    let watchList     = [];
+    let watchList     = []; // TODO onMount() 에서 DB 에 저장된 알림 정보 가져오게 하기 + (1분마다 업데이트 되는 현황을 어떻게 반영할지 고민)
     let searchInput; // 검색창을 참조할 변수
 
     // 모달이 열리면 검색창 자동 포커스
@@ -17,6 +17,7 @@
         searchInput?.focus();
     });
 
+    // TODO 동일한 검색 내용을 검색했을 때 실시간 결과가 반영되도록 수정 필요
     async function searchItems() {
         const searchKeyWord = searchInput?.value.trim();
         if (!searchKeyWord) {
@@ -30,12 +31,9 @@
 
         if (response.success) {
             searchResults = response.data;
-
-            // TODO 임시 검색 결과 없음 처리
             if (searchResults.length == 0) {
                 alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.')
             }
-
             return;
         }
 
@@ -49,23 +47,37 @@
         }
     }
 
-    function toggleWatch(item) {
-        const index = watchList.findIndex(w => w.id === item.id);
+    async function toggleWatch(item) {
+        const index = watchList.findIndex(w => w.itemInfo.auctionNo === item.itemInfo.auctionNo);
         if (index === -1) {
-            watchList = [...watchList, item];
-        } else {
-            watchList = watchList.filter(w => w.id !== item.id);
+            const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.CREATE, {
+                method: "POST",
+                body: JSON.stringify({
+                    "userId":   $userInfo,
+                    "itemImg":  item.imgUrl,
+                    "itemInfo": item.itemInfo,
+                }),
+            }).catch(handleApiError);
+
+            // 출력 리스트에 정보 추가
+            if (response.success) {
+                watchList = [...watchList, item];
+                return;
+            }
+
+            alert('판매 알림 등록에 실패하였습니다');
+            return;
         }
+
+        // TODO 판매 알림 해제 API 호출
+        watchList = watchList.filter(w => w.itemInfo.auctionNo !== item.itemInfo.auctionNo);
+        return;
     }
 
     // 2025-03-18 16:23:02 -> 03-18 16:23:02
     function extractTime(datetime) {
         return datetime.split(" ")[0].slice(5) + " " + datetime.split(" ")[1];
     }   
-
-    function removeCompleted(item) {
-        watchList = watchList.filter(w => w.id !== item.id);
-    }
 </script>
 
 <div class="ly_login_info" id="loginLayer">
@@ -73,7 +85,9 @@
         <a on:click={() => dispatch("close")} class="ly_clse">닫기</a>
         {#if !$isLoggedIn}
             <p class="txtarea">
-                <span>로그인 후 이용하여 주세요.<br>경매장에 등록된 아이템의 판매 알림을 받을 수 있습니다.</span>
+                <span>로그인 후 이용하여 주세요.
+                    <br>경매장에 등록된 아이템의 판매 알림을 받을 수 있습니다.
+                </span>
             </p>
             <p class="btnarea">
                 <a href={ PATHS.ACCOUNT.LOGIN } class="btn btn_n">관리자모드 로그인</a>
@@ -99,7 +113,7 @@
                                 <!-- 아이템 이미지 -->
                                 <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
             
-                                <!-- 아이템 이름 -->
+                                <!-- 아이템 이름 TODO (x 개수 표시하기) -->
                                 <span class="item-name">{ item.itemInfo.itemName }</span>
             
                                 <!-- 가격 -->
@@ -109,9 +123,9 @@
                                 <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
             
                                 <!-- 버튼 -->
-                                <button class={watchList.some(w => w.id === item.id) ? "btn-remove" : ""} 
+                                <button class={watchList.some(w => w.itemInfo.auctionNo === item.itemInfo.auctionNo) ? "btn-remove" : ""} 
                                         on:click={ () => toggleWatch(item) }>
-                                    { watchList.some(w => w.id === item.id) ? "판매 알림 해제" : "판매 알림 등록" }
+                                    { watchList.some(w => w.itemInfo.auctionNo === item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
                                 </button>
                             </li>
                         {/each}

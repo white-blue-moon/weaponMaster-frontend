@@ -11,8 +11,7 @@ export const API = {
     },
     ARTICLES: {
         CREATE: `${ROOT}/articles`,
-        LIST:   (categoryType, articleType) => 
-                `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
+        LIST:   (categoryType, articleType) => `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
         READ:   (id) => `${ROOT}/articles/${id}`,
         UPDATE: (id) => `${ROOT}/articles/${id}`,
         DELETE: (id) => `${ROOT}/articles/${id}`,
@@ -28,6 +27,9 @@ export const API = {
 export const NEOPLE_API = {
     AUCTION: {
         LIST: (itemName) => `${ROOT}/neople/auction/${itemName}`,
+    },
+    AUCTION_NOITCE: {
+        CREATE: `${ROOT}/neople/auction/notice`,
     },
 }
 
