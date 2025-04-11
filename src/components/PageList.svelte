@@ -17,12 +17,12 @@
     let page = getPage(categoryType, articleType);
     const articleFilters = getArticleFilter(categoryType, articleType);
 
-    const PAGE_SIZE = 20; // 한 페이지에 표시할 게시물 수
+    const PAGE_SIZE         = 20; // 한 페이지에 표시할 게시물 수
     const GROUP_PAGING_SIZE = 10; // 한 그룹에 표시할 페이지 번호 개수
 
-    let articles = [];
-    let totalPageNum = 1;
-    let currentPageNum = 1; // 현재 페이지
+    let articles          = [];
+    let totalPageNum      = 1;
+    let currentPageNum    = 1; // 현재 페이지
     let displayedArticles = [];
 
     onMount(async () => {
@@ -136,18 +136,18 @@
 
     <article class="paging mt60">
         <a class="first" on:click={ () => changePage(1) }>FIRST</a>
-        <a class="prev" on:click={ () => changePage(currentPageNum - 1) }>PREV</a>
+        <a class="prev"  on:click={ () => changePage(currentPageNum - 1) }>PREV</a>
 
         {#each currentGroupPages as pageNum}
             {#if pageNum === currentPageNum}
-                <span>{ pageNum }</span>
+                <span>{ currentPageNum }</span>
             {:else}
                 <a on:click={ () => changePage(pageNum) }>{ pageNum }</a>
             {/if}
         {/each}
 
         <a class="next" on:click={ () => changePage(currentGroupEnd + 1) }>NEXT</a>
-        <a class="end" on:click={ () => changePage(totalPageNum) }>END</a>
+        <a class="end"  on:click={ () => changePage(totalPageNum) }>END</a>
     </article>
 </section>
 
