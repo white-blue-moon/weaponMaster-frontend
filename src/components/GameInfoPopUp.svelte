@@ -12,9 +12,17 @@
     let watchList     = []; // TODO onMount() 에서 DB 에 저장된 알림 정보 가져오게 하기 + (1분마다 업데이트 되는 현황을 어떻게 반영할지 고민)
     let searchInput; // 검색창을 참조할 변수
 
-    // 모달이 열리면 검색창 자동 포커스
-    onMount(() => {
-        searchInput?.focus();
+    onMount(async () => {
+        searchInput?.focus(); // 모달이 열리면 검색창 자동 포커스
+
+        const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.READ($userInfo), {
+                method: "GET",
+            }).catch(handleApiError);
+
+        if (response.success) {
+            watchList = response.data;
+            return;
+        }
     });
 
     // TODO 동일한 검색 내용을 검색했을 때 실시간 결과가 반영되도록 수정 필요

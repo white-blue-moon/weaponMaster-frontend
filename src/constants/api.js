@@ -30,6 +30,7 @@ export const NEOPLE_API = {
     },
     AUCTION_NOITCE: {
         CREATE: `${ROOT}/neople/auction/notice`,
+        READ:   (userId) => `${ROOT}/neople/auction/notice?userId=${userId}`,
     },
 }
 
