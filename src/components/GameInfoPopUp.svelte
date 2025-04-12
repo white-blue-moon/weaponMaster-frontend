@@ -102,9 +102,21 @@
             return;
         }
 
-        // TODO 판매 알림 해제 API 호출
-        watch.list = watch.list.filter(w => w.itemInfo.auctionNo !== item.itemInfo.auctionNo);
-        updatePagination(watch);
+        const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
+            method: "DELETE",
+            body: JSON.stringify({
+                "userId": $userInfo,
+                "itemInfo": item.itemInfo,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            watch.list = watch.list.filter(w => w.itemInfo.auctionNo !== item.itemInfo.auctionNo);
+            updatePagination(watch);
+            return;
+        }
+
+        alert('판매 알림 해제에 실패하였습니다');
         return;
     }
 
@@ -154,6 +166,7 @@
     // watch.list 가 바뀔 때마다 자동으로 watchAuctionNoMap 갱신
     $: watchAuctionNoMap = new Set(watch.list.map(item => item.itemInfo.auctionNo));
 </script>
+
 
 <div class="ly_login_info" id="loginLayer">
     <div class="ly_logbox">
@@ -209,29 +222,34 @@
             
                                 <!-- 버튼 -->
                                 <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "" } 
-                                on:click={ () => toggleWatch(item) }>
-                                    { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
+                                    on:click={ () => toggleWatch(item) }>
+                                        { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
                                 </button>
                             </li>
                         {/each}
                     </ul>
                 {/if}
             </div>
-            <article class="paging">
-                <a class="first" on:click={() => changePage(search, 1)}>FIRST</a>
-                <a class="prev"  on:click={() => changePage(search, search.currentPage - 1)}>PREV</a>
-            
-                {#each search.groupPages as pageNo}
-                    {#if pageNo === search.currentPage}
-                        <span>{ search.currentPage }</span>
-                    {:else}
-                        <a on:click={() => changePage(search, pageNo)}>{ pageNo }</a>
-                    {/if}
-                {/each}
-            
-                <a class="next" on:click={() => changePage(search, search.groupPages.at(-1) + 1)}>NEXT</a>
-                <a class="end"  on:click={() => changePage(search, search.totalPage)}>END</a>
-            </article>
+            <!-- TODO 페이징 버튼은 별도 컴포넌트화 하는 게 어떨지 고려해 보기 -->
+            {#if search.list.length > 0}
+                <article class="paging">
+                    <a class="first" on:click={() => changePage(search, 1)}>FIRST</a>
+                    <a class="prev"  on:click={() => changePage(search, search.currentPage - 1)}>PREV</a>
+                
+                    {#each search.groupPages as pageNo}
+                        {#if pageNo === search.currentPage}
+                            <span>{ search.currentPage }</span>
+                        {:else}
+                            <a on:click={() => changePage(search, pageNo)}>{ pageNo }</a>
+                        {/if}
+                    {/each}
+                
+                    <a class="next" on:click={() => changePage(search, search.groupPages.at(-1) + 1)}>NEXT</a>
+                    <a class="end"  on:click={() => changePage(search, search.totalPage)}>END</a>
+                </article>
+            {/if}
+
+            <div class="blank-space"></div>
             
             <div class="watch-list">
                 <h3>판매 알림 등록 목록</h3>
@@ -240,7 +258,7 @@
                 {:else}
                     <ul>
                         {#each watch.displayed as item}
-                            <li class={ item.completed ? 'completed' : '' }>
+                            <li class={ item.auctionState == AUCTION_STATE.SOLD_OUT || item.auctionState == AUCTION_STATE.EXPIRED ? 'completed' : '' }>
                                 <!-- 아이템 이미지 -->
                                 <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
             
@@ -253,31 +271,42 @@
                                 <!-- 등록일 -->
                                 <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
                                 
-                                {#if item.auctionState == AUCTION_STATE.SOLD_OUT }
-                                    <span class="completed">판매 완료</span>
+                                <!-- 버튼 -->
+                                {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
+                                    <span class="status-wrap">
+                                        <span class="completed">판매 완료</span>
+                                        <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                    </span>
+                                {:else if item.auctionState == AUCTION_STATE.EXPIRED}
+                                    <span class="status-wrap">
+                                        <span class="expired">기간 만료</span>
+                                        <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                    </span>
                                 {:else}
-                                    <button class="btn-remove" on:click={ () => toggleWatch(item) }>판매 알림 해제</button>
+                                    <button class="btn-remove" on:click={() => toggleWatch(item)}>판매 알림 해제</button>
                                 {/if}
                             </li>
                         {/each}
                     </ul>
                 {/if}
             </div>
-            <article class="paging">
-                <a class="first" on:click={() => changePage(watch, 1)}>FIRST</a>
-                <a class="prev"  on:click={() => changePage(watch, watch.currentPage - 1)}>PREV</a>
-            
-                {#each watch.groupPages as pageNo}
-                    {#if pageNo === watch.currentPage}
-                        <span>{ watch.currentPage }</span>
-                    {:else}
-                        <a on:click={() => changePage(watch, pageNo)}>{ pageNo }</a>
-                    {/if}
-                {/each}
-            
-                <a class="next" on:click={() => changePage(watch, watch.groupPages.at(-1) + 1)}>NEXT</a>
-                <a class="end"  on:click={() => changePage(watch, watch.totalPage)}>END</a>
-            </article>
+            {#if watch.list.length > 0}
+                <article class="paging">
+                    <a class="first" on:click={() => changePage(watch, 1)}>FIRST</a>
+                    <a class="prev"  on:click={() => changePage(watch, watch.currentPage - 1)}>PREV</a>
+                
+                    {#each watch.groupPages as pageNo}
+                        {#if pageNo === watch.currentPage}
+                            <span>{ watch.currentPage }</span>
+                        {:else}
+                            <a on:click={() => changePage(watch, pageNo)}>{ pageNo }</a>
+                        {/if}
+                    {/each}
+                
+                    <a class="next" on:click={() => changePage(watch, watch.groupPages.at(-1) + 1)}>NEXT</a>
+                    <a class="end"  on:click={() => changePage(watch, watch.totalPage)}>END</a>
+                </article>
+            {/if}
         {/if}
     </div>
 </div>
@@ -404,6 +433,56 @@
 
     .btn-remove:hover {
         background: #cc0000;
+    }
+
+    // 단순 공백 추가 (search/watch 영역 구분용)
+    .blank-space {
+        margin-bottom: 25px;
+    }
+
+    // 알림 리스트 (판매 완료/기간 만료) 스타일
+    .status-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-width: 112px;
+        gap: 6px;
+    }
+
+    .completed {
+        background-color: #f5f5f5;
+        opacity: 0.6;
+
+        // & -> 현재 선택된 클래스 의미 (여기선 .completed 의미)
+        &:hover {
+            background-color: #f0f0f0;
+        }
+
+        .item-name,
+        .item-price,
+        .item-date {
+            color: #999;
+        }
+
+        .expired {
+            opacity: 0.6;
+            color: #ff4d4d;
+        }
+
+        .btn-x {
+            display: inline-block;
+            opacity: 1;
+            padding: 0 0px;
+            height: 30px;
+            width: 30px;
+            background: #ccc;
+            color: #333;
+        }
+
+        .btn-x:hover {
+            background: #999;
+            color: white;
+        }
     }
 
     /* 페이징 네비게이션 */
