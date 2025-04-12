@@ -60,7 +60,14 @@ export const ARTICLE_DETAIL_TYPE = {
             NORMAL:     1,
             ADMIN_TOOL: 2,
         }
-    }
+    },
+
+    SERVICE_CENTER: {
+        PRIVATE_CONTACT: {
+            WAITING:  0,
+            ANSWERED: 1,
+        },
+    },
 }
 
 export const ARTICLE_DETAIL_TYPE_TEXT = {
@@ -74,5 +81,12 @@ export const ARTICLE_DETAIL_TYPE_TEXT = {
             [ARTICLE_DETAIL_TYPE.NEWS.UPDATE.NORMAL]:     "일반",
             [ARTICLE_DETAIL_TYPE.NEWS.UPDATE.ADMIN_TOOL]: "어드민툴",
         },
-    }
+    },
+
+    [CATEGORY_TYPE.SERVICE_CENTER]: {
+        [ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT]: {
+            [ARTICLE_DETAIL_TYPE.SERVICE_CENTER.PRIVATE_CONTACT.WAITING]:  "미답변",
+            [ARTICLE_DETAIL_TYPE.SERVICE_CENTER.PRIVATE_CONTACT.ANSWERED]: "답변완료",
+        },
+    },
 }

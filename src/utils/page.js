@@ -45,6 +45,12 @@ export function isDetailTypeExist(categoryType, articleType) {
         }
     }
 
+    if(categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
+        if (articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT) {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -77,6 +83,19 @@ export function getArticleFilter(categoryType, articleType) {
         }
     }
 
+    // 서비스센터 
+    if (categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
+        if (ARTICLE_DETAIL_TYPE_TEXT[categoryType]?.[articleType]) {
+            for (const [filterType, filterText] of Object.entries(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType])) { // Object.entries()는 객체를 키-값 쌍의 배열로 변환
+                result.push({
+                    hasDetailType: true,
+                    filterType: filterType,
+                    filterText: filterText,
+                });
+            }
+        }
+    }
+
     return result;
 }
 
@@ -89,6 +108,10 @@ export function getArticleFilterText(categoryType, articleType, articleDetailTyp
 
     if (categoryType == CATEGORY_TYPE.COMMUNITY) {
         return ARTICLE_TYPE_TEXT[categoryType][articleType];
+    }
+
+    if (categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
+        return ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][articleDetailType];
     }
 
     return "공통";
@@ -115,8 +138,8 @@ export function getListPath(categoryType, articleType) {
 
     if (categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
         switch (articleType) {
-            case ARTICLE_TYPE.SERVICE_CENTER.ALL:   return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
-            default:                                return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
+            case ARTICLE_TYPE.SERVICE_CENTER:   return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
+            default:                            return PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST;
         }
     }
 
