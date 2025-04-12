@@ -6,12 +6,13 @@
     import { API, NEOPLE_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
-    
+
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
     const GROUP_PAGING_SIZE = 5; // 한 그룹에 표시할 페이지 번호 개수
 
     const dispatch = createEventDispatcher();
     let searchInput;
+    let maxNoticeCount = 5; // 한 번에 추적할 수 있는 최대 판매 알림 개수
 
     let search = {
         list:       [],
@@ -29,15 +30,6 @@
         groupPages: [],
     };
 
-    // TODO [ 임시 메모 ]
-    // regDate      : 물품 최초 등록일
-    // expireDate   : 물품 등록 만료일
-    // regCount     : 최초 등록 개수
-    // count        : 현재 남은 개수
-    // currentPrice : 현재 일괄 구매 가격
-    // unitPrice    : 개별 가격
-    // 단일 등록 상품 -> count = 1, currentPrice = unitPrice 그리고 regCount 키값 없음
-
     onMount(async () => {
         searchInput?.focus();
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.READ($userInfo), {
@@ -45,7 +37,8 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            watch.list = response.data;
+            maxNoticeCount = response.data.maxNoticeCount;
+            watch.list     = response.data.noticeList;
             updatePagination(watch);
         }
     });
@@ -83,16 +76,23 @@
     async function toggleWatch(item) {
         const index = watch.list.findIndex(w => w.itemInfo.auctionNo === item.itemInfo.auctionNo);
         if (index === -1) {
+            const sellingCount = watch.list.filter(w => w.auctionState == AUCTION_STATE.SELLING).length;
+            if(sellingCount >= maxNoticeCount) {
+                alert(`한 번에 추적 가능한 판매 알림은 최대 ${maxNoticeCount}개입니다.\n판매 완료 이후 혹은 알림 해제 후 다시 시도해 주세요.`);
+                return;
+            }
+
             const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.CREATE, {
                 method: "POST",
                 body: JSON.stringify({
-                    "userId": $userInfo,
-                    "itemImg": item.imgUrl,
+                    "userId":   $userInfo,
+                    "itemImg":  item.imgUrl,
                     "itemInfo": item.itemInfo,
                 }),
             }).catch(handleApiError);
 
             if (response.success) {
+                item.auctionState = AUCTION_STATE.SELLING;
                 watch.list = [item, ...watch.list];
                 updatePagination(watch);
                 return;
@@ -492,7 +492,8 @@
         text-align: center;
         vertical-align: top;
         overflow: hidden;
-        margin-bottom: 25px;
+        margin-top: 5px;
+        margin-bottom: 30px;
     }
 
     .paging a {
