@@ -128,6 +128,9 @@
                     {/if}
                     <div class="iconset"></div>
                 </li>
+                {#if categoryType != CATEGORY_TYPE.NEWS}
+                    <li class="arthor">{ article.userId }</li>
+                {/if}
                 <li class="date">{ article.createDate.split('T')[0] }</li>
                 <li class="hits">{ article.viewCount.toLocaleString() }</li>
             </ul>
