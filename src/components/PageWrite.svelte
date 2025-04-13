@@ -18,14 +18,14 @@
 
     const url = window.location.pathname;
 
-    let categoryType = getCategoryTypeByURL(url);
-    let articleType = 0;
+    let categoryType      = getCategoryTypeByURL(url);
+    let articleType       = 0;
     let articleDetailType = 0;
 
-    const articleTypes = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
+    const articleTypes     = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
     let articleDetailTypes = [];
 
-    let title = '';
+    let title    = '';
     let contents = '';
     let editor;
 
@@ -156,12 +156,12 @@
         const response = await apiFetch(apiURL, {
             method: apiMethod,
             body: JSON.stringify({
-                "categoryType": categoryType,
-                "articleType": articleType,
+                "categoryType":      categoryType,
+                "articleType":       articleType,
                 "articleDetailType": articleDetailType,
-                "title": title,
-                "contents": contents,
-                "userId": $userInfo,
+                "title":             title,
+                "contents":          contents,
+                "userId":            $userInfo,
             }),
         }).catch(handleApiError);
 

@@ -9,6 +9,7 @@
 	import Inspection from './routes/Inspection.svelte';
 	import Join from './routes/account/Join.svelte';
 	import LoginNormal from './routes/account/LoginNormal.svelte';
+	import LoginAdmin from './routes/account/LoginAdmin.svelte';
 
 	import NoticeList from './routes/news/notice/NoticeList.svelte';
 	import UpdateList from './routes/news/update/UpdateList.svelte';
@@ -56,30 +57,31 @@
 		<Route path={ PATHS.HOME } component={ Home } />
 
 		<!-- 계졍 관련 -->
-		<Route path={ PATHS.ACCOUNT.JOIN } component={ Join } />
-		<Route path={ PATHS.ACCOUNT.LOGIN } component={ LoginNormal } />
+		<Route path={ PATHS.ACCOUNT.JOIN }        component={ Join } />
+		<Route path={ PATHS.ACCOUNT.LOGIN }       component={ LoginNormal } />
+		<Route path={ PATHS.ACCOUNT.LOGIN_ADMIN } component={ LoginAdmin } />
 
 		<!-- 새소식 -->
-		<Route path={ PATHS.NEWS.NOTICE.LIST } component={ NoticeList } />
-		<Route path={ PATHS.NEWS.UPDATE.LIST } component={ UpdateList } />
+		<Route path={ PATHS.NEWS.NOTICE.LIST }   component={ NoticeList } />
+		<Route path={ PATHS.NEWS.UPDATE.LIST }   component={ UpdateList } />
 		<Route path={ PATHS.NEWS.DEV_NOTE.LIST } component={ DevNoteList } />
-		<Route path={ PATHS.NEWS.WRITE } component={ PageWrite } />
-		<Route path={ PATHS.NEWS.READ_TEPLATE } component={ PageRead } />
+		<Route path={ PATHS.NEWS.WRITE }         component={ PageWrite } />
+		<Route path={ PATHS.NEWS.READ_TEPLATE }  component={ PageRead } />
 		<Route path={ PATHS.NEWS.EDIT_TEMPLATE } component={ PageWrite } />
 
 		<!-- 커뮤니티 -->
-		<Route path={ PATHS.COMMUNITY.ALL.LIST } component={ AllList } />
-		<Route path={ PATHS.COMMUNITY.ASK.LIST } component={ AskList } />
-		<Route path={ PATHS.COMMUNITY.TALK.LIST } component={ TalkList } />
-		<Route path={ PATHS.COMMUNITY.WRITE } component={ PageWrite } />
-		<Route path={ PATHS.COMMUNITY.READ_TEPLATE } component={ PageRead } />
+		<Route path={ PATHS.COMMUNITY.ALL.LIST } 	  component={ AllList } />
+		<Route path={ PATHS.COMMUNITY.ASK.LIST } 	  component={ AskList } />
+		<Route path={ PATHS.COMMUNITY.TALK.LIST } 	  component={ TalkList } />
+		<Route path={ PATHS.COMMUNITY.WRITE }         component={ PageWrite } />
+		<Route path={ PATHS.COMMUNITY.READ_TEPLATE }  component={ PageRead } />
 		<Route path={ PATHS.COMMUNITY.EDIT_TEMPLATE } component={ PageWrite } />
 
 		<!-- 서비스센터 -->
 		<Route path={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST } component={ PrivateContactList } />
-		<Route path={ PATHS.SERVICE_CENTER.WRITE } component={ PageWrite } />
-		<Route path={ PATHS.SERVICE_CENTER.READ_TEPLATE } component={ PageRead } />
-		<Route path={ PATHS.SERVICE_CENTER.EDIT_TEMPLATE } component={ PageWrite } />
+		<Route path={ PATHS.SERVICE_CENTER.WRITE } 				  component={ PageWrite } />
+		<Route path={ PATHS.SERVICE_CENTER.READ_TEPLATE } 		  component={ PageRead } />
+		<Route path={ PATHS.SERVICE_CENTER.EDIT_TEMPLATE } 		  component={ PageWrite } />
 	{/if}
 </Router>
   

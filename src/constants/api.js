@@ -7,6 +7,7 @@ export const API = {
     ACCOUNT: {
         JOIN:         `${ROOT}/account/join`,
         LOGIN_NORMAL: `${ROOT}/account/login/normal`,
+        LOGIN_ADMIN:  `${ROOT}/account/login/admin`,
         EXIST_USER:   (userId) => `${ROOT}/account/exist/${userId}`,
     },
     ARTICLES: {

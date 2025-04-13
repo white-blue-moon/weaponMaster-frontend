@@ -2,8 +2,9 @@ export const PATHS = {
     HOME: '/',
     INSPECTION: '/',
     ACCOUNT: {
-        JOIN:   '/account/join',
-        LOGIN:  '/account/login',
+        JOIN:        '/account/join',
+        LOGIN:       '/account/login',
+        LOGIN_ADMIN: '/account/login/admin',
     },
     NEWS: {    
         READ:   (id) => `/news/${id}`,

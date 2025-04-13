@@ -34,6 +34,7 @@ export function getPage(categoryType, articleType) {
     };
 }
 
+// PageWrite 컴포넌트에서 (게시글 작성 시) 추가 세부 분류항목을 선택해야 하는 경우 사용하는 함수
 export function isDetailTypeExist(categoryType, articleType) {
     if (categoryType == CATEGORY_TYPE.NEWS) {
         if (articleType == ARTICLE_TYPE.NEWS.NOTICE) {
@@ -41,12 +42,6 @@ export function isDetailTypeExist(categoryType, articleType) {
         }
 
         if (articleType == ARTICLE_TYPE.NEWS.UPDATE) {
-            return true;
-        }
-    }
-
-    if(categoryType == CATEGORY_TYPE.SERVICE_CENTER) {
-        if (articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT) {
             return true;
         }
     }

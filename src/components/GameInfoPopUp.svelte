@@ -178,8 +178,8 @@
                 </span>
             </p>
             <p class="btnarea">
-                <a href={ PATHS.ACCOUNT.LOGIN } class="btn btn_n">관리자모드 로그인</a>
-                <a href={ PATHS.ACCOUNT.LOGIN } class="btn btn_b">일반모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN_ADMIN } class="btn btn_n">관리자모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN }       class="btn btn_b">일반모드 로그인</a>
             </p>
         {:else}
             <div class="search-box">

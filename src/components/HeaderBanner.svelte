@@ -1,11 +1,12 @@
 <script>
     import { DF_UI } from "../constants/resourcePath";
 
-    export let homeName = "weaponMaster";
-    export let bannerText = "BANNER TEXT";
-    export let isLogoVisible = true;
+    export let homeName         = "weaponMaster";
+    export let bannerText       = "BANNER TEXT";
+    export let bannerTextColor  = "#fff";
+    export let isLogoVisible    = true;
     export let bannerBackground = `${DF_UI}/img/mem/bg.png`;
-    const logoBackground = `${DF_UI}/img/mem/logo.png`;
+    const logoBackground        = `${DF_UI}/img/mem/logo.png`;
 </script>
 
 <header class="banner" style="--banner-background: url({ bannerBackground })">
@@ -14,7 +15,7 @@
         <a href="/" style="--logo-background: url({ logoBackground })">{ homeName }</a>
     </h1>
     {/if}
-    <h2 class:isLogoVisible={ isLogoVisible } class:notLogoVisible={ !isLogoVisible }>
+    <h2 class:isLogoVisible={ isLogoVisible } class:notLogoVisible={ !isLogoVisible } style="color: { bannerTextColor };">
         { bannerText }
     </h2>
 </header>
@@ -51,7 +52,6 @@
     header h2.isLogoVisible {
         margin-top: 0;
         text-align: center;
-        color: #fff;
         font-size: 40px;
         font-weight: 300;
         line-height: 54px;

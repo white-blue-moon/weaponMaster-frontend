@@ -1,7 +1,7 @@
 <script>
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn } from "../../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../../utils/auth";
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
@@ -31,62 +31,54 @@
             return;
         }
 
-        const response = await apiFetch(API.ACCOUNT.LOGIN_NORMAL, {
+        const response = await apiFetch(API.ACCOUNT.LOGIN_ADMIN, {
             method: 'POST',
             body: JSON.stringify({
-                "userId" : userId,
-                "userPw" : password,
+                "userId": userId,
+                "userPw": password,
             }),
         }).catch(handleApiError);
 
         if (response.success) {
-            alert(`로그인에 성공하였습니다. ${userId} 님 안녕하세요.`);
+            alert(`관리자모드로 로그인합니다. ${userId} 님 안녕하세요.`);
             
             // 계정 정보 Store 업데이트
             userInfo.set(userId); // TODO 추후 서버에서 받은 사용자 정보로 저장되도록 수정 필요
             isLoggedIn.set(true);
+            isAdmin.set(true);
 
-            window.location.href = "/";
+            window.location.href = PATHS.HOME;
             return;
         }
 
-        alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 한번 확인해 주세요.');
+        alert('로그인에 실패하였습니다.\n관리자 권한이 있는지 확인 및 아이디와 비밀번호를 다시 한번 확인해 주세요.');
         return;
     }
 </script>
 
 <GnbPublisher />
-<HeaderBanner bannerText="로그인" bannerBackground="https://resource.df.nexon.com/ui/img/login/bg.png"/>
+<HeaderBanner bannerText="관리자모드 로그인" bannerTextColor="#333" bannerBackground="https://developers.neople.co.kr/img/svisual4.jpg"/>
 <section class="content">
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
     <article class="login">
-        <form action="/account/login" method="post" id="loginForm" on:submit={onSubmitLogin}>
-            <ul class="login_normal">
+        <form action="/account/login" method="post" id="loginForm" on:submit={ onSubmitLogin }>
+            <ul class="login_admin">
                 <li>
                     <label for="id">아이디</label>
-                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={userId} autofocus="" maxlength="24">
+                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={ userId } autofocus="" maxlength="24">
                 </li>
                 <li>
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" name="password" placeholder="비밀번호" bind:value={password} maxlength="16">
+                    <input type="password" id="password" name="password" placeholder="비밀번호" bind:value={ password } maxlength="16">
                 </li>
 
                 <li class="msg" id="validationMsg">
                 </li>
 
                 <li class="btn">
-                    <button type="submit" id="login">일반모드 로그인</button>
+                    <button type="submit" id="login">관리자모드 로그인</button>
                 </li>              
-            </ul>
-
-            <ul class="login_admin">
-                <li class="logo" id="weaponMasterLogo"></li>
-                <li>잠깐! 관리자 권한이 있으신가요? 관리자모드로 로그인 할 수 있습니다!</li>
-                <li>
-                    <a href={ PATHS.ACCOUNT.LOGIN_ADMIN }>관리자모드 로그인</a>
-                </li>
-                <li><span>관리자 권한은 별도 어드민 툴에서 부여 가능하며 공지사항 작성 등 권한이 주어집니다.</span></li>
             </ul>
         </form>
     </article>
@@ -107,7 +99,7 @@
 
     .content h3 {
         position: relative;
-        margin-top: 60px;
+        margin-top: 10px;
         color: #6a6e76;
         font-size: 16px;
         font-weight: 400;
@@ -121,12 +113,12 @@
         width: 560px;
     }
 
-    .login .login_normal {
+    .login .login_admin {
         position: relative;
         margin-top: 65px;
     }
 
-    .login .login_normal li label {
+    .login .login_admin li label {
         display: none;
     }
 
@@ -135,11 +127,11 @@
         padding: 0;
     } 
 
-    .login_normal li {
+    .login_admin li {
         margin-bottom: 10px;
     }
     
-    .login_normal input {
+    .login_admin input {
         border: 1px solid #e1e6ee;
         background: #f8f9fb;
     }
@@ -159,66 +151,16 @@
         margin-left: 0px;
     }
 
-    .login .login_normal li.btn button {
+    .login .login_admin li.btn button {
         all: unset; /* 모든 기본 스타일 제거 */
         display: block;
         width: 560px;
         height: 61px;
-        background: #3392ff;
+        background: #5c6377;
         line-height: 60px;
         text-align: center;
         color: #fff;
         font-size: 16px;
         cursor: pointer;
-    }
- 
-    /* Nexon Login 스타일 */
-    .login .login_admin {
-        position: relative;
-        margin-top: 76px;
-        padding: 39px 0;
-        border-radius: 4px;
-        border: 1px solid #eeedf2;
-        background: #f8f9fb;
-        text-align: center;
-    }
-
-    .login .login_admin li.logo {
-        margin: 0 auto;
-        width: 108px;
-        height: 42px;
-        background: url(https://resource.df.nexon.com/ui/img/login/logo_nx.png) no-repeat;
-    }
-
-    .login .login_admin li {
-        margin-top: 15px;
-        color: #6a6e76;
-        font-size: 15px;
-    }
-
-    .login_admin span {
-        display: block;
-        margin-top: 10px;
-        font-size: 12px;
-        color: #999;
-    }
-
-    .login .login_admin li a {
-        display: block;
-        margin: 0 auto;
-        width: 480px;
-        height: 50px;
-        background: #5c6377;
-        line-height: 50px;
-        text-align: center;
-        color: #fff;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .login .login_admin li span {
-        color: #a2a5ac;
-        font-size: 14px;
-        letter-spacing: -.4px;
     }
 </style>
