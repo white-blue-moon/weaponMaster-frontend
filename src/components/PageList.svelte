@@ -1,7 +1,7 @@
 <script>
+    import { onMount } from "svelte";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { onMount } from "svelte";
     import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../constants/articles';
     import { getArticleFilter, getArticleFilterText, getPage } from '../utils/page';
     import { isAdmin, isLoggedIn } from '../utils/auth';
@@ -15,33 +15,95 @@
     export let categoryType;
     export let articleType;
 
-    let page = getPage(categoryType, articleType);
+    let   page           = getPage(categoryType, articleType);
     const articleFilters = getArticleFilter(categoryType, articleType);
 
-    const PAGE_SIZE         = 20; // 한 페이지에 표시할 게시물 수
-    const GROUP_PAGING_SIZE = 10; // 한 그룹에 표시할 페이지 번호 개수
+    const PAGE_SIZE         = 20;   // 한 페이지에 표시할 게시물 수
+    const GROUP_PAGING_SIZE = 10;   // 한 그룹에 표시할 페이지 번호 개수
 
     let articles          = [];
     let totalPageNum      = 1;
-    let currentPageNum    = 1; // 현재 페이지
+    let currentPageNum    = 1;
     let displayedArticles = [];
+
+    let selectedFilters     = new Set(); // 게시물 필터 버튼 상태 관리 (ex: 미답변/답변완료)
+    let groupedByDetailType = {};
+    let groupedByType       = {};
 
     onMount(async () => {
         const response = await apiFetch(API.ARTICLES.LIST(categoryType, articleType), {
             method: "GET",
         }).catch(handleApiError);
 
-        if (response.success) {
+        if (response?.success) {
             articles = response.data;
+
+            // 게시물 리스트 그룹화
+            if(categoryType == CATEGORY_TYPE.COMMUNITY) {
+                groupedByType = groupBy(articles, "articleType");
+            } else {
+                groupedByDetailType = groupBy(articles, "articleDetailType");
+            }
+
             totalPageNum = Math.ceil(articles.length / PAGE_SIZE);
             updateDisplayedArticles();
         }
     });
 
-    function updateDisplayedArticles() {
-        displayedArticles = articles.slice((currentPageNum - 1) * PAGE_SIZE, currentPageNum * PAGE_SIZE);
+    // key 에 해당하는 값으로 그룹화
+    function groupBy(list, key) {
+        return list.reduce((acc, item) => {
+            const value = String(item[key]); // 문자열로 변환
+            if (!acc[value]) {
+                acc[value] = [];
+            }
+
+            acc[value].push(item);
+            return acc;
+        }, {});
     }
 
+    // 필터 버튼 토글
+    function toggleFilter(filterKey) {
+        filterKey = String(filterKey);
+
+        const newSet = new Set(selectedFilters); // 반응성을 위해 기존 Set 복사
+        if (newSet.has(filterKey)) {
+            newSet.delete(filterKey);
+        } else {
+            newSet.add(filterKey);
+        }
+        selectedFilters = newSet;  // 재할당으로 반응성 유도
+
+        currentPageNum = 1;        // 필터 변경 시 페이지 리셋
+        updateDisplayedArticles(); // 다시 첫 페이지부터 필터링된 결과 출력
+    }
+
+    // 필터링 + 페이징 적용
+    function updateDisplayedArticles() {
+        let filtered = [];
+
+        if (selectedFilters.size > 0) {
+            const filtersArray = Array.from(selectedFilters);
+
+            filtered = articles.filter(article => {
+                const key = categoryType === CATEGORY_TYPE.COMMUNITY
+                    ? String(article.articleType)
+                    : String(article.articleDetailType);
+                return filtersArray.includes(key);
+            });
+        } else {
+            filtered = [...articles];
+        }
+
+        const start       = (currentPageNum - 1) * PAGE_SIZE;
+        const end         = currentPageNum * PAGE_SIZE;
+        displayedArticles = filtered.slice(start, end);
+
+        totalPageNum = Math.ceil(filtered.length / PAGE_SIZE);
+    }
+
+    // 페이지 변경
     function changePage(pageNum) {
         if (pageNum >= 1 && pageNum <= totalPageNum) {
             currentPageNum = pageNum;
@@ -49,18 +111,15 @@
         }
     }
 
-    $: currentGroupStart = Math.floor((currentPageNum - 1) / GROUP_PAGING_SIZE) * GROUP_PAGING_SIZE + 1; // 첫번째 페이징 번호를 1단위로 끊으려면 -1 필요, Math.floor(1.6) = 1
-    $: currentGroupEnd   = Math.min(currentGroupStart + GROUP_PAGING_SIZE - 1, totalPageNum); // 마지막 페이징 번호를 10 단위로 끊으려면 -1 필요
-    $: currentGroupPages = Array.from(
-        { length: currentGroupEnd - currentGroupStart + 1 }, // ex. 1 ~ 10 을 표현하려면 + 1 해야 함 (start ~ end 모두 표현하려면 +1 필요)
-        (_, i) => currentGroupStart + i
-    );
+    // 페이지 그룹 계산
+    $: currentGroupStart = Math.floor((currentPageNum - 1) / GROUP_PAGING_SIZE) * GROUP_PAGING_SIZE + 1;
+    $: currentGroupEnd   = Math.min(currentGroupStart + GROUP_PAGING_SIZE - 1, totalPageNum);
+    $: currentGroupPages = Array.from({ length: currentGroupEnd - currentGroupStart + 1 }, (_, i) => currentGroupStart + i);
 
-    // 공지사항은 관리자만 작성 가능, 이외 항목은 로그인 시 작성 가능
+    // 글쓰기 권한 확인
     $: canWrite = (categoryType === CATEGORY_TYPE.NEWS && $isAdmin && $isLoggedIn) ||
                   (categoryType !== CATEGORY_TYPE.NEWS && $isLoggedIn);
 </script>
-
 
 <GnbPublisher />
 <div class="menu">
@@ -80,11 +139,16 @@
     <article class="news_header">
         <div class="category_type_c">
             {#each articleFilters as articleFilter}
-                    <a has-detail-type={ articleFilter.hasDetailType } filter-type={ articleFilter.filterType }>
-                        { articleFilter.filterText }
-                    </a>
+                <a 
+                    class:selected={selectedFilters.has(String(articleFilter.filterType))}
+                    on:click={() => toggleFilter(articleFilter.filterType)}
+                >
+                    {articleFilter.filterText}
+                </a>
             {/each}
-        </div> 
+        </div>
+        
+                   
         <div class="board_srch">
             <div class="select_gy" style="width:120px">
                 <div class="select">
@@ -250,6 +314,11 @@
         width: 11px;
         height: 8px;
         background: url("#{$DF_UI}/img/board/arrow_tri_dn_11x7.png") no-repeat 0 0;
+    }
+
+    .category_type_c a.selected {
+        background-color: #3392ff; 
+        color: white;              
     }
 
     .board_srch {
