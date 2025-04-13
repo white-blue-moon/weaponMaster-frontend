@@ -2,8 +2,9 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT, CATEGORY_TYPE_TEXT } from '../constants/articles';
+    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../constants/articles';
     import { getArticleFilter, getArticleFilterText, getPage } from '../utils/page';
+    import { isAdmin, isLoggedIn } from '../utils/auth';
 
     import GnbPublisher from "./GnbPublisher.svelte";
     import Gnb from "./Gnb.svelte";
@@ -54,6 +55,10 @@
         { length: currentGroupEnd - currentGroupStart + 1 }, // ex. 1 ~ 10 을 표현하려면 + 1 해야 함 (start ~ end 모두 표현하려면 +1 필요)
         (_, i) => currentGroupStart + i
     );
+
+    // 공지사항은 관리자만 작성 가능, 이외 항목은 로그인 시 작성 가능
+    $: canWrite = (categoryType === CATEGORY_TYPE.NEWS && $isAdmin && $isLoggedIn) ||
+                  (categoryType !== CATEGORY_TYPE.NEWS && $isLoggedIn);
 </script>
 
 
@@ -128,11 +133,12 @@
             </ul>
         {/each}
     </article>
-    
-    <!-- TODO 권한 있는 상태에서만 보이도록 하기 -->
-    <article class="btnarea_r mt30">
-        <a href="{ page.writePath }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
-    </article>
+
+    {#if canWrite}
+        <article class="btnarea_r mt30">
+            <a href="{ page.writePath }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
+        </article>
+    {/if}
 
     <article class="paging mt60">
         <a class="first" on:click={ () => changePage(1) }>FIRST</a>
