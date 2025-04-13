@@ -356,6 +356,36 @@
         cursor: pointer;
     }
 
+    .ly_login_info .btnarea {
+        padding: 0;
+        margin: 30px 0 0 0;
+    }
+
+    .btnarea {
+        text-align: center;
+        font-size: 0;
+    }
+
+    .ly_login_info .btnarea a.btn_n {
+        background: #303544;
+        color: #fff;
+    }
+
+    .ly_login_info .btnarea a {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+        width: 165px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 14px;
+    }
+
+    .ly_login_info .btnarea a.btn_b {
+        background: #3392ff;
+        color: #fff;
+    }
+
     .search-box {
         display: flex;
         margin-bottom: 10px;

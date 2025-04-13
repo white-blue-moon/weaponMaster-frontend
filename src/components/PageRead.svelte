@@ -3,9 +3,9 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
     import { getPage, getArticleFilterText } from '../utils/page';
-    import { userInfo, isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
     import { formatDate } from "../utils/time";
-    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_TYPE } from '../constants/articles';
     
     import GnbPublisher from "../components/GnbPublisher.svelte";
     import Gnb from "../components/Gnb.svelte";
@@ -14,9 +14,9 @@
     import Footer from '../components/Footer.svelte';
     import Comment from './Comment.svelte';
     
-    let url = window.location.pathname;
-    let pageId = url.split('/').pop();
-    let page = {};
+    let url     = window.location.pathname;
+    let pageId  = url.split('/').pop();
+    let page    = {};
     let article = null;
 
     async function fetchArticle() {
@@ -111,15 +111,22 @@
             </div>
             <div class="btnst2">
                 <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
-                <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
-                <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
+                {#if article.userId == $userInfo || $isAdmin}
+                    <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
+                    <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
+                {/if}
                 <a href={ page.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          
         </article>
 
-        {#if article.categoryType != CATEGORY_TYPE.NEWS}
+        {#if article.categoryType == CATEGORY_TYPE.SERVICE_CENTER && article.articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT }
+            {#if article.userId == $userInfo || $isAdmin}
+                <Comment /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
+            {/if}
+        {:else if article.categoryType != CATEGORY_TYPE.NEWS}
             <Comment />
         {/if}
+
     </section>
 {/if}
 

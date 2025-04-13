@@ -1,5 +1,5 @@
 <script>
-    import { userInfo, isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
@@ -61,6 +61,7 @@
             method: "POST",
             body: JSON.stringify({
                 "userId":      $userInfo,
+                "isAdmin":     $isAdmin,
                 "articleId":   articleId,
                 "reCommentId": reCommentId,
                 "contents":    contents,
