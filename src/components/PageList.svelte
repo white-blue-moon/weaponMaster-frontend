@@ -147,8 +147,7 @@
                 </a>
             {/each}
         </div>
-        
-                   
+              
         <div class="board_srch">
             <div class="select_gy" style="width:120px">
                 <div class="select">
@@ -317,8 +316,13 @@
     }
 
     .category_type_c a.selected {
-        background-color: #3392ff; 
+        background-color: #3392ff;
+        border-color: #247ce1;
         color: white;              
+    }
+
+    .category_type_c a.selected::before {
+        background-position: 0 -50px; // 체크 이미지 하얀색으로 변경 (이미지 내 위치 이동)            
     }
 
     .board_srch {
