@@ -33,7 +33,7 @@
         src="https://cdn.df.nexon.com/img/insp/2023/logo.png" 
         alt="Dungeon &amp; Fighter" 
     />
-    <h3>이 홈페이지는 네오플 포트폴리오 제출용 홈페이지입니다.</h3>
+    <h3>이 홈페이지는 포트폴리오 제출용 홈페이지입니다.</h3>
     <h1>홈페이지 점검 시간 입니다.</h1>
     <h2>약속한 시간 내 오픈할 수 있도록 최선을 다하겠습니다.</h2>
 </header>
@@ -100,22 +100,12 @@
 
     <article class="media" id="media">
         <div class="media_tabm">
-            <a class="">던파카툰</a>
+            <!-- <a class="">던파카툰</a> -->
             <a class="active">비트비트 8비트</a>
-            <a>아라드 버거</a>
+            <!-- <a>아라드 버거</a> -->
         </div>
         <div class="media_tabc">
-            <ul class="cartoon show" style="display: none;">
-                <li data-cartoon="2846209">
-                    <img 
-                        src="https://bbscdn.df.nexon.com/data7/commu/202412/35f652b8-9adb-82a8-5e2c-e008cc974a2e.jpg" 
-                        alt="" 
-                    />
-                    <b>아라드 상중하 예고편</b>
-                    <span>2024-12-26</span>
-                </li>
-                <!-- 나머지 항목들도 동일하게 정리 가능 -->
-            </ul>
+            <!-- <ul class="cartoon show" style="display: none;"></ul> -->
             <ul class="bitbit8" style="display: flex;">
                 <li class="bit">
                     <div class="game_t"></div>
@@ -147,11 +137,7 @@
                     </p>
                 </li>
             </ul>
-            <ul class="aradburger" style="display: none;">
-                <li>
-                    <div id="actiondunfang"></div>
-                </li>
-            </ul>
+            <!-- <ul class="aradburger" style="display: none;"></ul> -->
         </div>
     </article>
 </section>
@@ -408,10 +394,6 @@
         position: relative;
     }
     
-    .content_section .media_tabc ul.cartoon {
-        padding: 60px 50px;
-    }
-    
     .content_section .media_tabc ul.cartoon li {
         margin: 10px;
         width: 280px;
@@ -424,15 +406,6 @@
         display: block;
         width: 100%;
         height: 134px;
-    }
-    
-    .content_section .media_tabc ul.cartoon li b {
-        display: block;
-        margin: 20px 0 8px 0;
-        padding: 0;
-        color: #36393f;
-        font-size: 17px;
-        line-height: 23px;
     }
     
     .content_section .media_tabc ul.cartoon li span {
@@ -496,25 +469,10 @@
         line-height: 18px;
     }
     
-    .content_section .media_tabc ul.aradburger {
-        position: relative;
-        padding: 60px;
-    }
-    
     .content_section .media_tabc ul.aradburger li {
         width: 1180px;
         height: 708px;
         background: url('https://cdn.df.nexon.com/img/insp/2023/bg_aradburger.png') no-repeat 50% 0;
-    }
-    
-    .content_section .media_tabc ul.aradburger li #actiondunfang {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 49px 0 0 40px;
-        width: calc(100% - 80px);
-        height: 590px;
-        background: #000;
     }
 
     .top {
