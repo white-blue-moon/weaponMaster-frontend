@@ -1,4 +1,8 @@
 <script>
+    import { API } from '../constants/api';
+    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { onMount } from "svelte";
+
     import FocusBanner from '../components/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
 
@@ -26,6 +30,16 @@
         "https://bbscdn.df.nexon.com/data6/commu/202412/0a3b7ce4-cb9c-1144-461d-634afa4f27c7.jpg",
         "https://bbscdn.df.nexon.com/data6/commu/202412/9a10acd4-d732-4002-2bec-c0a09bbfff45.jpg",
     ];
+
+    onMount(async () => {
+          const response = await apiFetch(API.PAGE.INSPECTIOIN, {
+              method: "GET",
+          }).catch(handleApiError);
+
+          if (response.success) {
+              publisherLogo = response.data
+          }
+    });
 </script>
 
 <header>
