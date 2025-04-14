@@ -11,11 +11,13 @@
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     
-    let focusBanners = [];  // FocusBanner 데이터를 저장할 변수
-    let loading = true;  // 데이터 로딩 중 상태를 관리할 변수
-    let banners1, banners2, banners3;
+    let focusBanners     = [];
+    let newsArticles     = [];
+    let bestViewArticles = [];
+    
+    let mainFocusBanner, newsFirstBanner, newsSecondBanner;
+    let loading = true; // 데이터 로딩 중 상태를 관리할 변수
 
-    // API 호출
     async function fetchFocusBanners() {
         const response = await apiFetch(API.PAGE.HOME, {
             method: 'POST',
@@ -28,24 +30,25 @@
             }),
         }).catch(handleApiError);
 
-        if (response != null) {
-            focusBanners = response.data.focusBanners;
-            loading = false;  // 로딩이 끝났으므로 로딩 상태를 false로 설정
+        if (response.success) {
+            focusBanners     = response.data.focusBanners;
+            newsArticles     = response.data.newsArticles;
+            bestViewArticles = response.data.bestViewArticles;
+            loading          = false;
         }
     }
 
-    // 컴포넌트가 마운트될 때 API 호출
     onMount(async () => {
-        await fetchFocusBanners();  // API 호출 완료될 때까지 기다림
+        await fetchFocusBanners();
 
-        // focusBanners가 업데이트된 후 banners1, banners2, banners3 할당
-        banners1 = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
-        banners2 = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
-        banners3 = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
+        // focusBanners가 업데이트된 후 각 변수에 할당
+        mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+        newsFirstBanner  = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
+        newsSecondBanner = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
     });
 </script>
 
-<!-- 페이지 전체 렌더링을 loading 상태가 끝날 때까지 기다림 -->
+
 <GnbPublisher />
 <div class="menu">
     <div class="gnb">
@@ -53,8 +56,7 @@
     </div>
     <div class="focus-banner">
         {#if !loading}
-            <!-- 첫 번째 배너 데이터로 FocusBanner 렌더링 -->
-            <FocusBanner width="1450px" height="600px" imageUrls={banners1} />
+            <FocusBanner width="1450px" height="600px" imageUrls={mainFocusBanner} />
         {:else}
             <!-- 로딩 중 상태 -->
         {/if}
@@ -62,16 +64,18 @@
 </div>
 <div class="news-container">
     <div class="news-banner">
-        <NewsBanner />
+        {#if !loading}
+            <NewsBanner articles={ newsArticles }/>
+        {/if}
     </div>
     <div class="news-focus-banners">
         {#if !loading}
             <!-- 두 번째와 세 번째 배너 데이터로 FocusBanner 렌더링 -->
             <div class="news-left-focus-banner">
-                <FocusBanner width="560px" height="280px" imageUrls={banners2} />
+                <FocusBanner width="560px" height="280px" imageUrls={newsFirstBanner} />
             </div>
             <div class="news-right-focus-banner">
-                <FocusBanner width="300px" height="280px" imageUrls={banners3} />
+                <FocusBanner width="300px" height="280px" imageUrls={newsSecondBanner} />
             </div>
         {:else}
             <!-- 로딩 중 상태 -->
@@ -79,7 +83,9 @@
     </div>
 </div>
 <div class="guide-and-recommand">
-    <ListBox />
+    {#if !loading}
+        <ListBox articles={ bestViewArticles }/>
+    {/if}
 </div>
 <!-- TODO 풀 배너 이벤트 등록하기 -->
 <!-- <FullBanner /> -->

@@ -1,4 +1,6 @@
 <script>
+    export let articles = [];
+
     // 필요한 경우 데이터 배열로 컨텐츠를 관리
     const slides = [
       {
@@ -24,7 +26,7 @@
   
 <section class="guide_rec">
   <article class="container">
-    <h3>가이드 <i>&amp;</i> 추천글</h3>
+    <h3>인기 게시물</h3>
 
     <!-- Navigation Buttons -->
     <div class="lst_control">

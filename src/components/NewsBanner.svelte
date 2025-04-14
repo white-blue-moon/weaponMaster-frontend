@@ -1,50 +1,36 @@
 <script>
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_DETAIL_TYPE } from '../constants/articles';
+    import { ARTICLE_TYPE } from '../constants/articles';
     import { PATHS } from '../constants/paths';
     import { getArticleFilterText } from '../utils/page';
 
-    export let width = "400px"; // 기본값 설정
-    export let height = "280px"; // 기본값 설정
+    export let width    = "400px";
+    export let height   = "280px";
+    export let articles = [];
 
     let activeTab = "전체";
-    let articles = [];
     let newsData = {
         전체: [],
         공지사항: [],
         업데이트: [],
         개발자노트: []
     };
-
     const tabs = ["전체", "공지사항", "업데이트", "개발자노트"];
 
-    // TODO -> 홈에서 한번에 가져오게 하기 (지금은 테스트를 위해 임시로 컴포넌트에서 API 호출)
-
-    // 게시물 데이터 가져오기
-    async function fetchArticles() {
-        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.NEWS, ARTICLE_TYPE.ALL), {
-            method: 'GET',
-        }).catch(handleApiError);
-
-        if (response?.success) {
-            articles = response.data;
-
-            // newsData 동적 생성
-            newsData = {
-                전체: articles.map((article) => formatArticleTitle(article)),
-                공지사항: articles
-                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.NOTICE)
-                    .map((article) => formatArticleTitle(article)),
-                업데이트: articles
-                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.UPDATE)
-                    .map((article) => formatArticleTitle(article)),
-                개발자노트: articles
-                    .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.DEV_NOTE)
-                    .map((article) => formatArticleTitle(article)),
-            };
-        }
+    function fetchArticles() {
+        // newsData 분류 할당
+        newsData = {
+            전체: articles.map((article) => formatArticleTitle(article)),
+            공지사항: articles
+                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.NOTICE)
+                .map((article) => formatArticleTitle(article)),
+            업데이트: articles
+                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.UPDATE)
+                .map((article) => formatArticleTitle(article)),
+            개발자노트: articles
+                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.DEV_NOTE)
+                .map((article) => formatArticleTitle(article)),
+        };
     }
 
     // 게시물 제목 포맷
@@ -67,7 +53,7 @@
     }
 
     onMount(async () => {
-        await fetchArticles();
+        fetchArticles();
     });
 </script>
 
