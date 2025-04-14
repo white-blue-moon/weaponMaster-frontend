@@ -1,6 +1,6 @@
 <script>
     import { DF_UI } from "../constants/resourcePath";
-    import { userInfo, isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
@@ -29,6 +29,7 @@
             method: 'DELETE',
             body: JSON.stringify({
                 "userId":    $userInfo,
+                "isAdmin":   $isAdmin,
                 "articleId": articleId,
             }),
         }).catch(handleApiError);
@@ -84,8 +85,8 @@
             <dt id="comment_count_dt">댓글 <b>{ comments.length }</b></dt>
             <dd>
                 <a class="go_reply">댓글 쓰러 가기</a>
-                <a href="javascript:void(0);" id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
-                <a href="javascript:void(0);" id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt=""> 댓글 새로고침</a>
+                <a href="#" id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
+                <a href="#" id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt=""> 댓글 새로고침</a>
             </dd>
         </dl>
     </div>
@@ -96,24 +97,40 @@
         <div id="comment_group_area">
             {#each normalComments as comment}
                 <div class="cmt_group">
-                    <ul>
-                        <li>
-                            <a class="name dnf_charac_name_tag"> { comment.userId }</a>
-                        </li>
-                        <li>{ @html comment.contents}</li>
-                        <li>
-                            <a>{ formatDate(comment.createDate) }</a>
-                            <a class="del" on:click={ handleDelete(comment.id) }>삭제</a>
-                        </li>
-                    </ul>
-                    <div class="cmt_btnarea">
-                        <div class="vam">
-                            <!-- <a class="like ">0</a> -->
-                            <a class="gocmt" on:click={ toggleReply(comment.id) }>
-                                { reCommentVisible[comment.id] ? "답글취소" : "답글쓰기" }
-                            </a>
+                    {#if comment.isDeleted}
+                        <ul>
+                            <li><b>작성자 또는 관리자에 의해 삭제된 글입니다.</b></li>
+                        </ul>
+                    {:else}
+                        <ul>
+                            <!-- 이름 -->
+                            <li><a class="name dnf_charac_name_tag"> { comment.userId }</a></li>
+
+                            <!-- 댓글 내용 -->
+                            <li>{ @html comment.contents}</li>
+
+                            <li>
+                                <!-- 작성일 -->
+                                <a>{ formatDate(comment.createDate) }</a>
+
+                                <!-- 삭제 버튼 -->
+                                {#if $isAdmin || comment.userId == $userInfo}
+                                    <a class="del" on:click={ handleDelete(comment.id) }>삭제</a>
+                                {/if}
+                            </li>
+                            
+                        </ul>
+
+                        <!-- 답글쓰기 버튼 -->
+                        <div class="cmt_btnarea">
+                            <div class="vam">
+                                <!-- <a class="like ">0</a> -->
+                                <a class="gocmt" on:click={ toggleReply(comment.id) }>
+                                    { reCommentVisible[comment.id] ? "답글취소" : "답글쓰기" }
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    {/if}
                 </div>
 
                 {#if reCommentVisible[comment.id]}
@@ -122,23 +139,37 @@
 
                 {#if replyCommentsList[comment.id]}
                     {#each replyCommentsList[comment.id] as replyComment}
-                        <!-- 댓글 출력창 컴포넌트화 하기 -->
                         <div class="cmt_group reply">
-                            <ul>
-                                <li>
-                                    <a class="name dnf_charac_name_tag">{ replyComment.userId }</a>
-                                </li>
-                                <li>{ @html replyComment.contents }</li>
-                                <li>
-                                    <a>{ formatDate(replyComment.createDate) }</a>
-                                    <a class="del" on:click={ handleDelete(replyComment.id) }>삭제</a>
-                                </li>
-                            </ul>
+                            {#if replyComment.isDeleted}
+                                <ul>
+                                    <li><b>작성자 또는 관리자에 의해 삭제된 글입니다.</b></li>
+                                </ul> 
+                            {:else}
+                                <ul>
+                                    <!-- 이름 -->
+                                    <li><a class="name dnf_charac_name_tag">{ replyComment.userId }</a></li>
+                                    
+                                    <!-- 댓글 내용 -->
+                                    <li>{ @html replyComment.contents }</li>
+                                    
+                                    <li>
+                                        <!-- 작성일 -->
+                                        <a>{ formatDate(replyComment.createDate) }</a>
+
+                                        <!-- 삭제 버튼 -->
+                                        {#if $isAdmin || replyComment.userId == $userInfo}
+                                            <a class="del" on:click={ handleDelete(replyComment.id) }>삭제</a>
+                                        {/if}
+                                    </li>
+                                
+                                </ul>               
+                            {/if} 
                         </div>
                     {/each}
                 {/if}
             {/each}
         </div>
+        <!-- 댓글 입력 창 -->
         <CommentEnter />
     </div>
 </article>
@@ -273,6 +304,12 @@
         cursor: pointer;
     }
 
+    .cmt_group ul li b {
+        color: #6a6e76;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
     .cmt_group ul li:nth-child(2) {
         display: block;
         padding: 11px 0;
@@ -304,7 +341,7 @@
         padding: 0 0 35px 30px;
     }
 
-    .comment_list .cmt_group.reply li a.name::before {
+    .comment_list .cmt_group.reply li a.name::before,  .comment_list .cmt_group.reply li b::before{
         content: '';
         display: inline-block;
         margin: -4px 13px 0 0;
