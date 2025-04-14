@@ -22,45 +22,42 @@
     const GROUP_PAGING_SIZE = 10;   // 한 그룹에 표시할 페이지 번호 개수
 
     let articles          = [];
+    let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
+
     let totalPageNum      = 1;
     let currentPageNum    = 1;
     let displayedArticles = [];
+    let searchKeyword     = "";
+    let searchInput       = "";
 
-    let selectedFilters     = new Set(); // 게시물 필터 버튼 상태 관리 (ex: 미답변/답변완료)
-    let groupedByDetailType = {};
-    let groupedByType       = {};
+    let selectedFilters   = new Set(); // 게시물 필터 버튼 상태 관리 (ex: 미답변/답변완료)
 
     onMount(async () => {
         const response = await apiFetch(API.ARTICLES.LIST(categoryType, articleType), {
             method: "GET",
         }).catch(handleApiError);
 
-        if (response?.success) {
-            articles = response.data;
-
-            // 게시물 리스트 그룹화
-            if(categoryType == CATEGORY_TYPE.COMMUNITY) {
-                groupedByType = groupBy(articles, "articleType");
-            } else {
-                groupedByDetailType = groupBy(articles, "articleDetailType");
-            }
-
-            totalPageNum = Math.ceil(articles.length / PAGE_SIZE);
+        if (response.success) {
+            articles     = response.data;
+            buildArticlesMap();
             updateDisplayedArticles();
         }
     });
 
-    // key 에 해당하는 값으로 그룹화
-    function groupBy(list, key) {
-        return list.reduce((acc, item) => {
-            const value = String(item[key]); // 문자열로 변환
-            if (!acc[value]) {
-                acc[value] = [];
-            }
+    // 필터 기준에 따라 Map 생성
+    function buildArticlesMap() {
+        articlesMap.clear();
+  
+        for (const article of articles) {
+            const key = (categoryType === CATEGORY_TYPE.COMMUNITY)
+            ? String(article.articleType)
+            : String(article.articleDetailType);
 
-            acc[value].push(item);
-            return acc;
-        }, {});
+            if (!articlesMap.has(key)) {
+                articlesMap.set(key, []);
+            }
+            articlesMap.get(key).push(article);
+        }
     }
 
     // 필터 버튼 토글
@@ -79,31 +76,33 @@
         updateDisplayedArticles(); // 다시 첫 페이지부터 필터링된 결과 출력
     }
 
-    // 필터링 + 페이징 적용
+    // 필터와 검색어에 따라 표시할 게시글 갱신
     function updateDisplayedArticles() {
         let filtered = [];
 
         if (selectedFilters.size > 0) {
-            const filtersArray = Array.from(selectedFilters);
-
-            filtered = articles.filter(article => {
-                const key = categoryType === CATEGORY_TYPE.COMMUNITY
-                    ? String(article.articleType)
-                    : String(article.articleDetailType);
-                return filtersArray.includes(key);
-            });
+            for (const key of selectedFilters) {
+                if (articlesMap.has(key)) {
+                    filtered.push(...articlesMap.get(key));
+                }
+            }
         } else {
             filtered = [...articles];
+        }
+
+        if (searchKeyword.trim()) {
+            filtered = filtered.filter(article => article.title.includes(searchKeyword.trim()));
         }
 
         const start       = (currentPageNum - 1) * PAGE_SIZE;
         const end         = currentPageNum * PAGE_SIZE;
         displayedArticles = filtered.slice(start, end);
+        totalPageNum      = Math.ceil(filtered.length / PAGE_SIZE);
 
-        totalPageNum = Math.ceil(filtered.length / PAGE_SIZE);
+        console.log('articlesMap: ', articlesMap)
+        console.log('selectedFilters: ', selectedFilters)
     }
 
-    // 페이지 변경
     function changePage(pageNum) {
         if (pageNum >= 1 && pageNum <= totalPageNum) {
             currentPageNum = pageNum;
@@ -111,12 +110,22 @@
         }
     }
 
-    // 페이지 그룹 계산
+    function handleSearch() {
+        searchKeyword  = searchInput;
+        currentPageNum = 1;
+        updateDisplayedArticles();
+    }
+
+    function clearSearch() {
+        searchKeyword = "";
+        searchInput   = "";
+        updateDisplayedArticles();
+    }
+
     $: currentGroupStart = Math.floor((currentPageNum - 1) / GROUP_PAGING_SIZE) * GROUP_PAGING_SIZE + 1;
     $: currentGroupEnd   = Math.min(currentGroupStart + GROUP_PAGING_SIZE - 1, totalPageNum);
     $: currentGroupPages = Array.from({ length: currentGroupEnd - currentGroupStart + 1 }, (_, i) => currentGroupStart + i);
 
-    // 글쓰기 권한 확인
     $: canWrite = (categoryType === CATEGORY_TYPE.NEWS && $isAdmin && $isLoggedIn) ||
                   (categoryType !== CATEGORY_TYPE.NEWS && $isLoggedIn);
 </script>
@@ -125,11 +134,7 @@
 <div class="menu">
     <Gnb />
     <div class="header-banner">
-        <HeaderBanner
-            isLogoVisible={ false }
-            bannerText={ CATEGORY_TYPE_TEXT[categoryType] }
-            bannerBackground={ page.bannerBackground }
-        />
+        <HeaderBanner isLogoVisible={ false } bannerText={ CATEGORY_TYPE_TEXT[categoryType] } bannerBackground={ page.bannerBackground } />
     </div>
 </div>
 <Menu2nd categoryType={ categoryType } articleType={ articleType }/>
@@ -139,65 +144,79 @@
     <article class="news_header">
         <div class="category_type_c">
             {#each articleFilters as articleFilter}
-                <a 
-                    class:selected={selectedFilters.has(String(articleFilter.filterType))}
-                    on:click={() => toggleFilter(articleFilter.filterType)}
-                >
+                <a class:selected={selectedFilters.has(String(articleFilter.filterType))} on:click={() => toggleFilter(articleFilter.filterType)}>
                     {articleFilter.filterText}
                 </a>
             {/each}
         </div>
-              
+
         <div class="board_srch">
             <div class="select_gy" style="width:120px">
                 <div class="select">
-                    <select id="searchType">
+                    <!-- <select id="searchType">
                         <option value="1">제목+본문</option>
                         <option value="2">제목</option>
-                    </select>
+                    </select> -->
                     <div class="select-element">
-                        <span class="active-option">제목+본문</span>
-                        <div class="option-list" style="max-height: 205px; height: 84px;">
+                        <span class="active-option">제목</span>
+                        <!-- <div class="option-list" style="max-height: 205px; height: 84px;">
                             <ul>
                                 <li data-value="1">제목+본문</li>
                                 <li data-value="2">제목</li>
                             </ul>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
             <div class="bs_ipt">
-                <input type="text" id="searchKeyword" name="" class="search_input" autocomplete="off">
-                <a class="btn_del">삭제</a>
-                <label id="searchButton"></label>
+                <input
+                    type="text"
+                    id="searchKeyword"
+                    bind:value={ searchInput }
+                    class="search_input"
+                    autocomplete="off"
+                    on:keydown={(e) => e.key === 'Enter' && handleSearch()}
+                >
+                <a class="btn_del" style:display={ searchInput ? 'block' : 'none' } on:click={ clearSearch }>삭제</a>
+                <label id="searchButton" on:click={ handleSearch }></label>
             </div>
         </div>
     </article>
 
     <article class="board_list news_list">
-        {#each displayedArticles as article}
-            <ul class:notice={ article.isPinned }>
-                <li class="category">
-                    {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
-                        <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
-                    {:else}
-                        { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
-                    {/if}
-                </li>
-                <li class="title" data-no={ article.id }>
-                    <a href={ page.readPath(article.id) }>{ article.title }</a>
-                    {#if article.commentCount > 0}
-                        <b>({ article.commentCount })</b>
-                    {/if}
-                    <div class="iconset"></div>
-                </li>
-                {#if categoryType != CATEGORY_TYPE.NEWS}
-                    <li class="arthor">{ article.userId }</li>
-                {/if}
-                <li class="date">{ article.createDate.split('T')[0] }</li>
-                <li class="hits">{ article.viewCount.toLocaleString() }</li>
+        {#if displayedArticles.length === 0}
+            <ul>
+                {#if searchKeyword == ""}
+                    <li><div class="no-results">검색 결과가 없습니다.</div></li>
+                {:else}
+                    <li><div class="no-results">"{ searchKeyword }" 에 대한 검색 결과가 없습니다.</div></li>
+                {/if} 
             </ul>
-        {/each}
+        {:else}
+            {#each displayedArticles as article}
+                <ul class:notice={ article.isPinned }>
+                    <li class="category">
+                        {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
+                            <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
+                        {:else}
+                            { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
+                        {/if}
+                    </li>
+                    <li class="title" data-no={ article.id }>
+                        <a href={ page.readPath(article.id) }>{ article.title }</a>
+                        {#if article.commentCount > 0}
+                            <b>({ article.commentCount })</b>
+                        {/if}
+                        <div class="iconset"></div>
+                    </li>
+                    {#if categoryType != CATEGORY_TYPE.NEWS}
+                        <li class="arthor">{ article.userId }</li>
+                    {/if}
+                    <li class="date">{ article.createDate.split('T')[0] }</li>
+                    <li class="hits">{ article.viewCount.toLocaleString() }</li>
+                </ul>
+            {/each}
+        {/if}
     </article>
 
     {#if canWrite}
