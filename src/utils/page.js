@@ -166,3 +166,16 @@ export function getMenu2nd(categoryType, articleType) {
         isActive: articleType == article_type,
     }));
 }
+
+export function getPagePath(article) {
+    let category;
+
+    switch(article.categoryType) {
+        case CATEGORY_TYPE.NEWS:           category = "news";      break;
+        case CATEGORY_TYPE.COMMUNITY:      category = "community"; break;
+        case CATEGORY_TYPE.SERVICE_CENTER: category = "service";   break;
+        default: throw new Error("Unknown categoryType, can't get page path");
+    }
+
+    return `/${category}/${article.id}`;
+}

@@ -1,28 +1,34 @@
 <script>
+    import { DF_UI } from '../constants/resourcePath';
+    import { CATEGORY_TYPE_TEXT } from '../constants/articles';
+    import { getPagePath } from '../utils/page';
+
     export let articles = [];
 
-    // 필요한 경우 데이터 배열로 컨텐츠를 관리
-    const slides = [
-      {
-        img: "//bbscdn.df.nexon.com/data7/commu/202411/11ac10dd-6bbb-2f74-67a8-b862ff51aa4a.jpg",
-        category: "커뮤니티",
-        title: "던파온 어플에서 칭호.오라.크리쳐 받으세요",
-        author: "뮤생",
-      },
-      {
-        img: "https://bbscdn.df.nexon.com/data6/commu/202407/e6ecdd25-e6df-5193-df27-ce5e4d7c3e59.jpg",
-        category: "가이드",
-        title: "성장이벤트 이후 뉴비 공략",
-        author: "모험가 공략 (Sanso)",
-      },
-      {
-        img: "//bbscdn.df.nexon.com/data7/commu/202411/642d0b07-f939-b8d4-68b5-7acfb975bb22.png",
-        category: "커뮤니티",
-        title: "트래블러 랭킹 3위가 알려주는 초 심화공략(feat.별빛하울링), 전직업 완벽공략 프로젝트 5편!",
-        author: "관훈",
-      },
-    ];
+    const ITEMS_PER_SLIDE  = 3; // 한 슬라이드에 보여지는 추천 게시물 개수
+    let currentIndex       = 0;
+
+    function prevSlide() {
+        currentIndex -= ITEMS_PER_SLIDE;
+        if (currentIndex < 0) {
+            // 끝에서 루프
+            const totalPages = Math.ceil(articles.length / ITEMS_PER_SLIDE);
+            currentIndex     = (totalPages - 1) * ITEMS_PER_SLIDE;
+        }
+    }
+
+    function nextSlide() {
+        currentIndex += ITEMS_PER_SLIDE;
+        if (currentIndex >= articles.length) {
+            // 처음으로 루프
+            currentIndex = 0;
+        }
+    }
+
+    $: visibleArticles = articles.slice(currentIndex, currentIndex + ITEMS_PER_SLIDE);
 </script>
+
+
   
 <section class="guide_rec">
   <article class="container">
@@ -30,23 +36,23 @@
 
     <!-- Navigation Buttons -->
     <div class="lst_control">
-      <button class="arrow_l"></button>
-      <button class="arrow_r"></button>
+      <button class="arrow_l" on:click={ prevSlide }></button>
+      <button class="arrow_r" on:click={ nextSlide }></button>
     </div>
 
     <div class="guide_rec_s">
       <!-- Slides -->
       <ul class="slides">
-        {#each slides as slide}
+        {#each visibleArticles as article}
           <li class="slide">
-            <a href="/">
+            <a href={ getPagePath(article) }>
               <div class="image-wrapper">
-                <img src={ slide.img } alt={ slide.title }/>
+                <img src="{DF_UI}/img/common/today_dnf_default.jpg" alt={ article.title } />
               </div>
-              <span class="category">{ slide.category }</span>
+              <span class="category">{ CATEGORY_TYPE_TEXT[article.categoryType] }</span>
               <div class="info">
-                <h4 class="title">{ slide.title }</h4>
-                <p class="author">{ slide.author }</p>
+                <h4 class="title">{ article.title }</h4>
+                <p class="author">{ article.userId }</p>
               </div>
             </a>
           </li>
