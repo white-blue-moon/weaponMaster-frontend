@@ -3,7 +3,7 @@
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
     import { userInfo, isLoggedIn } from "../utils/auth";
-    import { API, NEOPLE_API } from '../constants/api';
+    import { NEOPLE_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
 

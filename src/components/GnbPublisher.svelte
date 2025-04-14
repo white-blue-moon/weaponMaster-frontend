@@ -1,6 +1,21 @@
 <script>
   import { PATHS } from '../constants/paths';
   import { userInfo, isLoggedIn, handleLogout, isAdmin } from "../utils/auth";
+  import { API } from '../constants/api';
+  import { apiFetch, handleApiError } from '../utils/apiFetch';
+  import { onMount } from "svelte";
+
+  let publisherLogo;
+  
+  onMount(async () => {
+        const response = await apiFetch(API.LOGO.PUBLISHER, {
+            method: "GET",
+        }).catch(handleApiError);
+
+        if (response.success) {
+            publisherLogo = response.data
+        }
+  });
 </script>
 
 <div class="header">
@@ -13,7 +28,9 @@
   </div>
   
   <div class="logo">
-    <img src="https://rs.nxfs.nexon.com/bannerusr/24/12/LoDB30160754039.png" alt="1230 애도">
+    {#if publisherLogo}
+      <img src={ publisherLogo.imgUrl } alt={ publisherLogo.alt }>
+    {/if}
   </div>
   
   <div class="actions">
