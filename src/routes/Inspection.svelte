@@ -2,10 +2,11 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
+    import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
 
     import FocusBanner from '../components/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
-
+  
 
     export let endDate;
 
@@ -21,23 +22,18 @@
     const formatHours   = hours   < 10 ? `0${hours}`   : hours; 
     const formatMinutes = minutes < 10 ? `0${minutes}` : minutes; 
     
-    // 임시 이미지 링크
-    const imageUrls = [
-        "https://bbscdn.df.nexon.com/data6/commu/202412/3e0a78be-a19f-d2d3-5dbf-540aa173cab5.jpg",
-        "https://bbscdn.df.nexon.com/data6/commu/202412/eb467836-7628-ea9b-f49c-db53254e8bf4.jpg",
-        "https://bbscdn.df.nexon.com/data6/commu/202412/9641f064-a335-a7cd-df77-db9abc6ee8d1.png",
-        "https://bbscdn.df.nexon.com/data6/commu/202412/a3390e26-c053-759e-e460-486467f9f3e5.jpg",
-        "https://bbscdn.df.nexon.com/data6/commu/202412/0a3b7ce4-cb9c-1144-461d-634afa4f27c7.jpg",
-        "https://bbscdn.df.nexon.com/data6/commu/202412/9a10acd4-d732-4002-2bec-c0a09bbfff45.jpg",
-    ];
+    let bannerImgUrls = [];
+    let latestDevNote = {};
 
     onMount(async () => {
-          const response = await apiFetch(API.PAGE.INSPECTIOIN, {
+          const response = await apiFetch(API.PAGE.INSPECTIOIN(FOCUS_BANNER_TYPE.INSPECTION_MAIN), {
               method: "GET",
           }).catch(handleApiError);
 
           if (response.success) {
-              publisherLogo = response.data
+            const focusBanner = response.data.focusBanners;
+            bannerImgUrls     = focusBanner[FOCUS_BANNER_TYPE.INSPECTION_MAIN]?.map(banner => banner.imgUrl);
+            latestDevNote     = response.data.devNote;
           }
     });
 </script>
@@ -64,7 +60,9 @@
         </div>
     </article>
     <article class="focus">
-        <FocusBanner width="650px" height="650px" imageUrls={ imageUrls } />
+        <!-- {#if bannerImgUrls.length > 0} -->
+            <FocusBanner width="650px" height="650px" imageUrls={ bannerImgUrls } />
+        <!-- {/if} -->
     </article>
 </section>
 
@@ -84,30 +82,11 @@
     <article class="update">
         <div class="bd_viewcont">
             <div class="operation_guide">
-                <h1>개선 및 변경사항</h1>
-                <p></p>
-                <p class="indent1">
-                    아름골 지역 NPC 아샤 상점 - 깊은 숲 속의 백목 오라아바타 상자 판매가 중단됩니다.
-                </p>
-                <p class="indent2">
-                    ※ '시들지 않는 은빛 가지'는 2025년 1월 9일 점검 전까지 획득할 수 있습니다. 
-                    (상점 판매가는 유지됩니다.)
-                </p>
-                <p class="indent1 mt20">중천 전조 퀘스트 4종이 삭제됩니다.</p>
-                <p class="indent2">
-                    - 기존에 퀘스트 수락 상태인 캐릭터의 경우, 퀘스트가 취소됩니다.
-                </p>
-
-                <h1 class="mt50">버그수정</h1>
-                <h3>캐릭터</h3>
-                <p class="indent1 mt20">
-                    스트리트파이터(남) - 전직에 맞는 결전의 무기 장착 후 마운트 시전 시 
-                    크레이지 발칸이 주변 적을 공격하지 않는 현상이 수정됩니다.
-                </p>
-                <p class="indent1 mt20">
-                    스트리트파이터(남) - 전직에 맞는 결전의 무기 장착 후 마운트 시전 시 
-                    크레이지 발칸의 일부 이펙트가 비정상적으로 출력되는 현상이 수정됩니다.
-                </p>
+                {#if latestDevNote != null}
+                    { @html latestDevNote.contents }
+                {:else}
+                    loading...
+                {/if}
             </div>
         </div>
     </article>

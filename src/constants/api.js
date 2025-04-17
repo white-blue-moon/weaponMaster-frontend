@@ -5,7 +5,7 @@ export const API = {
     },
     PAGE: {
         HOME:        `${ROOT}/page/home`,
-        INSPECTIOIN: `${ROOT}/page/inspection`,
+        INSPECTIOIN: (bannerType) => `${ROOT}/page/inspection/${bannerType}`,
     },
     ACCOUNT: {
         JOIN:         `${ROOT}/account/join`,

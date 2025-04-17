@@ -56,7 +56,7 @@
     </div>
     <div class="focus-banner">
         {#if !loading}
-            <FocusBanner width="1450px" height="600px" imageUrls={mainFocusBanner} />
+            <FocusBanner width="1450px" height="600px" imageUrls={ mainFocusBanner } />
         {:else}
             <!-- 로딩 중 상태 -->
         {/if}
