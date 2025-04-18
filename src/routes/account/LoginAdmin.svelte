@@ -40,13 +40,12 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            alert(`관리자모드로 로그인합니다. ${userId} 님 안녕하세요.`);
-            
             // 계정 정보 Store 업데이트
             userInfo.set(userId); // TODO 추후 서버에서 받은 사용자 정보로 저장되도록 수정 필요
             isLoggedIn.set(true);
             isAdmin.set(true);
 
+            alert(`관리자모드로 로그인합니다. ${userId} 님 안녕하세요.`);
             window.location.href = PATHS.HOME;
             return;
         }
