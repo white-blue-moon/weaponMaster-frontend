@@ -2,11 +2,12 @@
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../../utils/auth";
+    import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
-  import { PATHS } from '../../constants/paths';
+  
 
     let userId   = "";
     let password = "";

@@ -7,6 +7,10 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
 
+    import SlackStatusButton from "./SlackStatusButton.svelte";
+    import SlackInfoModal from "./SlackInfoModal.svelte";
+
+
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
     const GROUP_PAGING_SIZE = 5; // 한 그룹에 표시할 페이지 번호 개수
 
@@ -163,6 +167,19 @@
         return Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => groupStart + i);
     }
 
+    function onClickSlackInfo() {
+        isModalOpen = true;
+    }
+
+    let isModalOpen = false;
+    function openModal() {
+        isModalOpen = true;
+    }
+
+    function closeModal() {
+        isModalOpen = false;
+    }
+
     // watch.list 가 바뀔 때마다 자동으로 watchAuctionNoMap 갱신
     $: watchAuctionNoMap = new Set(watch.list.map(item => item.itemInfo.auctionNo));
 </script>
@@ -170,6 +187,11 @@
 
 <div class="ly_login_info" id="loginLayer">
     <div class="ly_logbox">
+        {#if isModalOpen}
+            <article class="paging back-button-wrapper">
+                <a class="prev" on:click={ closeModal }>PREV</a>
+            </article>
+        {/if}
         <a on:click={() => dispatch("close")} class="ly_clse">닫기</a>
         {#if !$isLoggedIn}
             <p class="txtarea">
@@ -181,11 +203,13 @@
                 <a href={ PATHS.ACCOUNT.LOGIN_ADMIN } class="btn btn_n">관리자모드 로그인</a>
                 <a href={ PATHS.ACCOUNT.LOGIN }       class="btn btn_b">일반모드 로그인</a>
             </p>
+        {:else if isModalOpen}
+            <SlackInfoModal isOpen={ isModalOpen } onClose={ closeModal }/>
         {:else}
             <div class="search-box">
                 <input type="text"
                        bind:this={ searchInput } 
-                       placeholder="아이템 검색" 
+                       placeholder="던전앤파이터 경매 아이템 검색" 
                        on:keydown={ handleKeyDown } />
                 <button class="btn-search" on:click={ searchItems }>검색</button>
             </div>
@@ -252,7 +276,10 @@
             <div class="blank-space"></div>
             
             <div class="watch-list">
-                <h3>판매 알림 등록 목록</h3>
+                <div class="watch-list-header">
+                    <h3>판매 알림 등록 목록</h3>
+                    <SlackStatusButton slackInfoExists={ false } slackError={ false } onClick={ onClickSlackInfo } />
+                </div>
                 {#if watch.list.length === 0}
                     <p>등록된 판매 알림이 없습니다.</p>
                 {:else}
@@ -335,6 +362,18 @@
         align-items: center;
     }
 
+    .ly_login_info h3 {
+        all: unset;
+        color: #151518;
+        font-size: 21px;
+    }
+
+    .ly_login_info p {
+        // all: unset;
+        color: #6a6e76;
+        font-size: 14px;
+    }
+
     .ly_login_info .ly_logbox {
         background: #fff;
         padding: 40px;
@@ -354,6 +393,14 @@
         background: url('#{$DF_UI}/img/login/ly_clse.png') no-repeat;
         text-indent: -9999px;
         cursor: pointer;
+    }
+
+    // 모달 내부 뒤로가기 버튼
+    .ly_login_info .ly_logbox .back-button-wrapper {
+        position: absolute;
+        top: 8px;
+        left: 6px;
+        margin: 0;
     }
 
     .ly_login_info .btnarea {
@@ -431,6 +478,14 @@
         border-bottom: none;
     }
 
+    .watch-list-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        column-gap: 8px;
+    }
+
     .item-img {
         width: 46px;
         height: 46px;
@@ -439,7 +494,6 @@
     }
 
     .item-name {
-        font-weight: bold;
         color: #333;
         white-space: normal;  /* 자동 줄바꿈 허용 */
         word-wrap: break-word;
@@ -447,7 +501,6 @@
 
     .item-price {
         text-align: right;
-        font-weight: bold;
         color: #2a9d8f;
     }
 
