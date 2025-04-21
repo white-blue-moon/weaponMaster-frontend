@@ -3,13 +3,14 @@
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
     import { userInfo, isLoggedIn } from "../utils/auth";
-    import { NEOPLE_API } from '../constants/api';
+    import { NEOPLE_API, SLACK_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
+    import { SLACK_NOTICE_TYPE } from "../constants/slack";
 
     import SlackStatusButton from "./SlackStatusButton.svelte";
     import SlackInfoModal from "./SlackInfoModal.svelte";
-
+  
 
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
     const GROUP_PAGING_SIZE = 5; // 한 그룹에 표시할 페이지 번호 개수
@@ -34,8 +35,11 @@
         groupPages: [],
     };
 
+    let slackInfo;
+
     onMount(async () => {
         searchInput?.focus();
+        // 유저 경매 정보 확인
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.READ($userInfo), {
             method: "GET",
         }).catch(handleApiError);
@@ -44,6 +48,16 @@
             maxNoticeCount = response.data.maxNoticeCount;
             watch.list     = response.data.noticeList;
             updatePagination(watch);
+        }
+
+        // 유저 Slack 채널 정보 확인
+        // TODO -> API 조회가 끝나기 전까지는 modal 이동 못하게 막기
+        const slackResponse = await apiFetch(SLACK_API.CHANNEL.READ($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
+            method: "GET",
+        }).catch(handleApiError);
+
+        if (slackResponse.success) {
+            slackInfo = slackResponse.data.userSlackInfo;
         }
     });
 
@@ -109,7 +123,7 @@
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
             method: "DELETE",
             body: JSON.stringify({
-                "userId": $userInfo,
+                "userId":   $userInfo,
                 "itemInfo": item.itemInfo,
             }),
         }).catch(handleApiError);
@@ -180,6 +194,10 @@
         isModalOpen = false;
     }
 
+    function closingModal(event) {
+        slackInfo   = event.detail.slackInfo;
+    }
+
     // watch.list 가 바뀔 때마다 자동으로 watchAuctionNoMap 갱신
     $: watchAuctionNoMap = new Set(watch.list.map(item => item.itemInfo.auctionNo));
 </script>
@@ -193,6 +211,7 @@
             </article>
         {/if}
         <a on:click={() => dispatch("close")} class="ly_clse">닫기</a>
+        
         {#if !$isLoggedIn}
             <p class="txtarea">
                 <span>로그인 후 이용하여 주세요.
@@ -204,7 +223,8 @@
                 <a href={ PATHS.ACCOUNT.LOGIN }       class="btn btn_b">일반모드 로그인</a>
             </p>
         {:else if isModalOpen}
-            <SlackInfoModal isOpen={ isModalOpen } onClose={ closeModal }/>
+            <!-- TODO close 이벤트 핸들러 수정 필요 -->
+            <SlackInfoModal slackInfo={ slackInfo } isOpen={ isModalOpen } onClose={ closeModal } on:close={ closingModal }/>
         {:else}
             <div class="search-box">
                 <input type="text"

@@ -39,6 +39,16 @@ export const NEOPLE_API = {
     },
 }
 
+// 슬랙 API
+export const SLACK_API = {
+    CHANNEL: {
+        CREATE: `${ROOT}/slack/channel`,
+        DELETE: `${ROOT}/slack/channel`,
+        UPDATE: `${ROOT}/slack/channel`,
+        READ:   (userId, noticeType) => `${ROOT}/slack/channel?userId=${userId}&noticeType=${noticeType}`,
+    },
+}
+
 // 어드민 툴 백엔드 서버 API
 const ADMIN_ROOT = 'http://localhost:7770';
 export const ADMIN_API = {
