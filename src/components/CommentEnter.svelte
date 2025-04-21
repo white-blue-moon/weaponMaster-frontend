@@ -3,6 +3,9 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
+    import AdminArthor from "./AdminArthor.svelte";
+
+
     export let reCommentId = 0;
 
     let placeHolder = "비방, 욕설, 도배글 등은 서비스 이용제한 사유가 될 수 있습니다.";
@@ -83,8 +86,13 @@
 <div class="comment_enter" id="newCommentArea">
     <ul id="uiSticker" class="textarea">
         <li>
+            <!-- svelte-ignore a11y-missing-attribute -->
             <a class="name {reCommentId > 0 ? 'reply' : ''}">
-                { $userInfo }
+                {#if $isAdmin}
+                    <AdminArthor />
+                {:else}
+                    { $userInfo }
+                {/if}
             </a>
             <!-- <a>힐더</a> -->
         </li>

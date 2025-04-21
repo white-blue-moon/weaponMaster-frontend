@@ -7,6 +7,7 @@
     import { formatDate } from "../utils/time";
 
     import CommentEnter from "./CommentEnter.svelte";
+    import AdminArthor from "./AdminArthor.svelte";
 
     const url = window.location.pathname;
     let articleId = 0;
@@ -104,8 +105,16 @@
                     {:else}
                         <ul>
                             <!-- 이름 -->
-                            <li><a class="name dnf_charac_name_tag"> { comment.userId }</a></li>
-
+                            <li>
+                                <!-- svelte-ignore a11y-missing-attribute -->
+                                <a class="name dnf_charac_name_tag">
+                                    {#if comment.isAdminMode}
+                                        <AdminArthor />
+                                    {:else}
+                                        { comment.userId }
+                                    {/if}
+                                </a>
+                            </li>
                             <!-- 댓글 내용 -->
                             <li>{ @html comment.contents}</li>
 
@@ -147,7 +156,16 @@
                             {:else}
                                 <ul>
                                     <!-- 이름 -->
-                                    <li><a class="name dnf_charac_name_tag">{ replyComment.userId }</a></li>
+                                    <li>
+                                        <!-- svelte-ignore a11y-missing-attribute -->
+                                        <a class="name dnf_charac_name_tag">
+                                            {#if replyComment.isAdminMode}
+                                                <AdminArthor />
+                                            {:else}
+                                                { replyComment.userId }
+                                            {/if}
+                                        </a>
+                                    </li>
                                     
                                     <!-- 댓글 내용 -->
                                     <li>{ @html replyComment.contents }</li>

@@ -11,6 +11,7 @@
     import HeaderBanner from "./HeaderBanner.svelte";
     import Menu2nd from './Menu2nd.svelte';
     import Footer from "./Footer.svelte";
+    import AdminArthor from "./AdminArthor.svelte";
 
     export let categoryType;
     export let articleType;
@@ -98,9 +99,6 @@
         const end         = currentPageNum * PAGE_SIZE;
         displayedArticles = filtered.slice(start, end);
         totalPageNum      = Math.ceil(filtered.length / PAGE_SIZE);
-
-        console.log('articlesMap: ', articlesMap)
-        console.log('selectedFilters: ', selectedFilters)
     }
 
     function changePage(pageNum) {
@@ -210,7 +208,11 @@
                         <div class="iconset"></div>
                     </li>
                     {#if categoryType != CATEGORY_TYPE.NEWS}
-                        <li class="arthor">{ article.userId }</li>
+                        {#if article.isAdminMode}
+                            <AdminArthor />
+                        {:else}
+                            <li class="arthor">{ article.userId }</li>
+                        {/if}
                     {/if}
                     <li class="date">{ article.createDate.split('T')[0] }</li>
                     <li class="hits">{ article.viewCount.toLocaleString() }</li>
