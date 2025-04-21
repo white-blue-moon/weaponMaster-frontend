@@ -146,7 +146,7 @@
         </article>
     {:else}
         <div class="stxt">
-            기존 등록했던 Slack 채널 ID를 수정/삭제할 수 있습니다.
+            기존 등록했던 Slack 채널 ID를 삭제/수정할 수 있습니다.
         </div>
     {/if}
     <article class="register-box">

@@ -29,7 +29,7 @@
   
   <div class="logo">
     {#if publisherLogo}
-      <img src={ publisherLogo.imgUrl } alt={ publisherLogo.alt }>
+      <img src="/images/logo_blue_moon.png" alt={ publisherLogo.alt }>
     {/if}
   </div>
   
@@ -160,8 +160,8 @@
   .platform-icon-nexon {
     display: inline-block;
     width: 16px;
-    height: 16px;
-    background: transparent url(//rs.nxfs.nexon.com/gnb/images/ico_platform_icon_nexon.svg) 0 0 no-repeat;
+    height: 18px;
+    background: transparent url(/images/img_logo.png) 0 0 no-repeat;
     background-size: contain; /* 아이콘이 컨테이너 크기에 맞게 조정되도록 설정 */
   }
 

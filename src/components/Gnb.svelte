@@ -24,7 +24,7 @@
 <section class="gnb">
   <nav>
     <ul class="main-menu">
-      <li><a class="logo" href="/"><img src="{ DF_UI }/img/common/logo.png" alt="Dungeon & Fighter"></a></li>
+      <li><a class="logo" href="/"><img src="/images/logo.png" alt="Dungeon & Fighter"></a></li>
       <li><a href={ PATHS.NEWS.NOTICE.LIST }>새소식</a></li>
       <li><a href="/">사이트소개</a></li>
       <li><a href="/">가이드</a></li>
