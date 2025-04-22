@@ -4,7 +4,10 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo } from "../utils/auth";
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
-    import { createEventDispatcher } from 'svelte'  
+    import { createEventDispatcher } from 'svelte';
+
+    import Spinner from "./Spinner.svelte";
+
 
     export let slackInfo;
     export let onClose;
@@ -251,7 +254,7 @@
                              on:click={ testSlackInfo }
             >
                 {#if isChecking}
-                    <span class="spinner"></span> 확인중
+                    <Spinner colorTheme="white"/> 확인중
                 {:else}
                     통신확인
                 {/if}
@@ -468,23 +471,6 @@
         cursor: not-allowed;
         opacity: 0.9;
         border-color: transparent;
-    }
-
-    .register-box .spinner {
-        width: 16px;
-        height: 16px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        display: inline-block;
-        margin-right: 3px;
-        margin-bottom: 3px;
-        vertical-align: middle;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
     }
 
     .register-box .submit-button {

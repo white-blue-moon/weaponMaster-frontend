@@ -1,11 +1,11 @@
 <script>
     export let slackInfoExists;
-    export let slackError;
+    export let slackErrorExists;
     export let onClick;
   
     $: tooltip = !slackInfoExists
         ? "Slack 알림 채널 정보가 <br>등록되어 있지 않습니다."
-        : slackError
+        : slackErrorExists
         ? "Slack 채널 정보 조회에 실패했습니다. 다시 시도해 주세요."
         : "Slack 채널 정보 <br>열람/수정/삭제";
 </script>
@@ -18,11 +18,11 @@
     aria-label="Slack 채널 상태"
   >
     <img
-      src={ slackInfoExists && !slackError
+      src={ slackInfoExists && !slackErrorExists
               ? "/images/icon/icon_quest.png"
               : "/images/icon/icon_ex.png"
           }
-      alt={ slackInfoExists && !slackError ? "도움말 아이콘" : "주의 아이콘" }
+      alt={ slackInfoExists && !slackErrorExists ? "도움말 아이콘" : "주의 아이콘" }
       class="status-icon"
     />
   </a>

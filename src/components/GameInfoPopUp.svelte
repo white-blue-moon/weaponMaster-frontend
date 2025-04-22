@@ -10,6 +10,7 @@
 
     import SlackStatusButton from "./SlackStatusButton.svelte";
     import SlackInfoModal from "./SlackInfoModal.svelte";
+    import Spinner from "./Spinner.svelte";
   
 
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
@@ -35,7 +36,9 @@
         groupPages: [],
     };
 
-    let isSlackInfoErr = false;
+    let slackInfo;
+    let slackErrorExists    = false;
+    let isSlackInfoLoaded = false;
 
     onMount(async () => {
         searchInput?.focus();
@@ -59,8 +62,10 @@
         if (slackResponse.success) {
             slackInfo = slackResponse.data.userSlackInfo;
         } else {
-            isSlackInfoErr = true;
+            slackErrorExists = true;
         }
+
+        isSlackInfoLoaded = true;
     });
 
     async function searchItems() {
@@ -186,7 +191,6 @@
     // watch.list 가 바뀔 때마다 자동으로 watchAuctionNoMap 갱신
     $: watchAuctionNoMap = new Set(watch.list.map(item => item.itemInfo.auctionNo));
 
-    let slackInfo;
     let isSlackInfoOpen = false;
 
     function onClickSlackStatusButton() {
@@ -307,11 +311,15 @@
             <div class="watch-list">
                 <div class="watch-list-header">
                     <h3>판매 알림 등록 목록</h3>
-                    <SlackStatusButton 
-                        slackInfoExists={ slackInfo != null } 
-                             slackError={ isSlackInfoErr } 
-                                onClick={ onClickSlackStatusButton }
-                    />
+                    {#if isSlackInfoLoaded}
+                        <SlackStatusButton 
+                            slackInfoExists={ slackInfo != null } 
+                           slackErrorExists={ slackErrorExists } 
+                                    onClick={ onClickSlackStatusButton }
+                        />
+                    {:else}
+                        <Spinner margin_top="4px"/>
+                    {/if}
                 </div>
                 {#if watch.list.length === 0}
                     <p>등록된 판매 알림이 없습니다.</p>
