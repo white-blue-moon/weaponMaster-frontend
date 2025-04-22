@@ -198,9 +198,13 @@
     }
 
     function closingSlackInfo(event) {
-        if (event.detail.slackInfo != null) {
-            slackInfo = event.detail.slackInfo;
+        if (event.detail.slackInfo == null) {
+            slackInfo = null;
+            return;
         }
+
+        slackInfo = event.detail.slackInfo;
+        return;
     }
 </script>
 

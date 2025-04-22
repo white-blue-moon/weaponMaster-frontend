@@ -73,8 +73,28 @@
     }
   
     async function deleteSlackInfo() {
-        // TODO 실제 삭제 로직 호출
-        onClose();
+        const isConfirm = confirm("정말 등록된 채널 ID 정보를 삭제하시겠습니까?");
+        if (!isConfirm) {
+            return;
+        }
+
+        const response = await apiFetch(SLACK_API.CHANNEL.DELETE, {
+            method: 'DELETE',
+            body: JSON.stringify({
+                "userId":     $userInfo,
+                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            dispatch('close', {slackInfo: null});
+            alert('등록된 Slack 채널 정보를 삭제하였습니다.');
+            onClose();
+            return;
+        }
+
+        alert('Slack 채널 정보 삭제에 실패하였습니다.');
+        return;
     }
 
     async function updateSlackInfo() {
@@ -103,7 +123,7 @@
                 "noticeType":     SLACK_NOTICE_TYPE.AUCTION,
                 "slackChannelId": channelId,
             }});
-            
+
             alert('Slack 채널 정보를 수정하였습니다.');
             onClose();
             return;
