@@ -4,9 +4,9 @@
     export let onClick;
   
     $: tooltip = !slackInfoExists
-      ? "약관 동의 및 Slack 채널 정보를 등록해 주세요."
+      ? "Slack 알림 채널 정보가 등록되어 있지 않습니다."
       : slackError
-      ? "Slack 채널 인증에 실패했습니다. 다시 시도해 주세요."
+      ? "Slack 채널 정보 조회에 실패했습니다. 다시 시도해 주세요."
       : "Slack 채널 정보 열람/수정/삭제";
   
     $: icon = !slackInfoExists || slackError ? "❗" : "❔";

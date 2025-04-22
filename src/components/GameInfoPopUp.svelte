@@ -35,6 +35,8 @@
         groupPages: [],
     };
 
+    let isSlackInfoErr = false;
+
     onMount(async () => {
         searchInput?.focus();
         // 유저 경매 정보 확인
@@ -56,6 +58,8 @@
 
         if (slackResponse.success) {
             slackInfo = slackResponse.data.userSlackInfo;
+        } else {
+            isSlackInfoErr = true;
         }
     });
 
@@ -223,7 +227,6 @@
         {:else if isSlackInfoOpen}
             <SlackInfoModal 
                 slackInfo={ slackInfo } 
-                   isOpen={ isSlackInfoOpen } 
                   onClose={ closeSlackInfo } 
                  on:close={ closingSlackInfo }
             />
@@ -302,7 +305,7 @@
                     <h3>판매 알림 등록 목록</h3>
                     <SlackStatusButton 
                         slackInfoExists={ slackInfo != null } 
-                             slackError={ false } 
+                             slackError={ isSlackInfoErr } 
                                 onClick={ onClickSlackStatusButton }
                     />
                 </div>

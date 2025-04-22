@@ -42,6 +42,7 @@ export const NEOPLE_API = {
 // 슬랙 API
 export const SLACK_API = {
     CHANNEL: {
+        TEST:   `${ROOT}/slack/channel/test`,
         CREATE: `${ROOT}/slack/channel`,
         DELETE: `${ROOT}/slack/channel`,
         UPDATE: `${ROOT}/slack/channel`,

@@ -7,7 +7,6 @@
     import { createEventDispatcher } from 'svelte'  
 
     export let slackInfo;
-    export let isOpen;
     export let onClose;
 
     const dispatch = new createEventDispatcher();
@@ -73,7 +72,7 @@
         }
 
         if (!canSendMessage) {
-            alert('Slack 테스트 메시지 전송에 실패했습니다. 채널 ID를 다시 확인해 주세요.')
+            alert('Slack 알림 테스트 통신 확인 후 시도해 주세요.')
             return false;
         }
 
@@ -85,11 +84,52 @@
         onClose();
     }
 
+    let isChecking = false;
+
     async function checkSlackAPI() {
-        canSendMessage = true;
-        // TODO 슬랙 통신 테스트 API
-        alert('Slack 메시지 통신 테스트에 성공하였습니다.');
+        if (channelId.trim() == "") {
+            alert("채널 ID를 입력해 주세요.");
+            return;
+        }
+
+        isChecking = true;
+
+        const response = await apiFetch(SLACK_API.CHANNEL.TEST, {
+            method: 'POST',
+            body: JSON.stringify({
+                "userId":     $userInfo,
+                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
+                "channelId":  channelId,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            isChecking     = false;
+            canSendMessage = true;
+            alert('Slack 메시지 통신 테스트에 성공하였습니다.');
+            return;
+        }
+
+        isChecking      = false;
+        canSendMessage  = false;
+        alert(getTestErrorMessage(response.message));
         return;
+    }
+
+    function getTestErrorMessage(respMessage) {
+        let errMessage  =  "Slack 메시지 통신 테스트에 실패하였습니다. \n";
+        
+        if (respMessage == "not_in_channel") {
+            errMessage += "슬랙 봇을 해당 채널에 초대해 주세요. \n"
+        }
+
+        if (respMessage == "channel_not_found") {
+            errMessage += "채널 ID를 다시 확인해 주세요. \n"
+        }
+
+        errMessage += "[ error: " + respMessage + " ]";
+        
+        return errMessage;
     }
 </script>
 
@@ -153,7 +193,17 @@
         <div class="form-row">
             <label for="channelId">채널 ID<span class="required">*</span></label>
             <input id="channelId" type="text" bind:value={ channelId } />
-            <button type="button" class="secondary-button" on:click={ checkSlackAPI }>통신확인</button>
+            <button type="button" class="secondary-button" 
+                class:button-checking={ isChecking }
+                             disabled={ isChecking }
+                             on:click={ checkSlackAPI }
+            >
+                {#if isChecking}
+                    <span class="spinner"></span> 확인중
+                {:else}
+                    통신확인
+                {/if}
+            </button>
         </div>
         {#if slackInfo}
             <div class="form-row">
@@ -352,11 +402,37 @@
         color: #3392ff;
         border: 1px solid #3392ff;
         height: 54px;
+        min-width: 120px;
     }
 
     .register-box .secondary-button:hover {
         background: #3392ff;
         color: #fff;
+    }
+
+    .register-box .button-checking {
+        background-color: #a1a8b7 !important;
+        color: #fff;
+        cursor: not-allowed;
+        opacity: 0.9;
+        border-color: transparent;
+    }
+
+    .register-box .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        margin-right: 3px;
+        margin-bottom: 3px;
+        vertical-align: middle;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
     }
 
     .register-box .submit-button {
