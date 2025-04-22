@@ -21,20 +21,13 @@
         }
     })
   
-    async function saveSlackInfo() {
+    async function registerSlackInfo() {
         if (!isValidForm()) {
             return;
         }
 
-        let apiMethod = 'POST';
-        let apiURL    = SLACK_API.CHANNEL.CREATE;
-        if (slackInfo) {
-            apiMethod = 'PUT';
-            apiURL    = SLACK_API.CHANNEL.UPDATE;
-        }
-
-        const response = await apiFetch(apiURL, {
-            method: apiMethod,
+        const response = await apiFetch(SLACK_API.CHANNEL.CREATE, {
+            method: 'POST',
             body: JSON.stringify({
                 "userId":     $userInfo,
                 "noticeType": SLACK_NOTICE_TYPE.AUCTION,
@@ -84,9 +77,45 @@
         onClose();
     }
 
+    async function updateSlackInfo() {
+        if (channelId.trim() == "") {
+            alert("채널 ID를 입력해 주세요.");
+            return;
+        }
+
+        if (!canSendMessage) {
+            alert('Slack 알림 테스트 통신 확인 후 시도해 주세요.')
+            return false;
+        }
+
+        const response = await apiFetch(SLACK_API.CHANNEL.UPDATE, {
+            method: 'PUT',
+            body: JSON.stringify({
+                "userId":     $userInfo,
+                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
+                "channelId":  channelId,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            dispatch('close', { slackInfo: {
+                "userId":         $userInfo,
+                "noticeType":     SLACK_NOTICE_TYPE.AUCTION,
+                "slackChannelId": channelId,
+            }});
+            
+            alert('Slack 채널 정보를 수정하였습니다.');
+            onClose();
+            return;
+        }
+
+        alert('Slack 채널 정보 수정에 실패하였습니다.');
+        return;
+    }
+
     let isChecking = false;
 
-    async function checkSlackAPI() {
+    async function testSlackInfo() {
         if (channelId.trim() == "") {
             alert("채널 ID를 입력해 주세요.");
             return;
@@ -192,11 +221,14 @@
     <article class="register-box">
         <div class="form-row">
             <label for="channelId">채널 ID<span class="required">*</span></label>
-            <input id="channelId" type="text" bind:value={ channelId } />
+            <input id="channelId" type="text" 
+                bind:value={ channelId } 
+                  on:input={ () => {canSendMessage = false} }
+            />
             <button type="button" class="secondary-button" 
                 class:button-checking={ isChecking }
                              disabled={ isChecking }
-                             on:click={ checkSlackAPI }
+                             on:click={ testSlackInfo }
             >
                 {#if isChecking}
                     <span class="spinner"></span> 확인중
@@ -209,11 +241,11 @@
             <div class="form-row">
                 <button type="button" class="delete-button" on:click={ deleteSlackInfo }>삭제하기</button>
                 <div style="width: 10px;"></div>
-                <button type="button" class="edit-button" on:click={ saveSlackInfo }>수정하기</button>  
+                <button type="button" class="edit-button" on:click={ updateSlackInfo }>수정하기</button>  
             </div>
         {:else}
             <div class="form-row">
-                <button type="button" class="submit-button" on:click={ saveSlackInfo }>등록하기</button>
+                <button type="button" class="submit-button" on:click={ registerSlackInfo }>등록하기</button>
             </div>
         {/if}
     </article>

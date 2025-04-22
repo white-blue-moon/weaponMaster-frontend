@@ -8,8 +8,6 @@
         : slackError
         ? "Slack 채널 정보 조회에 실패했습니다. 다시 시도해 주세요."
         : "Slack 채널 정보 <br>열람/수정/삭제";
-  
-    $: icon = !slackInfoExists || slackError ? "❗" : "❔";
   </script>
   
 
@@ -19,7 +17,7 @@
       on:click={ onClick }
       aria-label="Slack 채널 상태"
     >
-      { icon }
+      { slackInfoExists && !slackError ? "❔" : "❗" }
     </button>
     <div class="ly_reco">
         <b>Slack 연동</b>
