@@ -5,7 +5,11 @@
   import { apiFetch, handleApiError } from '../utils/apiFetch';
   import { onMount } from "svelte";
 
+  import SideMenu from './SideMenu.svelte';
+
+
   let publisherLogo;
+  let isMenuOpen = false;
   
   onMount(async () => {
         const response = await apiFetch(API.LOGO.PUBLISHER, {
@@ -21,11 +25,13 @@
 <div class="header">
   <div class="gnb-publisher-menu">
     <!-- svelte-ignore a11y-invalid-attribute -->
-    <a href="#" opt="GLOBAL MENU (PUBLISHER)">
+    <a href="#" on:click={ () => isMenuOpen = true }>
       <span class="menuIcon"></span> 
       <span class="menuText">메뉴</span>
     </a>
   </div>
+
+  <SideMenu isOpen={ isMenuOpen } onClose={ () => isMenuOpen = false } />
   
   <div class="logo">
     {#if publisherLogo}
