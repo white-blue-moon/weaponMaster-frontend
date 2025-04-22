@@ -4,10 +4,10 @@
     export let onClick;
   
     $: tooltip = !slackInfoExists
-      ? "Slack 알림 채널 정보가 등록되어 있지 않습니다."
-      : slackError
-      ? "Slack 채널 정보 조회에 실패했습니다. 다시 시도해 주세요."
-      : "Slack 채널 정보 열람/수정/삭제";
+        ? "Slack 알림 채널 정보가 <br>등록되어 있지 않습니다."
+        : slackError
+        ? "Slack 채널 정보 조회에 실패했습니다. 다시 시도해 주세요."
+        : "Slack 채널 정보 <br>열람/수정/삭제";
   
     $: icon = !slackInfoExists || slackError ? "❗" : "❔";
   </script>
@@ -25,7 +25,7 @@
         <b>Slack 연동</b>
         <br>
         <br>
-        { tooltip }
+        { @html tooltip }
     </div>
   </div>
 
