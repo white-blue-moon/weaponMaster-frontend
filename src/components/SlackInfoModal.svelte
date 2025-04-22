@@ -13,9 +13,9 @@
     const dispatch = new createEventDispatcher();
   
     let agree            = false;
-    let channelId        = "";
     let canSendMessage   = false;
-
+    let channelId        = "";
+    
     onMount(async () => {
         if (slackInfo != null) {
             channelId = slackInfo.slackChannelId;

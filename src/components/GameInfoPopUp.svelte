@@ -15,7 +15,7 @@
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
     const GROUP_PAGING_SIZE = 5; // 한 그룹에 표시할 페이지 번호 개수
 
-    const dispatch = createEventDispatcher();
+    const dispatch = createEventDispatcher(); // TODO new 를 사용할 때와 그렇지 않을 떄의 차이점 확인 필요
     let searchInput;
     let maxNoticeCount = 5; // 한 번에 추적할 수 있는 최대 판매 알림 개수
 
@@ -34,8 +34,6 @@
         totalPage:   1,
         groupPages: [],
     };
-
-    let slackInfo;
 
     onMount(async () => {
         searchInput?.focus();
@@ -181,33 +179,33 @@
         return Array.from({ length: groupEnd - groupStart + 1 }, (_, i) => groupStart + i);
     }
 
-    function onClickSlackInfo() {
-        isModalOpen = true;
-    }
-
-    let isModalOpen = false;
-    function openModal() {
-        isModalOpen = true;
-    }
-
-    function closeModal() {
-        isModalOpen = false;
-    }
-
-    function closingModal(event) {
-        slackInfo   = event.detail.slackInfo;
-    }
-
     // watch.list 가 바뀔 때마다 자동으로 watchAuctionNoMap 갱신
     $: watchAuctionNoMap = new Set(watch.list.map(item => item.itemInfo.auctionNo));
+
+    let slackInfo;
+    let isSlackInfoOpen = false;
+
+    function onClickSlackStatusButton() {
+        isSlackInfoOpen = true;
+    }
+
+    function closeSlackInfo() {
+        isSlackInfoOpen = false;
+    }
+
+    function closingSlackInfo(event) {
+        if (event.detail.slackInfo != null) {
+            slackInfo = event.detail.slackInfo;
+        }
+    }
 </script>
 
 
 <div class="ly_login_info" id="loginLayer">
     <div class="ly_logbox">
-        {#if isModalOpen}
+        {#if isSlackInfoOpen}
             <article class="paging back-button-wrapper">
-                <a class="prev" on:click={ closeModal }>PREV</a>
+                <a class="prev" on:click={ closeSlackInfo }>PREV</a>
             </article>
         {/if}
         <a on:click={() => dispatch("close")} class="ly_clse">닫기</a>
@@ -222,9 +220,13 @@
                 <a href={ PATHS.ACCOUNT.LOGIN_ADMIN } class="btn btn_n">관리자모드 로그인</a>
                 <a href={ PATHS.ACCOUNT.LOGIN }       class="btn btn_b">일반모드 로그인</a>
             </p>
-        {:else if isModalOpen}
-            <!-- TODO close 이벤트 핸들러 수정 필요 -->
-            <SlackInfoModal slackInfo={ slackInfo } isOpen={ isModalOpen } onClose={ closeModal } on:close={ closingModal }/>
+        {:else if isSlackInfoOpen}
+            <SlackInfoModal 
+                slackInfo={ slackInfo } 
+                   isOpen={ isSlackInfoOpen } 
+                  onClose={ closeSlackInfo } 
+                 on:close={ closingSlackInfo }
+            />
         {:else}
             <div class="search-box">
                 <input type="text"
@@ -298,7 +300,11 @@
             <div class="watch-list">
                 <div class="watch-list-header">
                     <h3>판매 알림 등록 목록</h3>
-                    <SlackStatusButton slackInfoExists={ false } slackError={ false } onClick={ onClickSlackInfo } />
+                    <SlackStatusButton 
+                        slackInfoExists={ slackInfo != null } 
+                             slackError={ false } 
+                                onClick={ onClickSlackStatusButton }
+                    />
                 </div>
                 {#if watch.list.length === 0}
                     <p>등록된 판매 알림이 없습니다.</p>
@@ -389,7 +395,6 @@
     }
 
     .ly_login_info p {
-        // all: unset;
         color: #6a6e76;
         font-size: 14px;
     }
@@ -398,7 +403,8 @@
         background: #fff;
         padding: 40px;
         width: 600px;
-        max-height: 80vh;
+        min-height: 350px;
+        max-height: 90vh;
         overflow-y: auto;
         position: relative;
         text-align: center;
@@ -531,11 +537,11 @@
     }
 
     .btn-remove {
-        background: #ff4d4d;
+        background: #5c6377;
     }
 
     .btn-remove:hover {
-        background: #cc0000;
+        background: #484f61;
     }
 
     // 단순 공백 추가 (search/watch 영역 구분용)
