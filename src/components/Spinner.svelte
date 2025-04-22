@@ -1,8 +1,9 @@
 <script>
-    export let width      = "16px";
-    export let height     = "16px";
-    export let margin_top = "0";
-    export let colorTheme = "grey";
+    export let width         = "16px";
+    export let height        = "16px";
+    export let margin_top    = "0";
+    export let margin_bottom = "0";
+    export let colorTheme    = "grey";
 
     let borderColor    = "rgba(0, 0, 0, 0.1)";
     let borderTopColor = "#333";
@@ -19,9 +20,10 @@
 <span
     class="spinner"
     style="
-        width:      { width };
-        height:     { height };
-        margin-top: { margin_top };
+        width:            { width };
+        height:           { height };
+        margin-top:       { margin_top };
+        margin-bottom:    { margin_bottom };
         border: 2px solid { borderColor };
         border-top-color: { borderTopColor };
     "

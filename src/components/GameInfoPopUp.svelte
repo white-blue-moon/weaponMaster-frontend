@@ -37,8 +37,8 @@
     };
 
     let slackInfo;
-    let slackErrorExists    = false;
-    let isSlackInfoLoaded = false;
+    let slackErrorExists = false;
+    let isApiLoaded      = false;
 
     onMount(async () => {
         searchInput?.focus();
@@ -65,8 +65,10 @@
             slackErrorExists = true;
         }
 
-        isSlackInfoLoaded = true;
+        isApiLoaded = true;
     });
+
+    let isSearching = false;
 
     async function searchItems() {
         const searchKeyWord = searchInput?.value.trim();
@@ -74,6 +76,8 @@
             alert('검색할 아이템명을 입력해 주세요.');
             return;
         }
+
+        isSearching = true;
 
         const response = await apiFetch(NEOPLE_API.AUCTION.LIST(searchKeyWord), {
             method: "GET",
@@ -85,9 +89,11 @@
                 alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.');
             }
             updatePagination(search);
+            isSearching = false;
             return;
         }
 
+        isSearching = false;
         alert('경매 아이템 검색에 실패하였습니다.');
         return;
     }
@@ -249,42 +255,47 @@
 
             <div class="result-list">
                 <h3>검색 결과</h3>
-                {#if search.list.length === 0}
-                    <p>검색 결과 없음</p>
+                {#if isSearching}
+                    <Spinner margin_bottom="10px"/>
+                    <p>검색 중입니다.</p>
                 {:else}
-                    <ul>
-                        {#each search.displayed as item}
-                            <li>
-                                <!-- 아이템 이미지 -->
-                                <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
-            
-                                <!-- 아이템 이름 -->
-                                <span class="item-name">
-                                    { item.itemInfo.itemName }
-                                    {#if item.itemInfo.count > 1}
-                                        (x{ item.itemInfo.count })
-                                    {/if}
-                                </span>
-                                
-                                <!-- 가격 -->
-                                <span class="item-price">
-                                    { item.itemInfo.currentPrice.toLocaleString() } G
-                                    {#if item.itemInfo.count > 1}
-                                        ({(item.itemInfo.currentPrice/item.itemInfo.count).toLocaleString()})
-                                    {/if}
-                                </span>
-            
-                                <!-- 등록일 -->
-                                <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
-            
-                                <!-- 버튼 -->
-                                <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "" } 
-                                    on:click={ () => toggleWatch(item) }>
-                                        { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
-                                </button>
-                            </li>
-                        {/each}
-                    </ul>
+                    {#if search.list.length === 0}
+                        <p>검색 결과 없음</p>
+                    {:else}
+                        <ul>
+                            {#each search.displayed as item}
+                                <li>
+                                    <!-- 아이템 이미지 -->
+                                    <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
+                
+                                    <!-- 아이템 이름 -->
+                                    <span class="item-name">
+                                        { item.itemInfo.itemName }
+                                        {#if item.itemInfo.count > 1}
+                                            (x{ item.itemInfo.count })
+                                        {/if}
+                                    </span>
+                                    
+                                    <!-- 가격 -->
+                                    <span class="item-price">
+                                        { item.itemInfo.currentPrice.toLocaleString() } G
+                                        {#if item.itemInfo.count > 1}
+                                            ({(item.itemInfo.currentPrice/item.itemInfo.count).toLocaleString()})
+                                        {/if}
+                                    </span>
+                
+                                    <!-- 등록일 -->
+                                    <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
+                
+                                    <!-- 버튼 -->
+                                    <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "" } 
+                                        on:click={ () => toggleWatch(item) }>
+                                            { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
                 {/if}
             </div>
             <!-- TODO 페이징 버튼은 별도 컴포넌트화 하는 게 어떨지 고려해 보기 -->
@@ -311,7 +322,7 @@
             <div class="watch-list">
                 <div class="watch-list-header">
                     <h3>판매 알림 등록 목록</h3>
-                    {#if isSlackInfoLoaded}
+                    {#if isApiLoaded}
                         <SlackStatusButton 
                             slackInfoExists={ slackInfo != null } 
                            slackErrorExists={ slackErrorExists } 
@@ -321,41 +332,45 @@
                         <Spinner margin_top="4px"/>
                     {/if}
                 </div>
-                {#if watch.list.length === 0}
-                    <p>등록된 판매 알림이 없습니다.</p>
+                {#if !isApiLoaded}
+                    <p>판매 알림 목록을 불러오는 중입니다.</p>
                 {:else}
-                    <ul>
-                        {#each watch.displayed as item}
-                            <li class={ item.auctionState == AUCTION_STATE.SOLD_OUT || item.auctionState == AUCTION_STATE.EXPIRED ? 'completed' : '' }>
-                                <!-- 아이템 이미지 -->
-                                <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
-            
-                                <!-- 아이템 이름 -->
-                                <span class="item-name">{ item.itemInfo.itemName }</span>
-                                
-                                <!-- 가격 -->
-                                <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
-                                
-                                <!-- 등록일 -->
-                                <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
-                                
-                                <!-- 버튼 -->
-                                {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
-                                    <span class="status-wrap">
-                                        <span class="completed">판매 완료</span>
-                                        <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
-                                    </span>
-                                {:else if item.auctionState == AUCTION_STATE.EXPIRED}
-                                    <span class="status-wrap">
-                                        <span class="expired">기간 만료</span>
-                                        <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
-                                    </span>
-                                {:else}
-                                    <button class="btn-remove" on:click={() => toggleWatch(item)}>판매 알림 해제</button>
-                                {/if}
-                            </li>
-                        {/each}
-                    </ul>
+                    {#if watch.list.length === 0}
+                        <p>등록된 판매 알림이 없습니다.</p>
+                    {:else}
+                        <ul>
+                            {#each watch.displayed as item}
+                                <li class={ item.auctionState == AUCTION_STATE.SOLD_OUT || item.auctionState == AUCTION_STATE.EXPIRED ? 'completed' : '' }>
+                                    <!-- 아이템 이미지 -->
+                                    <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
+                
+                                    <!-- 아이템 이름 -->
+                                    <span class="item-name">{ item.itemInfo.itemName }</span>
+                                    
+                                    <!-- 가격 -->
+                                    <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
+                                    
+                                    <!-- 등록일 -->
+                                    <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
+                                    
+                                    <!-- 버튼 -->
+                                    {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
+                                        <span class="status-wrap">
+                                            <span class="completed">판매 완료</span>
+                                            <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                        </span>
+                                    {:else if item.auctionState == AUCTION_STATE.EXPIRED}
+                                        <span class="status-wrap">
+                                            <span class="expired">기간 만료</span>
+                                            <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                        </span>
+                                    {:else}
+                                        <button class="btn-remove" on:click={() => toggleWatch(item)}>판매 알림 해제</button>
+                                    {/if}
+                                </li>
+                            {/each}
+                        </ul>
+                    {/if}
                 {/if}
             </div>
             {#if watch.list.length > 0}
