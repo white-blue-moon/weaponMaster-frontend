@@ -37,6 +37,7 @@
     };
 
     let slackInfo;
+    let slackBotInstallUrl;
     let slackErrorExists = false;
     let isApiLoaded      = false;
 
@@ -54,13 +55,13 @@
         }
 
         // 유저 Slack 채널 정보 확인
-        // TODO -> API 조회가 끝나기 전까지는 modal 이동 못하게 막기
         const slackResponse = await apiFetch(SLACK_API.CHANNEL.READ($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
             method: "GET",
         }).catch(handleApiError);
 
         if (slackResponse.success) {
-            slackInfo = slackResponse.data.userSlackInfo;
+            slackInfo          = slackResponse.data.userSlackInfo;
+            slackBotInstallUrl = slackResponse.data.slackBotInstallUrl;
         } else {
             slackErrorExists = true;
         }
@@ -239,10 +240,11 @@
                 <a href={ PATHS.ACCOUNT.LOGIN }       class="btn btn_b">일반모드 로그인</a>
             </p>
         {:else if isSlackInfoOpen}
-            <SlackInfoModal 
-                slackInfo={ slackInfo } 
-                  onClose={ closeSlackInfo } 
-                 on:close={ closingSlackInfo }
+            <SlackInfoModal
+                slackBotInstallUrl={ slackBotInstallUrl } 
+                         slackInfo={ slackInfo } 
+                           onClose={ closeSlackInfo } 
+                          on:close={ closingSlackInfo }
             />
         {:else}
             <div class="search-box">

@@ -5,78 +5,55 @@
     import { userInfo } from "../utils/auth";
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
     import { createEventDispatcher } from 'svelte';
+    import { formatDate } from "../utils/time";
 
     import Spinner from "./Spinner.svelte";
+  
 
-
+    export let slackBotInstallUrl;
     export let slackInfo;
     export let onClose;
 
-    const dispatch = new createEventDispatcher();
-  
-    let agree            = false;
-    let canSendMessage   = false;
-    let channelId        = "";
+    const dispatch      = new createEventDispatcher(); // TODO new 사용할 때와 그냥 사용할 때 차이 확인하기
+    let   agree         = false;
+    let   isSlackLinked = false;
+    let   registerDate;
     
     onMount(async () => {
-        if (slackInfo != null) {
-            channelId = slackInfo.slackChannelId;
-        }
-    })
-  
-    async function registerSlackInfo() {
-        if (!isValidForm()) {
-            return;
-        }
-
-        const response = await apiFetch(SLACK_API.CHANNEL.CREATE, {
-            method: 'POST',
-            body: JSON.stringify({
-                "userId":     $userInfo,
-                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
-                "channelId":  channelId,
-            }),
-        }).catch(handleApiError);
-
-        if (response.success) {
-            dispatch('close', { slackInfo: {
-                "userId":         $userInfo,
-                "noticeType":     SLACK_NOTICE_TYPE.AUCTION,
-                "slackChannelId": channelId,
-            }});
-
-            alert('Slack 알림 채널 정보 저장이 완료되었습니다.');
-            onClose();
-            return;
-        }
-
-        alert('Slack 알림 채널 정보 저장에 실패하였습니다.');
-        return;
-    }
-
-    function isValidForm() {
-        if (!slackInfo) {
-            if (!agree) {
-                alert('약관에 동의 후 이용해 주세요.')
-                return false;
+        // 슬랙 연동 콜백 리스너 등록
+	    window.addEventListener('message', (event) => {
+            // TODO -> 로컬 주소가 아닌 실제 사용한 외부 공유 링크 주소를 기재해야 함 -> 실제 배포할 때 수정 필요
+            if (event.origin !== "https://20fb-2001-e60-2019-6f78-a9d5-10c2-71c2-222c.ngrok-free.app") {
+                return;
             }
-        }
-        
-        if (channelId.trim() == "") {
-            alert('채널 ID 입력 후 시도해 주세요.')
-            return false;
+            
+            if (event.data?.success) {
+                isSlackLinked = true;
+                registerDate  = formatDate(event.data.slackInfo.createDate);
+
+                // 설치 페이지 닫기
+                if (event.source?.close) {
+                    event.source.close();
+                }
+
+                dispatch('close', { slackInfo: event.data.slackInfo });
+                return;
+            }
+	    });
+    })
+
+    function openBotInstallPage() {
+        if (!agree) {
+            alert('서비스 이용을 위해 동의가 필요합니다.')
+            return;
         }
 
-        if (!canSendMessage) {
-            alert('Slack 알림 테스트 통신 확인 후 시도해 주세요.')
-            return false;
-        }
-
-        return true;
-    }
+		window.open(slackBotInstallUrl, '_blank', 'noopener=false');
+        return;
+	}
   
     async function deleteSlackInfo() {
-        const isConfirm = confirm("정말 등록된 채널 ID 정보를 삭제하시겠습니까?");
+        const isConfirm = confirm("정말 슬랙 연동 정보를 삭제하시겠습니까?");
         if (!isConfirm) {
             return;
         }
@@ -91,59 +68,18 @@
 
         if (response.success) {
             dispatch('close', {slackInfo: null});
-            alert('등록된 Slack 채널 정보를 삭제하였습니다.');
+            alert('등록된 Slack 연동 정보를 삭제하였습니다.');
             onClose();
             return;
         }
 
-        alert('Slack 채널 정보 삭제에 실패하였습니다.');
-        return;
-    }
-
-    async function updateSlackInfo() {
-        if (channelId.trim() == "") {
-            alert("채널 ID를 입력해 주세요.");
-            return;
-        }
-
-        if (!canSendMessage) {
-            alert('Slack 알림 테스트 통신 확인 후 시도해 주세요.')
-            return false;
-        }
-
-        const response = await apiFetch(SLACK_API.CHANNEL.UPDATE, {
-            method: 'PUT',
-            body: JSON.stringify({
-                "userId":     $userInfo,
-                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
-                "channelId":  channelId,
-            }),
-        }).catch(handleApiError);
-
-        if (response.success) {
-            dispatch('close', { slackInfo: {
-                "userId":         $userInfo,
-                "noticeType":     SLACK_NOTICE_TYPE.AUCTION,
-                "slackChannelId": channelId,
-            }});
-
-            alert('Slack 채널 정보를 수정하였습니다.');
-            onClose();
-            return;
-        }
-
-        alert('Slack 채널 정보 수정에 실패하였습니다.');
+        alert('Slack 연동 정보 삭제에 실패하였습니다.');
         return;
     }
 
     let isChecking = false;
 
     async function testSlackInfo() {
-        if (channelId.trim() == "") {
-            alert("채널 ID를 입력해 주세요.");
-            return;
-        }
-
         isChecking = true;
 
         const response = await apiFetch(SLACK_API.CHANNEL.TEST, {
@@ -151,127 +87,123 @@
             body: JSON.stringify({
                 "userId":     $userInfo,
                 "noticeType": SLACK_NOTICE_TYPE.AUCTION,
-                "channelId":  channelId,
+                "channelId":  slackInfo.slackChannelId,
             }),
         }).catch(handleApiError);
 
         if (response.success) {
-            isChecking     = false;
-            canSendMessage = true;
+            isChecking = false;
             alert('Slack 메시지 통신 테스트에 성공하였습니다.');
             return;
         }
 
-        isChecking      = false;
-        canSendMessage  = false;
+        isChecking = false;
         alert(getTestErrorMessage(response.message));
         return;
     }
 
     function getTestErrorMessage(respMessage) {
-        let errMessage  =  "Slack 메시지 통신 테스트에 실패하였습니다. \n";
-        
-        if (respMessage == "not_in_channel") {
-            errMessage += "슬랙 봇을 해당 채널에 초대해 주세요. \n"
-        }
-
-        if (respMessage == "channel_not_found") {
-            errMessage += "채널 ID를 다시 확인해 주세요. \n"
-        }
-
-        errMessage += "[ error: " + respMessage + " ]";
-        
+        let errMessage  = "Slack 메시지 통신 테스트에 실패하였습니다. \n";
+        errMessage     += "[ error: " + respMessage + " ]";
         return errMessage;
     }
 </script>
 
 <div>
     <h2>Slack 연동</h2>
+    <div class="stxt">
+        경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
+    </div>
+
     {#if !slackInfo}
-        <article class="agreebox">
-            <dl>
-            <dt>
-                <input
-                class="agrees"
-                type="checkbox"
-                name="privacyCheck"
-                id="privacyCheck"
-                bind:checked={ agree }
-                />
-                <label for="privacyCheck">
-                <span></span>개인정보 수집 및 이용 동의
-                </label>
-            </dt>
-            <dt class="stxt">
-                Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.
-            </dt>
-            <dd>
-                <p>다음과 같이 개인정보를 수집 및 이용하고 있습니다.</p>
-                <table class="table-agreement">
-                <thead>
-                    <tr>
-                    <th class="table-left">수집 및<br />이용 목적</th>
-                    <th>항목</th>
-                    <th class="table-left">보유 및 이용기간</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td rowspan="2" class="table-center">
-                        Slack 알림<br />서비스<br />이용
-                    </td>
-                    <td class="table-left">
-                        Slack<br />채널 ID
-                    </td>
-                    <td rowspan="2" class="table-left">
-                        <strong>
-                        개인적으로 삭제 또는 웨펀마스터 서비스 종료 시까지
-                        </strong>
-                    </td>
-                    </tr>
-                </tbody>
-                </table>
-                <br />
-                <p>※ 채널 ID는 알림 전송을 위한 용도로만 사용되며,<br />다른 용도로는 사용되지 않습니다.</p>
-            </dd>
-            </dl>
-        </article>
-    {:else}
-        <div class="stxt">
-            기존 등록했던 Slack 채널 ID를 삭제/수정할 수 있습니다.
-        </div>
-    {/if}
-    <article class="register-box">
-        <div class="form-row">
-            <label for="channelId">채널 ID<span class="required">*</span></label>
-            <input id="channelId" type="text" 
-                bind:value={ channelId } 
-                  on:input={ () => {canSendMessage = false} }
-            />
-            <button type="button" class="secondary-button" 
-                class:button-checking={ isChecking }
-                             disabled={ isChecking }
-                             on:click={ testSlackInfo }
-            >
-                {#if isChecking}
-                    <Spinner colorTheme="white"/> 확인중
-                {:else}
-                    통신확인
-                {/if}
-            </button>
-        </div>
-        {#if slackInfo}
-            <div class="form-row">
-                <button type="button" class="delete-button" on:click={ deleteSlackInfo }>삭제하기</button>
-                <div style="width: 10px;"></div>
-                <button type="button" class="edit-button" on:click={ updateSlackInfo }>수정하기</button>  
-            </div>
+        {#if !isSlackLinked}
+            <article class="agreebox">
+                <dl>
+                    <dt>
+                        <input
+                            class="agrees"
+                            type="checkbox"
+                            name="privacyCheck"
+                            id="privacyCheck"
+                            bind:checked={ agree }
+                        />
+                        <label for="privacyCheck">
+                        <span></span>개인정보 수집 및 이용 동의
+                        </label>
+                    </dt>
+                    <dt class="stxt">
+                        Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.
+                    </dt>
+                    <dd>
+                        <p>다음과 같이 개인정보를 수집 및 이용하고 있습니다.</p>
+                        <table class="table-agreement">
+                        <thead>
+                            <tr>
+                            <th class="table-left">수집 및 이용 목적</th>
+                            <th>항목</th>
+                            <th class="table-left">보유 및 이용기간</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            <td rowspan="2" class="table-center">
+                                Slack 알림<br />서비스 이용<br />
+                            </td>
+                            <td class="table-left">
+                                Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token
+                            </td>
+                            <td rowspan="2" class="table-left">
+                                <strong>
+                                    사용자가 직접 삭제하거나, 웨펀마스터 서비스 종료 시까지
+                                </strong>
+                            </td>
+                            </tr>
+                        </tbody>
+                        </table>
+                        <br />
+                        <p>※ 채널 ID는 알림 전송을 위한 용도로만 사용되며,<br />다른 용도로는 사용되지 않습니다.</p>
+                    </dd>
+                </dl>
+            </article>
+
+            <article class="register-box">
+                <div class="form-row">
+                    <button type="button" class="submit-button" on:click={ openBotInstallPage }>연동하기</button>
+                </div>
+            </article>
         {:else}
             <div class="form-row">
-                <button type="button" class="submit-button" on:click={ registerSlackInfo }>등록하기</button>
-            </div>
+                <div class="stxt">
+                    연동 정보가 정상적으로 등록되었습니다.
+                </div>
+
+                <label for="createDate">연동일</label>
+                <input id="createDate" type="text" value={ registerDate } disabled={ true }/>
+            </div>   
         {/if}
-    </article>
+    {:else}
+        <article class="register-box">
+            <div class="form-row">
+                <label for="createDate">연동일</label>
+                <input id="createDate" type="text" value={ formatDate(slackInfo.createDate) } disabled={ true }/>
+                
+                <button type="button" class="secondary-button" 
+                    class:button-checking={ isChecking }
+                                 disabled={ isChecking }
+                                 on:click={ testSlackInfo }
+                >
+                    {#if isChecking}
+                        <Spinner colorTheme="white"/> 확인중
+                    {:else}
+                        Slack 응답확인
+                    {/if}
+                </button>
+            </div>
+            <div class="form-row">
+                <button type="button" class="delete-button" on:click={ deleteSlackInfo }>삭제하기</button> 
+            </div>
+        </article>
+    {/if}
 </div>
 
 
@@ -323,7 +255,7 @@
     }
 
     .agreebox table td {
-        padding: 5px 10px;
+        padding: 5px 7px;
         border-top: 1px solid #ccc;
         font-size: 13px;
         line-height: 150%;
@@ -412,11 +344,6 @@
         margin-bottom: 20px;
     }
 
-    .register-box .required {
-        color: red;
-        margin-left: 5px;
-    }
-
     .register-box label {
         height: 30px;
         font-size: 14px;
@@ -483,14 +410,7 @@
     .register-box .delete-button {
         background: #5c6377;
         color: #fff;
-        width: 50%;
-        text-align: center;
-    }
-
-    .register-box .edit-button {
-        background: #3392ff;
-        color: #fff;
-        width: 50%;
+        width: 100%;
         text-align: center;
     }
 </style>
