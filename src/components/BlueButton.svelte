@@ -1,5 +1,10 @@
 <script>
-    export let onClick;
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
+
+    export let width  = "200px";
+    export let height = "60px";
     export let text;
 </script>
 
@@ -7,7 +12,10 @@
 <!-- TODO 클래스 네이밍 수정하기 -->
 <article class="register-box">
     <div class="form-row">
-        <button type="button" class="submit-button" on:click={ onClick }>
+        <button type="button" class="submit-button" 
+            style="width:{ width }; height:{ height };"
+            on:click={ () => dispatch('click') }
+        >
             { text }
         </button>
     </div>
@@ -26,7 +34,6 @@
     }
 
     .register-box button {
-        height: 54px;
         padding: 0 20px;
         font-size: 16px;
         color: #fff;

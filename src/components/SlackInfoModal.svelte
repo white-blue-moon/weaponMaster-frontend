@@ -9,6 +9,7 @@
 
     import Spinner from "./Spinner.svelte";
     import AgreeBox from "./AgreeBox.svelte";
+    import BlueButton from "./BlueButton.svelte";
   
 
     export let slackBotInstallUrl;
@@ -103,8 +104,9 @@
         <div class="stxt">
             경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
         </div>
-        <AgreeBox bind:agree={ agree } />
-
+        <AgreeBox 
+            bind:agree={ agree }
+        />
         <article class="register-box">
             <div class="form-row">
                 <button type="button" class="submit-button" on:click={ openBotInstallPage }>연동하기</button>

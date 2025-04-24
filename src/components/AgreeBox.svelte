@@ -1,13 +1,12 @@
 <script>
+    export let agree  = false;
+    export let height = "185px";
 
-    export let agree = false;
-
-    export let subTitle = "Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.";
-    export let table1 = "Slack 알림<br />서비스 이용<br />";
-    export let table2 = "Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token";
-    export let table3 = "사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지";
+    export let subTitle  = "Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.";
+    export let table1    = "Slack 알림<br />서비스 이용<br />";
+    export let table2    = "Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token";
+    export let table3    = "사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지";
     export let bottomTip = "※ 수집된 정보는 오직 알림 전송을 위한 용도로만 사용됩니다.";
-
 </script>
 
 
@@ -28,7 +27,7 @@
         <dt class="stxt">
             { subTitle }
         </dt>
-        <dd>
+        <dd style="height:{ height };">
             <p>다음과 같이 개인정보를 수집 및 이용하고 있습니다.</p>
             <table class="table-agreement">
             <thead>
@@ -54,7 +53,8 @@
                 </tr>
             </tbody>
             </table>
-            <br />
+            <!-- <br /> -->
+            <p>&nbsp;</p>
             <p>{ bottomTip }</p>
         </dd>
     </dl>
@@ -62,6 +62,10 @@
 
 
 <style lang="scss">
+    p {
+        margin: 0 !important;
+    }
+
     .agreebox {
         position: relative;
     }
@@ -87,7 +91,6 @@
         margin-top: 26px;
         margin-left: 0;
         padding: 15px 20px;
-        height: 240px;
         overflow-y: scroll;
         background: #f8f9fb;
         border: 1px solid #eeedf2;
@@ -154,7 +157,7 @@
     /* 셀 스타일 */
     .table-agreement th,
     .table-agreement td {
-        padding: 3px 4px 2px;
+        padding: 3px 20px 2px;
         border: 1px solid #e7e7e7;
         text-align: center;
         vertical-align: middle;

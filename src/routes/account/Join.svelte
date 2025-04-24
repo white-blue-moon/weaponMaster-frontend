@@ -91,8 +91,13 @@
     }
 
     function onClick() {
-        alert('Click Test')
+        if (!agree) {
+            alert('약관 동의 필요');
+            return;
+        }
+
         agreeOk = true;
+        return;
     }
 </script>
 
@@ -102,8 +107,15 @@
 <section class="content">
     <main>
         {#if !agreeOk && !joinOk}
-            <AgreeBox bind:agree={ agree }/>
-            <BlueButton on:click={ onClick } />
+            <AgreeBox 
+                bind:agree={ agree }
+                subTitle="웨펀마스터 서비스 제공을 위해 필요한 최소한의 개인정보입니다."
+                table1="서비스 제공 및 개선, 서비스 이용 분석 및 부정 이용 방지"
+                table2="웨펀마스터ID, 비밀번호, 서비스 이용기록 (방문일시, 접속 IP), 이용 콘텐츠 및 활동 정보"
+                table3="사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지"
+                bottomTip="동의를 거부할 권리가 있으나, 동의를 거부할 경우 서비스 이용이 불가능 합니다."
+            />
+            <BlueButton text="확인" on:click={ onClick } />
         {:else if agreeOk && !joinOk}
             <form on:submit={ onSubmitJoin }>
                 <div class="form-row">
@@ -120,22 +132,6 @@
                 <div class="form-row">
                     <label for="confirmPassword">비밀번호 확인<span class="required">*</span></label>
                     <input id="confirmPassword" type="password" bind:value={confirmPassword} placeholder="비밀번호를 다시 입력하세요" />
-                </div>
-
-                <div class="form-row">
-                    <label for="server">서버 선택</label>
-                    <select id="server" bind:value={server}>
-                        <option value="" disabled selected>서버를 선택하세요</option>
-                        {#each servers as server}
-                            <option value={server.id}>{server.name}</option>
-                        {/each}
-                    </select>
-                </div>
-
-                <div class="form-row">
-                    <label for="character">던파 캐릭터</label>
-                    <input id="character" type="text" bind:value={character} placeholder="캐릭터 이름을 입력하세요" />
-                    <button type="button" class="secondary-button" on:click={checkCharacterExistence}>캐릭터 확인</button>
                 </div>
 
                 <div class="form-row">
@@ -168,31 +164,39 @@
         width: 560px;
         background: #fff;
         padding: 20px 30px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); */
     }
-    
+
+    /* 각 항목 줄 간격 */
     .form-row {
         display: flex;
-        align-items: center;
-        margin-bottom: 20px;
+        flex-direction: column;
+        margin-bottom: 24px;
+        width: 100%;
     }
 
     label {
-        height: 30px;
+        height: auto;
         font-size: 14px;
         color: #6a6e76;
-        width: 120px; /* 고정된 레이블 너비 */
+        margin-bottom: 6px;
+        width: auto;
     }
 
-    input, select {
-        flex: 1;
-        height: 54px;
-        padding: 0 10px;
+    input {
         font-size: 16px;
-        border: 1px solid #e1e6ee;
-        background: #f8f9fb;
-        color: #6a6e76;
+        padding: 12px 8px;
+        border: none;
+        border-bottom: 2px solid #e1e6ee;
+        background: transparent;
+        color: #333;
         box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+        outline: none;
+        border-bottom: 2px solid #3392ff;
     }
 
     input::placeholder {
@@ -208,19 +212,17 @@
         border: none;
         cursor: pointer;
         background: #3392ff;
-        white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+        white-space: nowrap;
     }
 
-    button:hover {
-        background: #005fcc;
-    }
-
+    /* 보조 버튼 */
     .secondary-button {
-        margin-left: 10px;
+        margin-top: 10px;
         background: #fff;
         color: #3392ff;
         border: 1px solid #3392ff;
-        height: 54px;
+        height: 48px;
+        align-self: flex-start;
     }
 
     .secondary-button:hover {
@@ -228,15 +230,13 @@
         color: #fff;
     }
 
+    /* 가입 버튼 */
     .submit-button {
         background: #3392ff;
         color: #fff;
         width: 100%;
         text-align: center;
-    }
-
-    .submit-button:hover {
-        background: #005fcc;
+        height: 52px;
     }
 
     .required {
