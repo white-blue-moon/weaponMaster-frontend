@@ -16,8 +16,6 @@
 
     const dispatch      = new createEventDispatcher(); // TODO new 사용할 때와 그냥 사용할 때 차이 확인하기
     let   agree         = false;
-    let   isSlackLinked = false;
-    let   registerDate;
     
     onMount(async () => {
         // 슬랙 연동 콜백 리스너 등록
@@ -28,9 +26,6 @@
             }
             
             if (event.data?.success) {
-                isSlackLinked = true;
-                registerDate  = formatDate(event.data.slackInfo.createDate);
-
                 // 설치 페이지 닫기
                 if (event.source?.close) {
                     event.source.close();
@@ -58,12 +53,8 @@
             return;
         }
 
-        const response = await apiFetch(SLACK_API.CHANNEL.DELETE, {
+        const response = await apiFetch(SLACK_API.CHANNEL.DELETE($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
             method: 'DELETE',
-            body: JSON.stringify({
-                "userId":     $userInfo,
-                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
-            }),
         }).catch(handleApiError);
 
         if (response.success) {
@@ -82,13 +73,8 @@
     async function testSlackInfo() {
         isChecking = true;
 
-        const response = await apiFetch(SLACK_API.CHANNEL.TEST, {
+        const response = await apiFetch(SLACK_API.CHANNEL.TEST($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
             method: 'POST',
-            body: JSON.stringify({
-                "userId":     $userInfo,
-                "noticeType": SLACK_NOTICE_TYPE.AUCTION,
-                "channelId":  slackInfo.slackChannelId,
-            }),
         }).catch(handleApiError);
 
         if (response.success) {
@@ -111,77 +97,70 @@
 
 <div>
     <h2>Slack 연동</h2>
-    <div class="stxt">
-        경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
-    </div>
 
     {#if !slackInfo}
-        {#if !isSlackLinked}
-            <article class="agreebox">
-                <dl>
-                    <dt>
-                        <input
-                            class="agrees"
-                            type="checkbox"
-                            name="privacyCheck"
-                            id="privacyCheck"
-                            bind:checked={ agree }
-                        />
-                        <label for="privacyCheck">
-                        <span></span>개인정보 수집 및 이용 동의
-                        </label>
-                    </dt>
-                    <dt class="stxt">
-                        Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.
-                    </dt>
-                    <dd>
-                        <p>다음과 같이 개인정보를 수집 및 이용하고 있습니다.</p>
-                        <table class="table-agreement">
-                        <thead>
-                            <tr>
-                            <th class="table-left">수집 및 이용 목적</th>
-                            <th>항목</th>
-                            <th class="table-left">보유 및 이용기간</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                            <td rowspan="2" class="table-center">
-                                Slack 알림<br />서비스 이용<br />
-                            </td>
-                            <td class="table-left">
-                                Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token
-                            </td>
-                            <td rowspan="2" class="table-left">
-                                <strong>
-                                    사용자가 직접 삭제하거나, 웨펀마스터 서비스 종료 시까지
-                                </strong>
-                            </td>
-                            </tr>
-                        </tbody>
-                        </table>
-                        <br />
-                        <p>※ 채널 ID는 알림 전송을 위한 용도로만 사용되며,<br />다른 용도로는 사용되지 않습니다.</p>
-                    </dd>
-                </dl>
-            </article>
+        <div class="stxt">
+            경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
+        </div>
+        <article class="agreebox">
+            <dl>
+                <dt>
+                    <input
+                        class="agrees"
+                        type="checkbox"
+                        name="privacyCheck"
+                        id="privacyCheck"
+                        bind:checked={ agree }
+                    />
+                    <label for="privacyCheck">
+                    <span></span>개인정보 수집 및 이용 동의
+                    </label>
+                </dt>
+                <dt class="stxt">
+                    Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.
+                </dt>
+                <dd>
+                    <p>다음과 같이 개인정보를 수집 및 이용하고 있습니다.</p>
+                    <table class="table-agreement">
+                    <thead>
+                        <tr>
+                        <th class="table-left">수집 및 이용 목적</th>
+                        <th>항목</th>
+                        <th class="table-left">보유 및 이용기간</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <td rowspan="2" class="table-center">
+                            Slack 알림<br />서비스 이용<br />
+                        </td>
+                        <td class="table-left">
+                            Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token
+                        </td>
+                        <td rowspan="2" class="table-left">
+                            <strong>
+                                사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지
+                            </strong>
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+                    <br />
+                    <p>※ 수집된 정보는 오직 알림 전송을 위한 용도로만 사용됩니다.</p>
+                </dd>
+            </dl>
+        </article>
 
-            <article class="register-box">
-                <div class="form-row">
-                    <button type="button" class="submit-button" on:click={ openBotInstallPage }>연동하기</button>
-                </div>
-            </article>
-        {:else}
+        <article class="register-box">
             <div class="form-row">
-                <div class="stxt">
-                    연동 정보가 정상적으로 등록되었습니다.
-                </div>
-
-                <label for="createDate">연동일</label>
-                <input id="createDate" type="text" value={ registerDate } disabled={ true }/>
-            </div>   
-        {/if}
+                <button type="button" class="submit-button" on:click={ openBotInstallPage }>연동하기</button>
+            </div>
+        </article>
     {:else}
+        <div class="stxt">
+            ※ Slack 연동이 완료된 상태입니다.<br />
+            경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
+        </div>
         <article class="register-box">
             <div class="form-row">
                 <label for="createDate">연동일</label>

@@ -42,11 +42,9 @@ export const NEOPLE_API = {
 // 슬랙 API
 export const SLACK_API = {
     CHANNEL: {
-        TEST:   `${ROOT}/slack/channel/test`,
-        CREATE: `${ROOT}/slack/channel`,
-        DELETE: `${ROOT}/slack/channel`,
-        UPDATE: `${ROOT}/slack/channel`,
-        READ:   (userId, noticeType) => `${ROOT}/slack/channel?userId=${userId}&noticeType=${noticeType}`,
+        READ:   (userId, noticeType) => `${ROOT}/slack/${userId}/integration?noticeType=${noticeType}`,
+        DELETE: (userId, noticeType) => `${ROOT}/slack/${userId}/integration?noticeType=${noticeType}`,
+        TEST:   (userId, noticeType) => `${ROOT}/slack/${userId}/integration/test?noticeType=${noticeType}`,
     },
 }
 
