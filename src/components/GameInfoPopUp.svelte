@@ -89,6 +89,8 @@
             if (search.list.length === 0) {
                 alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.');
             }
+
+            search.currentPage = 1;
             updatePagination(search);
             isSearching = false;
             return;
