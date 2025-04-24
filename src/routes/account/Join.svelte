@@ -5,12 +5,18 @@
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
+    import AgreeBox from '../../components/AgreeBox.svelte';
+    import BlueButton from '../../components/BlueButton.svelte';
 
     let userId          = "";
     let password        = "";
     let confirmPassword = "";
     let server          = "";
     let character       = "";
+
+    let agree      = false;
+    let agreeOk    = false;
+    let joinOk     = false;
 
     // TODO 아래 정보 서버에서 관리하기
     const servers = [
@@ -83,59 +89,78 @@
         alert('회원가입에 실패하였습니다.');
         return;
     }
+
+    function onClick() {
+        alert('Click Test')
+        agreeOk = true;
+    }
 </script>
 
 <GnbPublisher />
 <HeaderBanner bannerText="회원가입" bannerBackground="https://resource.df.nexon.com/ui/img/mem/bg.png"/>
-<main>
-    <form on:submit={onSubmitJoin}>
-        <div class="form-row">
-            <label for="userId">아이디<span class="required">*</span></label>
-            <input id="userId" type="text" bind:value={userId} placeholder="6자 이상 영문 및 숫자 조합" />
-            <button type="button" class="secondary-button" on:click={checkDuplicateId}>중복확인</button>
-        </div>
 
-        <div class="form-row">
-            <label for="password">비밀번호<span class="required">*</span></label>
-            <input id="password" type="password" bind:value={password} placeholder="비밀번호를 입력하세요" />
-        </div>
+<section class="content">
+    <main>
+        {#if !agreeOk && !joinOk}
+            <AgreeBox bind:agree={ agree }/>
+            <BlueButton on:click={ onClick } />
+        {:else if agreeOk && !joinOk}
+            <form on:submit={ onSubmitJoin }>
+                <div class="form-row">
+                    <label for="userId">아이디<span class="required">*</span></label>
+                    <input id="userId" type="text" bind:value={userId} placeholder="6자 이상 영문 및 숫자 조합" />
+                    <button type="button" class="secondary-button" on:click={checkDuplicateId}>중복확인</button>
+                </div>
 
-        <div class="form-row">
-            <label for="confirmPassword">비밀번호 확인<span class="required">*</span></label>
-            <input id="confirmPassword" type="password" bind:value={confirmPassword} placeholder="비밀번호를 다시 입력하세요" />
-        </div>
+                <div class="form-row">
+                    <label for="password">비밀번호<span class="required">*</span></label>
+                    <input id="password" type="password" bind:value={password} placeholder="비밀번호를 입력하세요" />
+                </div>
 
-        <div class="form-row">
-            <label for="server">서버 선택</label>
-            <select id="server" bind:value={server}>
-                <option value="" disabled selected>서버를 선택하세요</option>
-                {#each servers as server}
-                    <option value={server.id}>{server.name}</option>
-                {/each}
-            </select>
-        </div>
+                <div class="form-row">
+                    <label for="confirmPassword">비밀번호 확인<span class="required">*</span></label>
+                    <input id="confirmPassword" type="password" bind:value={confirmPassword} placeholder="비밀번호를 다시 입력하세요" />
+                </div>
 
-        <div class="form-row">
-            <label for="character">던파 캐릭터</label>
-            <input id="character" type="text" bind:value={character} placeholder="캐릭터 이름을 입력하세요" />
-            <button type="button" class="secondary-button" on:click={checkCharacterExistence}>캐릭터 확인</button>
-        </div>
+                <div class="form-row">
+                    <label for="server">서버 선택</label>
+                    <select id="server" bind:value={server}>
+                        <option value="" disabled selected>서버를 선택하세요</option>
+                        {#each servers as server}
+                            <option value={server.id}>{server.name}</option>
+                        {/each}
+                    </select>
+                </div>
 
-        <div class="form-row">
-            <button type="submit" class="submit-button">가입하기</button>
-        </div>
-    </form>
-</main>
-<Footer />
+                <div class="form-row">
+                    <label for="character">던파 캐릭터</label>
+                    <input id="character" type="text" bind:value={character} placeholder="캐릭터 이름을 입력하세요" />
+                    <button type="button" class="secondary-button" on:click={checkCharacterExistence}>캐릭터 확인</button>
+                </div>
+
+                <div class="form-row">
+                    <button type="submit" class="submit-button">가입하기</button>
+                </div>
+            </form>
+        {/if}
+    </main>
+</section>
+<Footer showBorderTop={ true }/>
 
 <!-- TODO 이미지 경로 등은 최소한 상수로 관리하도록 수정하기 -->
 <style>
+    .content {
+        position: relative;
+        padding-bottom: 100px;
+        margin: 0 auto;
+        width: 660px;
+    }
+
     main {
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background: #f9f9f9;
         padding: 40px;
     }
 
