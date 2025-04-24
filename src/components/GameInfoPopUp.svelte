@@ -221,7 +221,7 @@
 
 
 <div class="ly_login_info" id="loginLayer">
-    <div class="ly_logbox">
+    <div class="ly_logbox { $isLoggedIn ? 'logged-in' : 'logged-out' }">
         {#if isSlackInfoOpen}
             <article class="paging back-button-wrapper">
                 <a class="prev" on:click={ closeSlackInfo }>PREV</a>
@@ -435,12 +435,19 @@
         background: #fff;
         padding: 40px;
         width: 600px;
-        min-height: 350px;
         max-height: 90vh;
         overflow-y: auto;
         position: relative;
         text-align: center;
     }
+
+    .ly_login_info .ly_logbox.logged-in {
+        min-height: 350px;
+    }
+
+    // .ly_login_info .ly_logbox.logged-out {
+    //     // min-height: 220px;
+    // }
 
     .ly_login_info .ly_logbox a.ly_clse {
         position: absolute;
