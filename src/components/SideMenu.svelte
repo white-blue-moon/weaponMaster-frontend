@@ -6,8 +6,6 @@
     export let isOpen  = false;
     export let onClose = () => {}; // 닫기 콜백
 
-    const adminToolPath = "http://localhost:8880/"; // TODO 어드민툴 주소 임시 하드 코딩
-
     const handleDimmedClick = () => {
         onClose();
     };
@@ -46,7 +44,7 @@
                             <div class="gnbCell">
                                 <h3>A~Z</h3>
                                 <ul>
-                                    <li obj="P_GNB" opt=''><a href={ adminToolPath } target="_blank">Admin Tool</a></li>
+                                    <li obj="P_GNB" opt=''><a href={ PATHS.ADMIN_TOOL } target="_blank">Admin Tool</a></li>
                                 </ul>
                             </div>
                         </div>

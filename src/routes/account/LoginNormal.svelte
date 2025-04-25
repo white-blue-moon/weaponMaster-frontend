@@ -1,5 +1,5 @@
 <script>
-    import { API } from '../../constants/api';
+    import { ADMIN_API, API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
@@ -7,6 +7,7 @@
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
+  import BoldLink from '../../components/BoldLink.svelte';
   
 
     let userId   = "";
@@ -86,7 +87,11 @@
                 <li>
                     <a href={ PATHS.ACCOUNT.LOGIN_ADMIN }>관리자모드 로그인</a>
                 </li>
-                <li><span>관리자 권한은 별도 어드민 툴에서 부여 가능하며 공지사항 작성 등 권한이 주어집니다.</span></li>
+                <li>
+                    <span>
+                        관리자 권한은 별도 <BoldLink href={ PATHS.ADMIN_TOOL } text={ "어드민툴" }/>에서 부여 가능하며 공지사항 작성 등 권한이 주어집니다.
+                    </span>
+                </li>
             </ul>
         </form>
     </article>
@@ -185,9 +190,9 @@
 
     .login .login_admin li.logo {
         margin: 0 auto;
-        width: 108px;
+        width: 123px;
         height: 42px;
-        background: url(https://resource.df.nexon.com/ui/img/login/logo_nx.png) no-repeat;
+        background: url(/images/logo_blue_moon_img.png) no-repeat;
     }
 
     .login .login_admin li {

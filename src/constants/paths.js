@@ -40,4 +40,6 @@ export const PATHS = {
 
         PRIVATE_CONTACT: { LIST: '/service/private_contact/list' },
     },
+
+    ADMIN_TOOL: 'http://localhost:8880/'
 };
