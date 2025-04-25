@@ -119,12 +119,12 @@
             </div>          
         </article>
 
-        {#if article.categoryType == CATEGORY_TYPE.SERVICE_CENTER && article.articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT }
-            {#if article.userId == $userInfo || $isAdmin}
-                <Comment /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
-            {/if}
-        {:else if article.categoryType != CATEGORY_TYPE.NEWS}
-            <Comment />
+        {#if article.categoryType != CATEGORY_TYPE.NEWS}
+            <Comment 
+                categoryType={ article.categoryType }
+                articleType={ article.articleType }
+                arthor={ article.userId }
+            /> <!-- 공지사항에는 댓글 기재 불가능 -->
         {/if}
 
     </section>

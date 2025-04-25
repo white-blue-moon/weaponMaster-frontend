@@ -5,9 +5,15 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
     import { formatDate } from "../utils/time";
+    import { ARTICLE_TYPE, CATEGORY_TYPE } from "../constants/articles";
 
     import CommentEnter from "./CommentEnter.svelte";
     import AdminArthor from "./AdminArthor.svelte";
+  
+
+    export let categoryType;
+    export let articleType;
+    export let arthor;
 
     const url = window.location.pathname;
     let articleId = 0;
@@ -15,9 +21,10 @@
         articleId = url.split('/').pop();
     }
 
-    let comments = [];
+    let comments       = [];
     let normalComments = [];
-    let replyComments = [];
+    let replyComments  = [];
+
     const replyCommentsList = [];
 
     async function handleDelete(commentId) {
@@ -71,6 +78,15 @@
     onMount(async () => {
         await fetchComments();
     })
+
+    function isPrivacyArticle() {
+        if (categoryType == CATEGORY_TYPE.SERVICE_CENTER)
+            if (articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT) {
+                return true;
+            }
+        
+        return false;
+    }
 
     let reCommentVisible = {}; // 각 댓글별로 답글창 ON/OFF 상태 관리
     function toggleReply(commentId) {
@@ -130,20 +146,30 @@
                             
                         </ul>
 
-                        <!-- 답글쓰기 버튼 -->
-                        <div class="cmt_btnarea">
-                            <div class="vam">
-                                <!-- <a class="like ">0</a> -->
-                                <a class="gocmt" on:click={ toggleReply(comment.id) }>
-                                    { reCommentVisible[comment.id] ? "답글취소" : "답글쓰기" }
-                                </a>
+                        <!-- {#if !isPrivacyArticle()} -->
+                            <!-- 답글쓰기 버튼 -->
+                            <div class="cmt_btnarea">
+                                <div class="vam">
+                                    <!-- <a class="like ">0</a> -->
+                                    <a class="gocmt" on:click={ toggleReply(comment.id) }>
+                                        { reCommentVisible[comment.id] ? "답글취소" : "답글쓰기" }
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        <!-- {/if} -->
                     {/if}
                 </div>
 
                 {#if reCommentVisible[comment.id]}
-                    <CommentEnter reCommentId={comment.id} />
+                    {#if isPrivacyArticle() }
+                        {#if arthor == $userInfo || $isAdmin }
+                            <CommentEnter reCommentId={comment.id} /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
+                        {:else}
+                            <CommentEnter reCommentId={comment.id} privacyMode={ true }/>
+                        {/if}
+                    {:else}
+                        <CommentEnter reCommentId={comment.id} />
+                    {/if}
                 {/if}
 
                 {#if replyCommentsList[comment.id]}
@@ -187,8 +213,17 @@
                 {/if}
             {/each}
         </div>
-        <!-- 댓글 입력 창 -->
-        <CommentEnter />
+
+        {#if isPrivacyArticle() }
+            {#if arthor == $userInfo || $isAdmin }
+                <CommentEnter /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
+            {:else}
+                <CommentEnter privacyMode={ true }/>
+            {/if}
+        {:else}
+            <!-- 댓글 입력 창 -->
+            <CommentEnter />
+        {/if}
     </div>
 </article>
 

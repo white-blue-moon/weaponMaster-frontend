@@ -51,7 +51,7 @@
             isLoggedIn.set(true);
             isAdmin.set(true);
 
-            alert(`관리자모드로 로그인합니다. ${userId} 님 안녕하세요.`);
+            alert(`관리자모드로 로그인합니다.\n${userId} 님 안녕하세요.`);
             window.location.href = PATHS.HOME;
             return;
         }

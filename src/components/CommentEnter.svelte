@@ -7,11 +7,9 @@
 
 
     export let reCommentId = 0;
+    export let privacyMode = false;
 
-    let placeHolder = "비방, 욕설, 도배글 등은 서비스 이용제한 사유가 될 수 있습니다.";
-    if (!$isLoggedIn) {
-        placeHolder = "로그인 후 댓글 쓰기가 가능합니다."
-    }
+    let placeHolder = getPlaceHolder();
 
     let contents = "";
     let isFocused = false;
@@ -20,6 +18,18 @@
     let articleId = 0;
     if (/\d+$/.test(url)) {
         articleId = url.split('/').pop();
+    }
+
+    function getPlaceHolder() {
+        if (privacyMode) {
+            return "1:1 문의 게시글은 작성자와 관리자만 댓글을 기재할 수 있습니다."
+        }
+        
+        if (!$isLoggedIn) {
+            return "로그인 후 댓글 쓰기가 가능합니다."
+        }
+
+        return "비방, 욕설, 도배글 등은 서비스 이용제한 사유가 될 수 있습니다.";
     }
 
     // contenteditable의 텍스트를 contents에 반영
@@ -42,6 +52,11 @@
     }
 
     function isCommentValid() {
+        if (privacyMode) {
+            alert("1:1 문의 게시글은 작성자와 관리자만 댓글을 기재할 수 있습니다.");
+            return false;
+        }
+
         if (!$isLoggedIn) {
             alert("로그인 후 댓글 쓰기가 가능합니다.");
             return false;
