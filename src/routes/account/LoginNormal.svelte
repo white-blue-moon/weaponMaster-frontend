@@ -7,11 +7,14 @@
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
-  import BoldLink from '../../components/BoldLink.svelte';
+    import BoldLink from '../../components/BoldLink.svelte';
+  import Spinner from '../../components/Spinner.svelte';
   
 
     let userId   = "";
     let password = "";
+
+    let isLoginLoading = false;
 
     function isValidForm() {
         if (userId == "") {
@@ -33,6 +36,8 @@
             return;
         }
 
+        isLoginLoading = true;
+
         const response = await apiFetch(API.ACCOUNT.LOGIN, {
             method: 'POST',
             body: JSON.stringify({
@@ -43,16 +48,18 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            // 계정 정보 Store 업데이트
-            userInfo.set(userId); // TODO 추후 서버에서 받은 사용자 정보로 저장되도록 수정 필요
+            isLoginLoading = false;
+            
+            userInfo.set(userId);
             isLoggedIn.set(true);
 
-            alert(`로그인에 성공하였습니다. ${userId} 님 안녕하세요.`);
-            window.location.href = "/";
+            alert(`로그인에 성공하였습니다.\n${userId} 님 안녕하세요.`);
+            window.location.href = PATHS.HOME;
             return;
         }
 
-        alert('로그인에 실패하였습니다. 아이디와 비밀번호를 다시 한번 확인해 주세요.');
+        isLoginLoading = false;
+        alert('로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 한번 확인해 주세요.');
         return;
     }
 </script>
@@ -78,7 +85,9 @@
                 </li>
 
                 <li class="btn">
-                    <button type="submit" id="login">일반모드 로그인</button>
+                    <button type="submit" id="login">
+                        {#if isLoginLoading} <Spinner colorTheme="white"/> {/if} 일반모드 로그인
+                    </button>
                 </li>              
             </ul>
 

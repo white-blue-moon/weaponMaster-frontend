@@ -10,13 +10,14 @@
     import NewsBanner from '../components/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
+    import Spinner from '../components/Spinner.svelte';
     
     let focusBanners     = [];
     let newsArticles     = [];
     let bestViewArticles = [];
     
     let mainFocusBanner, newsFirstBanner, newsSecondBanner;
-    let loading = true; // 데이터 로딩 중 상태를 관리할 변수
+    let isLoading = true; // 데이터 로딩 중 상태를 관리할 변수
 
     async function fetchFocusBanners() {
         const response = await apiFetch(API.PAGE.HOME, {
@@ -34,7 +35,7 @@
             focusBanners     = response.data.focusBanners;
             newsArticles     = response.data.newsArticles;
             bestViewArticles = response.data.bestViewArticles;
-            loading          = false;
+            isLoading          = false;
         }
     }
 
@@ -55,21 +56,23 @@
         <Gnb />
     </div>
     <div class="focus-banner">
-        {#if !loading}
+        {#if !isLoading}
             <FocusBanner width="1450px" height="600px" imageUrls={ mainFocusBanner } />
         {:else}
-            <!-- 로딩 중 상태 -->
+            <div class="spinner-container">
+                <Spinner /> <span class="loading-text">로딩중입니다.</span>
+            </div>
         {/if}
     </div>
 </div>
 <div class="news-container">
     <div class="news-banner">
-        {#if !loading}
+        {#if !isLoading}
             <NewsBanner articles={ newsArticles }/>
         {/if}
     </div>
     <div class="news-focus-banners">
-        {#if !loading}
+        {#if !isLoading}
             <!-- 두 번째와 세 번째 배너 데이터로 FocusBanner 렌더링 -->
             <div class="news-left-focus-banner">
                 <FocusBanner width="560px" height="280px" imageUrls={newsFirstBanner} />
@@ -83,7 +86,7 @@
     </div>
 </div>
 <div class="guide-and-recommand">
-    {#if !loading}
+    {#if !isLoading}
         <ListBox articles={ bestViewArticles }/>
     {/if}
 </div>
@@ -91,15 +94,46 @@
 <!-- <FullBanner /> -->
 <Footer />
 
+
 <style>
     .menu {
-        position: relative; /* Gnb와 FocusBanner의 위치를 기준으로 설정 */
-        height: 600px;
+        position: relative;
     }
-    
-    .menu .focus-banner {
-        position: absolute;
-        top: 0;
+
+    .gnb {
+        position: absolute;   
+        top: 0;         /* 상단에 맞추기 */
+        left: 0;        /* 왼쪽에 맞추기 */
+        width: 1450px;  
+        height: 100px;  
+        z-index: 20;    /* focus-banner 위로 올리기 위해 z-index 조정 */
+    }
+
+    .focus-banner {
+        position: relative;  /* 위치를 상대적으로 설정하여 스피너 컨테이너와 겹치지 않도록 함 */
+        width: 1450px;       
+        height: 600px;       
+    }
+
+    .spinner-container {
+        position: absolute;  
+        top: 0;     /* 상단에 맞추기 */
+        left: 0;    /* 왼쪽에 맞추기 */
+        width: 100%;         
+        height: 100%;        
+        display: flex;       
+        justify-content: center;  /* 가로 중앙 정렬 */
+        align-items: center;      /* 세로 중앙 정렬 */
+        flex-direction: column;   /* 스피너와 텍스트를 세로로 배치 */
+        z-index: 10;              /* 다른 요소 위에 올리기 */
+    }
+
+    .loading-text {
+        font-size: 16px;      
+        color: #6a6e76;      
+        font-weight: 500;     
+        margin-top: 20px;   /* 스피너와 텍스트 사이 간격 */
+        text-align: center;   
     }
 
     .news-container {
@@ -121,5 +155,3 @@
         margin: 60px;
     }
 </style>
-
-

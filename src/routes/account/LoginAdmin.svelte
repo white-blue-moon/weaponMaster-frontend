@@ -2,14 +2,16 @@
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn, isAdmin } from "../../utils/auth";
+    import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
-  import { PATHS } from '../../constants/paths';
-
+  
     let userId   = "";
     let password = "";
+
+    let isLoginLoading = false;
 
     function isValidForm() {
         if (userId == "") {
@@ -31,6 +33,8 @@
             return;
         }
 
+        isLoginLoading = true;
+
         const response = await apiFetch(API.ACCOUNT.LOGIN, {
             method: 'POST',
             body: JSON.stringify({
@@ -41,8 +45,9 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            // 계정 정보 Store 업데이트
-            userInfo.set(userId); // TODO 추후 서버에서 받은 사용자 정보로 저장되도록 수정 필요
+            isLoginLoading = false;
+
+            userInfo.set(userId);
             isLoggedIn.set(true);
             isAdmin.set(true);
 
@@ -51,7 +56,8 @@
             return;
         }
 
-        alert('로그인에 실패하였습니다.\n관리자 권한이 있는지 확인 및 아이디와 비밀번호를 다시 한번 확인해 주세요.');
+        isLoginLoading = false;
+        alert('관리자모드 로그인에 실패하였습니다.\n관리자 권한이 있는지 확인 및 아이디와 비밀번호를 다시 한번 확인해 주세요.');
         return;
     }
 </script>
@@ -77,7 +83,9 @@
                 </li>
 
                 <li class="btn">
-                    <button type="submit" id="login">관리자모드 로그인</button>
+                    <button type="submit" id="login">
+                        {#if isLoginLoading} <Spinner colorTheme="white"/> {/if} 관리자모드 로그인
+                    </button>
                 </li>              
             </ul>
         </form>
