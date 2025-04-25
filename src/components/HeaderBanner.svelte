@@ -6,7 +6,7 @@
     export let bannerTextColor  = "#fff";
     export let isLogoVisible    = true;
     export let bannerBackground = `${DF_UI}/img/mem/bg.png`;
-    const logoBackground        = `${DF_UI}/img/mem/logo.png`;
+    const logoBackground        = `/images/logo_background.png`;
 </script>
 
 <header class="banner" style="--banner-background: url({ bannerBackground })">
@@ -39,7 +39,7 @@
     header h1 a {
         display: block;
         margin: 53px auto 0 auto;
-        width: 216px;
+        width: 166px;
         height: 122px;
         background: var(--logo-background) no-repeat;
         font-size: 0;

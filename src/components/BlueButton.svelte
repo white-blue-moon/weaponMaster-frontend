@@ -12,7 +12,9 @@
 <!-- TODO 클래스 네이밍 수정하기 -->
 <article class="register-box">
     <div class="form-row">
-        <button type="button" class="submit-button" 
+        <button 
+            type="button" 
+            class="submit-button" 
             style="width:{ width }; height:{ height };"
             on:click={ () => dispatch('click') }
         >

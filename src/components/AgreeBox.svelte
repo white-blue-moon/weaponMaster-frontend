@@ -53,7 +53,6 @@
                 </tr>
             </tbody>
             </table>
-            <!-- <br /> -->
             <p>&nbsp;</p>
             <p>{ bottomTip }</p>
         </dd>
