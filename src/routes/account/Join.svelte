@@ -11,8 +11,8 @@
     let userId          = "";
     let password        = "";
     let confirmPassword = "";
-    let server          = "";
-    let character       = "";
+
+    let isUserIdAvailable = false;
 
     let agree      = false;
     let agreeOk    = false;
@@ -36,7 +36,7 @@
             method: 'GET',
         }).catch(handleApiError);
 
-        const isUserIdAvailable = response.data;
+        isUserIdAvailable = response.data;
         if (isUserIdAvailable) {
             alert('사용 가능한 아이디입니다');
             return;
@@ -46,13 +46,14 @@
         return;
     }
 
-    function checkCharacterExistence() {
-        alert(`Checking if character '${character}' exists...`);
-    }
-
     function isValidForm() {
         if (userId.trim() == "" || password.trim() == "" || confirmPassword.trim() == "") {
             alert('비어 있는 입력칸을 입력 후 시도해 주세요')
+            return false;
+        }
+
+        if (!isUserIdAvailable) {
+            alert("ID 중복 확인 후 다시 시도해 주세요");
             return false;
         }
 
@@ -92,7 +93,7 @@
 
     function onClick() {
         if (!agree) {
-            alert('약관 동의 필요');
+            alert('서비스 이용을 위해 동의가 필요합니다.');
             return;
         }
 
@@ -123,18 +124,18 @@
             <form on:submit={ onSubmitJoin }>
                 <div class="form-row">
                     <label for="userId">아이디<span class="required">*</span></label>
-                    <input id="userId" type="text" bind:value={userId} placeholder="6자 이상 영문 및 숫자 조합" />
-                    <button type="button" class="secondary-button" on:click={checkDuplicateId}>중복확인</button>
+                    <input id="userId" type="text" bind:value= { userId } placeholder="6자 이상 영문 및 숫자 조합" on:input={ isUserIdAvailable = false }/>
+                    <button type="button" class="secondary-button" on:click={ checkDuplicateId }>중복확인</button>
                 </div>
 
                 <div class="form-row">
                     <label for="password">비밀번호<span class="required">*</span></label>
-                    <input id="password" type="password" bind:value={password} placeholder="비밀번호를 입력하세요" />
+                    <input id="password" type="password" bind:value={ password } placeholder="비밀번호를 입력하세요" />
                 </div>
 
                 <div class="form-row">
                     <label for="confirmPassword">비밀번호 확인<span class="required">*</span></label>
-                    <input id="confirmPassword" type="password" bind:value={confirmPassword} placeholder="비밀번호를 다시 입력하세요" />
+                    <input id="confirmPassword" type="password" bind:value={ confirmPassword } placeholder="비밀번호를 다시 입력하세요" />
                 </div>
 
                 <div class="form-row">
