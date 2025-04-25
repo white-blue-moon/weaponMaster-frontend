@@ -12,6 +12,7 @@
     import Menu2nd from './Menu2nd.svelte';
     import Footer from "./Footer.svelte";
     import AdminArthor from "./AdminArthor.svelte";
+  import Spinner from "./Spinner.svelte";
 
     export let categoryType;
     export let articleType;
@@ -33,16 +34,27 @@
 
     let selectedFilters   = new Set(); // 게시물 필터 버튼 상태 관리 (ex: 미답변/답변완료)
 
+    let isLoading = false;
+
     onMount(async () => {
+        isLoading = true;
+
         const response = await apiFetch(API.ARTICLES.LIST(categoryType, articleType), {
             method: "GET",
         }).catch(handleApiError);
 
         if (response.success) {
-            articles     = response.data;
+            isLoading = false;
+            articles  = response.data;
+
             buildArticlesMap();
             updateDisplayedArticles();
+
+            return;
         }
+
+        isLoading = false;
+        return;
     });
 
     // 필터 기준에 따라 Map 생성
@@ -183,13 +195,23 @@
 
     <article class="board_list news_list">
         {#if displayedArticles.length === 0}
-            <ul>
-                {#if searchKeyword == ""}
-                    <li><div class="no-results">검색 결과가 없습니다.</div></li>
-                {:else}
-                    <li><div class="no-results">"{ searchKeyword }" 에 대한 검색 결과가 없습니다.</div></li>
-                {/if} 
-            </ul>
+            {#if isLoading}
+                <ul>
+                    <li>
+                        <div class="no-results">
+                            <Spinner /> 게시물 정보를 불러오는 중입니다.
+                        </div>
+                    </li>
+                </ul>
+            {:else}
+                <ul>
+                    {#if searchKeyword == ""}
+                        <li><div class="no-results">검색 결과가 없습니다.</div></li>
+                    {:else}
+                        <li><div class="no-results">"{ searchKeyword }" 에 대한 검색 결과가 없습니다.</div></li>
+                    {/if} 
+                </ul>
+            {/if}
         {:else}
             {#each displayedArticles as article}
                 <ul class:notice={ article.isPinned }>
