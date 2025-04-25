@@ -5,7 +5,7 @@
     export let subTitle  = "Slack 알림 서비스 제공을 위해 필요한 최소한의 개인정보입니다.";
     export let table1    = "Slack 알림<br />서비스 이용<br />";
     export let table2    = "Slack 사용자 ID, Slack DM 채널 ID, Slack 봇 Access Token";
-    export let table3    = "사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지";
+    export let table3    = "사용자가 삭제를 요청하거나, 웨펀마스터 서비스 종료 시까지";
     export let bottomTip = "※ 수집된 정보는 오직 알림 전송을 위한 용도로만 사용됩니다.";
 </script>
 

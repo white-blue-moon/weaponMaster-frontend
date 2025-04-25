@@ -103,16 +103,19 @@
 
 <GnbPublisher />
 <HeaderBanner bannerText="회원가입" bannerBackground="https://resource.df.nexon.com/ui/img/mem/bg.png"/>
-
+<section class="step">
+    <p class="{ (!agreeOk && !joinOk) ? "active" : "" }">약관동의</p>
+    <p class="{ (agreeOk  && !joinOk) ? "active" : "" }">가입하기</p>
+</section>
 <section class="content">
     <main>
         {#if !agreeOk && !joinOk}
             <AgreeBox 
                 bind:agree={ agree }
                 subTitle="웨펀마스터 서비스 제공을 위해 필요한 최소한의 개인정보입니다."
-                table1="서비스 제공 및 개선, 서비스 이용 분석 및 부정 이용 방지"
-                table2="웨펀마스터ID, 비밀번호, 서비스 이용기록 (방문일시, 접속 IP), 이용 콘텐츠 및 활동 정보"
-                table3="사용자가 삭제 요청하거나, 웨펀마스터 서비스 종료 시까지"
+                table1="서비스 제공 및 개선, 서비스 이용 분석"
+                table2="웨펀마스터ID, 비밀번호, 서비스 이용 기록, 이용 콘텐츠 및 활동 정보"
+                table3="사용자가 삭제를 요청하거나, 웨펀마스터 서비스 종료 시까지"
                 bottomTip="동의를 거부할 권리가 있으나, 동의를 거부할 경우 서비스 이용이 불가능 합니다."
             />
             <BlueButton text="확인" on:click={ onClick } />
@@ -144,7 +147,43 @@
 <Footer showBorderTop={ true }/>
 
 <!-- TODO 이미지 경로 등은 최소한 상수로 관리하도록 수정하기 -->
-<style>
+<style lang="scss">
+    * {
+        margin: 0;
+        padding: 0;
+
+    }
+
+    .step {
+        position: relative;
+        width: 100%;
+        height: 120px;
+        background: #f8f9fb;
+        border-bottom: 1px solid #e0e2ec;
+        font-size: 0;
+        text-align: center;
+        line-height: 118px;
+    }
+
+    .step p.active {
+        color: #151518;
+    }
+
+    .step p {
+        display: inline-block;
+        padding-right: 25px;
+        margin-right: 19px;
+        color: #bec5cc;
+        font-size: 20px;
+        background: url(#{$DF_UI}/img/mem/ico_arrow.png) no-repeat 100% 53px;
+    }
+
+    .step p:last-child {
+        margin-right: 0;
+        padding-right: 0;
+        background: none;
+    }
+
     .content {
         position: relative;
         padding-bottom: 100px;
