@@ -32,7 +32,7 @@
 
         isChecking = true;
 
-        const response = await apiFetch(API.ACCOUNT.EXIST_USER(userId), {
+        const response = await apiFetch(API.ACCOUNT.CHECK_USER_ID_EXISTS(userId), {
             method: 'GET',
         }).catch(handleApiError);
 

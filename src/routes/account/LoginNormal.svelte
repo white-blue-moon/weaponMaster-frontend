@@ -1,7 +1,7 @@
 <script>
     import { ADMIN_API, API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn } from "../../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
@@ -33,11 +33,12 @@
             return;
         }
 
-        const response = await apiFetch(API.ACCOUNT.LOGIN_NORMAL, {
+        const response = await apiFetch(API.ACCOUNT.LOGIN, {
             method: 'POST',
             body: JSON.stringify({
-                "userId" : userId,
-                "userPw" : password,
+                "isAdminMode": false,
+                "userId":      userId,
+                "userPw":      password,
             }),
         }).catch(handleApiError);
 
@@ -85,7 +86,7 @@
                 <li class="logo" id="weaponMasterLogo"></li>
                 <li>잠깐! 관리자 권한이 있으신가요? 관리자모드로 로그인 할 수 있습니다!</li>
                 <li>
-                    <a href={ PATHS.ACCOUNT.LOGIN_ADMIN }>관리자모드 로그인</a>
+                    <a href={ PATHS.ACCOUNT.LOGIN }>관리자모드 로그인</a>
                 </li>
                 <li>
                     <span>

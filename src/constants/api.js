@@ -8,10 +8,9 @@ export const API = {
         INSPECTIOIN: (bannerType) => `${ROOT}/page/inspection/${bannerType}`,
     },
     ACCOUNT: {
-        JOIN:         `${ROOT}/account/join`,
-        LOGIN_NORMAL: `${ROOT}/account/login/normal`,
-        LOGIN_ADMIN:  `${ROOT}/account/login/admin`,
-        EXIST_USER:   (userId) => `${ROOT}/account/exist/${userId}`,
+        JOIN:  `${ROOT}/accounts`,
+        LOGIN: `${ROOT}/accounts/login`,
+        CHECK_USER_ID_EXISTS: (userId) => `${ROOT}/accounts/${userId}/exists`,
     },
     ARTICLES: {
         CREATE: `${ROOT}/articles`,

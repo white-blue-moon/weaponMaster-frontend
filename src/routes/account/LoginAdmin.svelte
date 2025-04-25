@@ -31,11 +31,12 @@
             return;
         }
 
-        const response = await apiFetch(API.ACCOUNT.LOGIN_ADMIN, {
+        const response = await apiFetch(API.ACCOUNT.LOGIN, {
             method: 'POST',
             body: JSON.stringify({
-                "userId": userId,
-                "userPw": password,
+                "isAdminMode": true,
+                "userId":      userId,
+                "userPw":      password,
             }),
         }).catch(handleApiError);
 
