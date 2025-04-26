@@ -18,6 +18,7 @@
 
     const dispatch      = new createEventDispatcher(); // TODO new 사용할 때와 그냥 사용할 때 차이 확인하기
     let   agree         = false;
+    let   isDeleting    = false;
     
     onMount(async () => {
         // 슬랙 연동 콜백 리스너 등록
@@ -55,17 +56,22 @@
             return;
         }
 
+        isDeleting = true;
+
         const response = await apiFetch(SLACK_API.CHANNEL.DELETE($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
             method: 'DELETE',
         }).catch(handleApiError);
 
         if (response.success) {
+            isDeleting = false;
+
             dispatch('close', {slackInfo: null});
             alert('등록된 Slack 연동 정보를 삭제하였습니다.');
             onClose();
             return;
         }
 
+        isDeleting = false;
         alert('Slack 연동 정보 삭제에 실패하였습니다.');
         return;
     }
@@ -135,7 +141,9 @@
                 </button>
             </div>
             <div class="form-row">
-                <button type="button" class="delete-button" on:click={ deleteSlackInfo }>삭제하기</button> 
+                <button type="button" class="delete-button" on:click={ deleteSlackInfo }>
+                    {#if isDeleting}<Spinner colorTheme="white"/>{/if} 삭제하기
+                </button> 
             </div>
         </article>
     {/if}
