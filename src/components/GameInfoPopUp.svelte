@@ -107,6 +107,8 @@
         }
     }
 
+    let loadingButtonMap = {}; // (auctionNo: true/false)
+
     async function toggleWatch(item) {
         const index = watch.list.findIndex(w => w.itemInfo.auctionNo === item.itemInfo.auctionNo);
         if (index === -1) {
@@ -115,6 +117,9 @@
                 alert(`한 번에 추적 가능한 판매 알림은 최대 ${maxNoticeCount}개입니다.\n판매 완료 이후 혹은 알림 해제 후 다시 시도해 주세요.`);
                 return;
             }
+
+            loadingButtonMap[item.itemInfo.auctionNo] = true;
+            loadingButtonMap = { ...loadingButtonMap }; // 반응성 트리거
 
             const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.CREATE, {
                 method: "POST",
@@ -127,15 +132,23 @@
             }).catch(handleApiError);
 
             if (response.success) {
+                loadingButtonMap[item.itemInfo.auctionNo] = false;
+                loadingButtonMap = { ...loadingButtonMap };
+
                 item.auctionState = AUCTION_STATE.SELLING;
                 watch.list = [item, ...watch.list];
                 updatePagination(watch);
                 return;
             }
 
+            loadingButtonMap[item.itemInfo.auctionNo] = false;
+            loadingButtonMap = { ...loadingButtonMap };
             alert('판매 알림 등록에 실패하였습니다');
             return;
         }
+
+        loadingButtonMap[item.itemInfo.auctionNo] = true;
+        loadingButtonMap = { ...loadingButtonMap }; // 반응성 트리거
 
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
             method: "DELETE",
@@ -147,10 +160,16 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            loadingButtonMap[item.itemInfo.auctionNo] = false;
+            loadingButtonMap = { ...loadingButtonMap };
+
             watch.list = watch.list.filter(w => w.itemInfo.auctionNo !== item.itemInfo.auctionNo);
             updatePagination(watch);
             return;
         }
+
+        loadingButtonMap[item.itemInfo.auctionNo] = false;
+        loadingButtonMap = { ...loadingButtonMap };
 
         alert('판매 알림 해제에 실패하였습니다');
         return;
@@ -294,9 +313,14 @@
                                     <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
                 
                                     <!-- 버튼 -->
-                                    <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "" } 
+                                    <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "btn-register" } 
                                         on:click={ () => toggleWatch(item) }>
-                                            { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
+                                            {#if loadingButtonMap[item.itemInfo.auctionNo]}
+                                                <Spinner colorTheme="white" margin_right="9px" margin_top="1px" margin_bottom="0"/>
+                                                { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "알림 해제" : "알림 등록" }
+                                            {:else}
+                                                { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
+                                            {/if}
                                     </button>
                                 </li>
                             {/each}
@@ -363,15 +387,34 @@
                                     {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
                                         <span class="status-wrap">
                                             <span class="completed">판매 완료</span>
-                                            <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                            <button class="btn-x" on:click={() => toggleWatch(item)}>
+                                                {#if loadingButtonMap[item.itemInfo.auctionNo]}
+                                                    <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px"/>
+                                                {:else}
+                                                    ×
+                                                {/if}
+                                            </button>
                                         </span>
                                     {:else if item.auctionState == AUCTION_STATE.EXPIRED}
                                         <span class="status-wrap">
                                             <span class="expired">기간 만료</span>
-                                            <button class="btn-x" on:click={() => toggleWatch(item)}>×</button>
+                                            <button class="btn-x" on:click={() => toggleWatch(item)}>
+                                                {#if loadingButtonMap[item.itemInfo.auctionNo]}
+                                                    <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px"/>
+                                                {:else}
+                                                    ×
+                                                {/if}
+                                            </button>
                                         </span>
                                     {:else}
-                                        <button class="btn-remove" on:click={() => toggleWatch(item)}>판매 알림 해제</button>
+                                        <button class="btn-remove" on:click={() => toggleWatch(item)}>
+                                            {#if loadingButtonMap[item.itemInfo.auctionNo]}
+                                                <Spinner colorTheme="white" margin_right="9px" margin_top="1px" margin_bottom="0"/>
+                                                알림 해제
+                                            {:else}
+                                                판매 알림 해제
+                                            {/if}
+                                        </button>
                                     {/if}
                                 </li>
                             {/each}
@@ -448,10 +491,6 @@
     .ly_login_info .ly_logbox.logged-in {
         min-height: 350px;
     }
-
-    // .ly_login_info .ly_logbox.logged-out {
-    //     // min-height: 220px;
-    // }
 
     .ly_login_info .ly_logbox a.ly_clse {
         position: absolute;
@@ -585,6 +624,16 @@
 
     .btn-remove:hover {
         background: #484f61;
+    }
+
+    .btn-remove, .btn-register {
+        display: inline-flex; 
+        align-items: center;
+        justify-content: center;
+        min-width: 120px; /* 버튼 고정 최소 너비 */
+        height: 36px;     /* 버튼 고정 높이 */
+        padding: 0 12px;  /* 내부 여백 */
+        font-size: 14px; 
     }
 
     // 단순 공백 추가 (search/watch 영역 구분용)

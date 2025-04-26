@@ -52,7 +52,7 @@
   }
 
   .status-icon {
-    padding-top: 1px;
+    padding-top: 2px;
     padding-right: 10px;
     width: 16px;
     height: 16px;
