@@ -3,7 +3,7 @@
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
     import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
-    import { NEOPLE_API, SLACK_API } from '../constants/api';
+    import { NEOPLE_API, SLACK_API, WEB_SOCKET_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
@@ -12,6 +12,9 @@
     import SlackInfoModal from "./SlackInfoModal.svelte";
     import Spinner from "./Spinner.svelte";
   
+    // WebSocket 통신을 위한 impoprt
+    import SockJS from 'sockjs-client/dist/sockjs.js';
+    import { Client } from "@stomp/stompjs";
 
     const PAGE_SIZE         = 5; // 한 페이지에 표시할 아이템 수
     const GROUP_PAGING_SIZE = 5; // 한 그룹에 표시할 페이지 번호 개수
@@ -41,6 +44,8 @@
     let slackErrorExists = false;
     let isApiLoaded      = false;
 
+    let client;
+
     onMount(async () => {
         searchInput?.focus();
         // 유저 경매 정보 확인
@@ -66,8 +71,50 @@
             slackErrorExists = true;
         }
 
+        connectWebSocket();
         isApiLoaded = true;
     });
+
+    function connectWebSocket() {
+        client = new Client({
+            brokerURL: "", // 직접 WebSocket 쓰지 않고 sockjs 로
+            webSocketFactory: () => new SockJS(WEB_SOCKET_API.FACTORY), // Spring Boot WebSocket 연결
+            reconnectDelay: 5000, // 연결 끊겼을 때 재연결
+
+            onConnect: () => {
+                console.log("WebSocket connected!");
+
+                client.subscribe(WEB_SOCKET_API.AUCTION_STATE, (message) => {
+                    const response = JSON.parse(message.body);
+                    console.log("판매 상태 변경 알림 수신: ", response);
+
+                    // 판매완료/기간만료 처리
+                    handleAuctionStateChange(response);
+                });
+            },
+
+            onStompError: (frame) => {
+                console.error('Broker reported error: ' + frame.headers['message']);
+                console.error('Additional details: ' + frame.body);
+            }
+        });
+
+        client.activate();
+    }
+
+    function handleAuctionStateChange(response) {
+        const watchIndex = watch.list.findIndex(item => item.itemInfo.auctionNo === response.itemInfo.auctionNo);
+        if (watchIndex != -1) {
+            watch.list[watchIndex].auctionState = response.auctionState;
+        }
+
+        const searchIndex = search.list.findIndex(item => item.itemInfo.auctionNo === response.itemInfo.auctionNo);
+        if (searchIndex != -1) {
+            search.list[searchIndex].auctionState = response.auctionState;
+        }
+
+        return;
+    }
 
     let isSearching = false;
 

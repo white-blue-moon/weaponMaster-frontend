@@ -47,6 +47,11 @@ export const SLACK_API = {
     },
 }
 
+export const WEB_SOCKET_API = {
+    FACTORY:       `${ROOT}/ws`,
+    AUCTION_STATE: `/topic/auction-state`,
+}
+
 // 어드민 툴 백엔드 서버 API
 const ADMIN_ROOT = 'http://localhost:7770';
 export const ADMIN_API = {
