@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
-    import { userInfo, isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
     import { NEOPLE_API, SLACK_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { AUCTION_STATE } from '../constants/auctionState';
@@ -119,9 +119,10 @@
             const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.CREATE, {
                 method: "POST",
                 body: JSON.stringify({
-                    "userId":   $userInfo,
-                    "itemImg":  item.imgUrl,
-                    "itemInfo": item.itemInfo,
+                    "isAdminMode": $isAdmin,
+                    "userId":      $userInfo,
+                    "itemImg":     item.imgUrl,
+                    "itemInfo":    item.itemInfo,
                 }),
             }).catch(handleApiError);
 
@@ -139,8 +140,9 @@
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
             method: "DELETE",
             body: JSON.stringify({
-                "userId":   $userInfo,
-                "itemInfo": item.itemInfo,
+                "isAdminMode": $isAdmin,
+                "userId":      $userInfo,
+                "itemInfo":    item.itemInfo,
             }),
         }).catch(handleApiError);
 
