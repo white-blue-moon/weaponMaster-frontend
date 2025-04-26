@@ -137,6 +137,14 @@
                 alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.');
             }
 
+            // === 판매 등록 알림 현황 상태를 검색 결과에도 반영 ===
+            search.list.forEach(searchItem => {
+                const watchedItem = watch.list.find(watchItem => watchItem.itemInfo.auctionNo === searchItem.itemInfo.auctionNo);
+                if (watchedItem) {
+                    searchItem.auctionState = watchedItem.auctionState;
+                }
+            });
+
             search.currentPage = 1;
             updatePagination(search);
             isSearching = false;
@@ -305,7 +313,6 @@
 
         return lines.map(lineWords => lineWords.join(' ')).join('<br>');
     }
-
 </script>
 
 
@@ -355,7 +362,7 @@
                     {:else}
                         <ul>
                             {#each search.displayed as item}
-                                <li>
+                                <li class={ item.auctionState == AUCTION_STATE.SOLD_OUT || item.auctionState == AUCTION_STATE.EXPIRED ? 'completed' : '' }>
                                     <!-- 아이템 이미지 -->
                                     <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
                 
@@ -379,15 +386,25 @@
                                     <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
                 
                                     <!-- 버튼 -->
-                                    <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "btn-register" } 
-                                        on:click={ () => toggleWatch(item) }>
-                                            {#if loadingButtonMap[item.itemInfo.auctionNo]}
-                                                <Spinner colorTheme="white" margin_right="9px" margin_top="1px" margin_bottom="0"/>
-                                                { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "알림 해제" : "알림 등록" }
-                                            {:else}
-                                                { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
-                                            {/if}
-                                    </button>
+                                    {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
+                                        <span class="status-wrap">
+                                            <span class="completed">판매 완료</span>
+                                        </span>
+                                    {:else if item.auctionState == AUCTION_STATE.EXPIRED}
+                                        <span class="status-wrap">
+                                            <span class="expired">기간 만료</span>
+                                        </span>
+                                    {:else}
+                                        <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "btn-register" } 
+                                            on:click={ () => toggleWatch(item) }>
+                                                {#if loadingButtonMap[item.itemInfo.auctionNo]}
+                                                    <Spinner colorTheme="white" margin_right="9px" margin_top="1px" margin_bottom="0"/>
+                                                    { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "알림 해제" : "알림 등록" }
+                                                {:else}
+                                                    { watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "판매 알림 해제" : "판매 알림 등록" }
+                                                {/if}
+                                        </button>
+                                    {/if}
                                 </li>
                             {/each}
                         </ul>
