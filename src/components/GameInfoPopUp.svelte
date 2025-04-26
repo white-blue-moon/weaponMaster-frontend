@@ -300,7 +300,7 @@
             <div class="result-list">
                 <h3>검색 결과</h3>
                 {#if isSearching}
-                    <Spinner margin_bottom="10px"/>
+                    <Spinner margin_bottom="5px"/>
                     <p>검색 중입니다.</p>
                 {:else}
                     {#if search.list.length === 0}
