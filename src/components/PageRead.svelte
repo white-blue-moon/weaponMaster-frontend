@@ -43,7 +43,8 @@
         const response = await apiFetch(API.ARTICLES.DELETE(pageId), {
             method: 'DELETE',
             body: JSON.stringify({
-                "userId": $userInfo,
+                "isAdminMode": $isAdmin,
+                "userId":      $userInfo,
             }),
         }).catch(handleApiError);
 

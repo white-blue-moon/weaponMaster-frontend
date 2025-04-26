@@ -1,7 +1,7 @@
 <script>
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { userInfo, isLoggedIn } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
     import { onMount } from 'svelte';
     import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
@@ -156,12 +156,13 @@
         const response = await apiFetch(apiURL, {
             method: apiMethod,
             body: JSON.stringify({
+                "isAdminMode":       $isAdmin,
+                "userId":            $userInfo,
                 "categoryType":      categoryType,
                 "articleType":       articleType,
                 "articleDetailType": articleDetailType,
                 "title":             title,
                 "contents":          contents,
-                "userId":            $userInfo,
             }),
         }).catch(handleApiError);
 
