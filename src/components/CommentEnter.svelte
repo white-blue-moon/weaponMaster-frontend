@@ -4,6 +4,7 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
     import AdminArthor from "./AdminArthor.svelte";
+    import Spinner from "./Spinner.svelte";
 
 
     export let reCommentId = 0;
@@ -14,11 +15,13 @@
     let contents = "";
     let isFocused = false;
 
-    const url = window.location.pathname;
     let articleId = 0;
+    const url     = window.location.pathname;
     if (/\d+$/.test(url)) {
         articleId = url.split('/').pop();
     }
+
+    let isLoading = false;
 
     function getPlaceHolder() {
         if (privacyMode) {
@@ -75,6 +78,8 @@
             return;
         }
 
+        isLoading = true;
+
         const response = await apiFetch(API.COMMENTS.CREATE, {
             method: "POST",
             body: JSON.stringify({
@@ -87,11 +92,13 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            isLoading = false;
             alert('댓글 등록이 완료되었습니다.');
             location.reload();
             return;
         }
 
+        isLoading = false;
         alert('댓글 등록에 실패하였습니다.');
         return;
     }
@@ -123,7 +130,9 @@
                     <span class="pNode">{ placeHolder }</span>
                 {/if}
             </div>
-            <a class="reg" on:click={ handleRegister }>등록</a>
+            <a class="reg" on:click={ handleRegister }>
+                {#if isLoading}<Spinner colorTheme="white"/>{/if} 등록
+            </a>
         </li>
     </ul>
 </div>

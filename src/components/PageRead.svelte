@@ -13,11 +13,14 @@
     import Menu2nd from './Menu2nd.svelte';
     import Footer from '../components/Footer.svelte';
     import Comment from './Comment.svelte';
+    import Spinner from './Spinner.svelte';
     
     let url     = window.location.pathname;
     let pageId  = url.split('/').pop();
     let page    = {};
     let article = null;
+
+    let isLoading = false;
 
     async function fetchArticle() {
         const response = await apiFetch(API.ARTICLES.READ(pageId), {
@@ -40,6 +43,8 @@
             return;
         }
 
+        isLoading = true;
+
         const response = await apiFetch(API.ARTICLES.DELETE(pageId), {
             method: 'DELETE',
             body: JSON.stringify({
@@ -49,11 +54,13 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            isLoading = false;
             alert('게시물이 삭제되었습니다.');
             window.location.href = page.listPath;
             return;
         }
         
+        isLoading = false;
         alert('게시물 삭제에 실패하였습니다.');
         return;
     }
@@ -114,7 +121,9 @@
                 <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
                 {#if article.userId == $userInfo || $isAdmin}
                     <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
-                    <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">삭제</a>
+                    <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">
+                        {#if isLoading}<Spinner colorTheme="white"/>{/if} 삭제
+                    </a>
                 {/if}
                 <a href={ page.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          

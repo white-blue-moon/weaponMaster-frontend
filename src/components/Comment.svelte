@@ -9,7 +9,7 @@
 
     import CommentEnter from "./CommentEnter.svelte";
     import AdminArthor from "./AdminArthor.svelte";
-  
+    import Spinner from "./Spinner.svelte";
 
     export let categoryType;
     export let articleType;
@@ -27,11 +27,16 @@
 
     const replyCommentsList = [];
 
+    let deleteLoadingMap = {}; // (commentId: true/false)
+
     async function handleDelete(commentId) {
         const isConfirm = confirm("정말 해당 댓글을 삭제하시겠습니까?");
         if (!isConfirm) {
             return;
         }
+
+        deleteLoadingMap[commentId] = true;
+        deleteLoadingMap = { ...deleteLoadingMap }; // 반응성 트리거
 
         const response = await apiFetch(API.COMMENTS.DELETE(commentId), {
             method: 'DELETE',
@@ -43,11 +48,17 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            deleteLoadingMap[commentId] = false;
+            deleteLoadingMap = { ...deleteLoadingMap };
+
             alert('댓글이 삭제되었습니다.');
             location.reload();
             return;
         }
         
+        deleteLoadingMap[commentId] = false;
+        deleteLoadingMap = { ...deleteLoadingMap };
+
         alert('댓글 삭제에 실패하였습니다.');
         return;
     }
@@ -140,7 +151,9 @@
 
                                 <!-- 삭제 버튼 -->
                                 {#if $isAdmin || comment.userId == $userInfo}
-                                    <a class="del" on:click={ handleDelete(comment.id) }>삭제</a>
+                                    <a class="del" on:click={ handleDelete(comment.id) }>
+                                        {#if deleteLoadingMap[comment.id]}<Spinner />{/if} 삭제
+                                    </a>
                                 {/if}
                             </li>
                             
@@ -202,7 +215,9 @@
 
                                         <!-- 삭제 버튼 -->
                                         {#if $isAdmin || replyComment.userId == $userInfo}
-                                            <a class="del" on:click={ handleDelete(replyComment.id) }>삭제</a>
+                                            <a class="del" on:click={ handleDelete(replyComment.id) }>
+                                                {#if deleteLoadingMap[replyComment.id]}<Spinner />{/if} 삭제
+                                            </a>
                                         {/if}
                                     </li>
                                 

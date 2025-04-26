@@ -15,6 +15,7 @@
     import Gnb from "../components/Gnb.svelte";
     import Menu2nd from "./Menu2nd.svelte";
     import Footer from "../components/Footer.svelte";
+    import Spinner from './Spinner.svelte';
 
     const url = window.location.pathname;
 
@@ -35,6 +36,8 @@
     let article = null;
     let pageId;
     let page = getPage(categoryType, articleType);
+
+    let isLoading = false;
 
     // TODO url 확인 로직 -> 함수화 하기
     // 마지막 문자열이 숫자인지 확인하는 정규식
@@ -146,6 +149,8 @@
             return;
         }
 
+        isLoading = true;
+
         let apiMethod = 'POST';
         let apiURL = API.ARTICLES.CREATE;
         if (isEditPage) {
@@ -167,11 +172,13 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            isLoading = false;
             alert('게시물 등록이 완료되었습니다.');
             window.location.href = page.listPath;
             return;
         }
 
+        isLoading = false;
         alert('게시물 등록에 실패하였습니다.');
         return;
     }
@@ -265,7 +272,9 @@
     </article>
 
     <article class="btnarea mt40">
-        <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>등록</a>
+        <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>
+            {#if isLoading}<Spinner colorTheme="white"/>{/if} 등록
+        </a>
         <a class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
 </section>
