@@ -240,6 +240,25 @@
         slackInfo = event.detail.slackInfo;
         return;
     }
+
+    function formatItemName(name) {
+        const words       = name.trim().split(/\s+/); // 공백 문자 (띄어쓰기, 탭, 줄바꿈 포함) 기준으로 단어 나누기
+        const totalWords  = words.length;
+        const totalLength = name.replace(/\s+/g, '').length; // 띄어쓰기 제외 글자 수
+
+        // 단어 5개 이상 또는 글자수 14자 이상이면 3줄, 아니면 2줄
+        const targetLineCount = (totalWords >= 5 || totalLength >= 14) ? 3 : 2;
+
+        const lines = Array.from({ length: targetLineCount }, () => []);
+
+        words.forEach((word, index) => {
+            const lineIndex = Math.floor(index * targetLineCount / totalWords);
+            lines[lineIndex].push(word);
+        });
+
+        return lines.map(lineWords => lineWords.join(' ')).join('<br>');
+    }
+
 </script>
 
 
@@ -295,7 +314,7 @@
                 
                                     <!-- 아이템 이름 -->
                                     <span class="item-name">
-                                        { item.itemInfo.itemName }
+                                        { @html formatItemName(item.itemInfo.itemName) }
                                         {#if item.itemInfo.count > 1}
                                             (x{ item.itemInfo.count })
                                         {/if}
@@ -375,7 +394,7 @@
                                     <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
                 
                                     <!-- 아이템 이름 -->
-                                    <span class="item-name">{ item.itemInfo.itemName }</span>
+                                    <span class="item-name">{ @html formatItemName(item.itemInfo.itemName) }</span>
                                     
                                     <!-- 가격 -->
                                     <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
@@ -470,12 +489,14 @@
     .ly_login_info h3 {
         all: unset;
         color: #151518;
-        font-size: 21px;
+        font-size: 18px;
+        font-weight: 500;
     }
 
     .ly_login_info p {
         color: #6a6e76;
         font-size: 14px;
+        line-height: 1.6;
     }
 
     .ly_login_info .ly_logbox {
@@ -521,11 +542,6 @@
         font-size: 0;
     }
 
-    .ly_login_info .btnarea a.btn_n {
-        background: #303544;
-        color: #fff;
-    }
-
     .ly_login_info .btnarea a {
         display: inline-block;
         padding: 0;
@@ -533,7 +549,13 @@
         width: 165px;
         height: 50px;
         line-height: 50px;
-        font-size: 14px;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .ly_login_info .btnarea a.btn_n {
+        background: #303544;
+        color: #fff;
     }
 
     .ly_login_info .btnarea a.btn_b {
@@ -551,6 +573,7 @@
         padding: 8px;
         border-right: none;
         outline: none;
+        font-size: 15px;
     }
 
     input:focus {
@@ -563,6 +586,7 @@
         color: white;
         border: none;
         cursor: pointer;
+        font-size: 15px;
     }
 
     button:hover {
@@ -575,11 +599,12 @@
 
     .result-list ul li, .watch-list ul li {
         display: grid;
-        grid-template-columns: 50px 2fr 100px 100px auto; /* 이미지 | 이름 (넓게) | 가격 | 등록일 | 버튼 */
-        align-items: start;  /* 자동 줄바꿈 시 UI 정렬 유지 */
+        grid-template-columns: 50px 2fr 100px 100px auto;
+        align-items: start;
         gap: 10px;
         padding: 10px;
         border-bottom: 1px solid #ddd;
+        font-size: 14px;
     }
 
     .result-list ul li:last-child, .watch-list ul li:last-child {
@@ -603,19 +628,32 @@
 
     .item-name {
         color: #333;
-        white-space: normal;  /* 자동 줄바꿈 허용 */
+        white-space: normal;
         word-wrap: break-word;
+        font-size: 14px;
+        font-weight: 500;
     }
 
     .item-price {
         text-align: right;
         color: #2a9d8f;
+        font-size: 14px;
     }
 
     .item-date {
         text-align: right;
-        font-size: 14px;
+        font-size: 13px;
         color: #777;
+    }
+
+    .btn-remove, .btn-register {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 112px;
+        height: 36px;
+        padding: 0 12px;
+        font-size: 14px;
     }
 
     .btn-remove {
@@ -626,22 +664,10 @@
         background: #484f61;
     }
 
-    .btn-remove, .btn-register {
-        display: inline-flex; 
-        align-items: center;
-        justify-content: center;
-        min-width: 120px; /* 버튼 고정 최소 너비 */
-        height: 36px;     /* 버튼 고정 높이 */
-        padding: 0 12px;  /* 내부 여백 */
-        font-size: 14px; 
-    }
-
-    // 단순 공백 추가 (search/watch 영역 구분용)
     .blank-space {
         margin-bottom: 25px;
     }
 
-    // 알림 리스트 (판매 완료/기간 만료) 스타일
     .status-wrap {
         display: flex;
         align-items: center;
@@ -653,8 +679,8 @@
     .completed {
         background-color: #f5f5f5;
         opacity: 0.6;
+        
 
-        // & -> 현재 선택된 클래스 의미 (여기선 .completed 의미)
         &:hover {
             background-color: #f0f0f0;
         }
@@ -664,26 +690,34 @@
         .item-date {
             color: #999;
         }
+    }
 
-        .expired {
-            opacity: 0.6;
-            color: #ff4d4d;
-        }
+    span.completed {
+        margin-left: 10px;
+    }
 
-        .btn-x {
-            display: inline-block;
-            opacity: 1;
-            padding: 0 0px;
-            height: 30px;
-            width: 30px;
-            background: #ccc;
-            color: #333;
-        }
+    .expired {
+        opacity: 0.6;
+        color: #ff4d4d;
+    }
 
-        .btn-x:hover {
-            background: #999;
-            color: white;
-        }
+    .btn-x {
+        display: inline-block;
+        opacity: 1;
+        padding: 0;
+        height: 30px;
+        width: 30px;
+        background: #ccc;
+        color: #fff;
+        font-size: 14px;
+        line-height: 30px;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-x:hover {
+        background: #999;
     }
 
     /* 페이징 네비게이션 */
