@@ -1,4 +1,5 @@
-const ROOT = 'http://localhost:7070'; // TODO .env 파일을 통한 경로 관리 추후 고려 ex) const ROOT = import.meta.env.API_ROOT
+export const BACKEND_ROOT = 'https://20fb-2001-e60-2019-6f78-a9d5-10c2-71c2-222c.ngrok-free.app'; // ngrok 을 이용한 임시 배포 주소
+const  ROOT               = 'http://localhost:7070'; // TODO .env 파일을 통한 경로 관리 추후 고려 ex) const ROOT = import.meta.env.API_ROOT
 export const API = {
     LOGO: {
         PUBLISHER:   `${ROOT}/logo/publisher`,

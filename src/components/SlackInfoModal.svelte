@@ -1,6 +1,6 @@
 <script>
-    import { onMount } from "svelte";
-    import { SLACK_API } from '../constants/api';
+    import { onDestroy, onMount } from "svelte";
+    import { BACKEND_ROOT, SLACK_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo } from "../utils/auth";
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
@@ -16,29 +16,31 @@
     export let slackInfo;
     export let onClose;
 
-    const dispatch      = new createEventDispatcher(); // TODO new 사용할 때와 그냥 사용할 때 차이 확인하기
-    let   agree         = false;
-    let   isDeleting    = false;
+    const dispatch   = createEventDispatcher();
+    let   agree      = false;
+    let   isDeleting = false;
     
-    onMount(async () => {
-        // 슬랙 연동 콜백 리스너 등록
-	    window.addEventListener('message', (event) => {
-            // TODO -> 로컬 주소가 아닌 실제 사용한 외부 공유 링크 주소를 기재해야 함 -> 실제 배포할 때 수정 필요
-            if (event.origin !== "https://20fb-2001-e60-2019-6f78-a9d5-10c2-71c2-222c.ngrok-free.app") {
-                return;
-            }
-            
-            if (event.data?.success) {
-                // 설치 페이지 닫기
-                if (event.source?.close) {
-                    event.source.close();
-                }
-
-                dispatch('close', { slackInfo: event.data.slackInfo });
-                return;
-            }
-	    });
+    onMount(() => {
+	    window.addEventListener('message', handleSlackWebhookResponse); // 슬랙 연동 콜백 리스너 등록
     })
+
+    onDestroy(() => {
+        window.removeEventListener('message', handleSlackWebhookResponse);
+    })
+
+    function handleSlackWebhookResponse(event) {
+        if (event.origin !== BACKEND_ROOT) {
+            return;
+        }
+        
+        if (event.data?.success) {
+            if (event.source?.close) {
+                event.source.close(); // 새 탭으로 열린 슬랙 봇 연동 페이지 닫기
+            }
+
+            dispatch('close', { slackInfo: event.data.slackInfo });
+        }
+    }
 
     function openBotInstallPage() {
         if (!agree) {
