@@ -108,8 +108,8 @@
             <dt id="comment_count_dt">댓글 <b>{ comments.length }</b></dt>
             <dd>
                 <a class="go_reply">댓글 쓰러 가기</a>
-                <a href="#" id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
-                <a href="#" id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt=""> 댓글 새로고침</a>
+                <a id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
+                <a id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt=""> 댓글 새로고침</a>
             </dd>
         </dl>
     </div>
