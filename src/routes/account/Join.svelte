@@ -169,7 +169,7 @@
         {/if}
     </main>
 </section>
-<Footer showBorderTop={ true }/>
+<Footer showBorderTop={ true } padding_top="39px"/>
 
 
 <style lang="scss">

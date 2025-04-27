@@ -269,9 +269,7 @@
 
 <Top />
 
-<div class="footer">
-    <Footer />
-</div>
+<Footer />
 
 
 <style lang="scss">
@@ -680,7 +678,7 @@
 
     .footer {
         margin-top: 160px !important;
-        padding-top: 50px;
+        padding-top: 19px;
         border-top: 1px solid #e0e2ec;
     }
 </style>
