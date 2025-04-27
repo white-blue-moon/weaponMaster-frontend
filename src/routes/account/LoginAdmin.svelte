@@ -1,17 +1,19 @@
 <script>
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin } from "../../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin, handleCapsLock } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
+    import CapsLockWarning from '../../components/CapsLockWarning.svelte';
   
     let userId   = "";
     let password = "";
 
-    let isLoginLoading = false;
+    let capsLockWarning = false;
+    let isLoginLoading  = false;
 
     function isValidForm() {
         if (userId == "") {
@@ -76,7 +78,18 @@
                 </li>
                 <li>
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" name="password" placeholder="비밀번호" bind:value={ password } maxlength="16">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="비밀번호"
+                        maxlength="16" 
+                        bind:value={ password }
+                        on:keypress={ (event) => handleCapsLock(event, (value) => capsLockWarning = value) }
+                    >
+                    {#if capsLockWarning}
+                        <CapsLockWarning />
+                    {/if}
                 </li>
 
                 <li class="msg" id="validationMsg">

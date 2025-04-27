@@ -36,3 +36,9 @@ export function handleLogout() {
     alert("로그아웃 되었습니다.");
     window.location.href = "/";
 }
+
+// Caps Lock 감지 함수
+export function handleCapsLock(event, setCapsLockWarning) {
+    const capsLockOn = event.getModifierState("CapsLock");
+    setCapsLockWarning(capsLockOn);
+}

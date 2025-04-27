@@ -1,21 +1,23 @@
 <script>
     import { ADMIN_API, API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin } from "../../utils/auth";
+    import { userInfo, isLoggedIn, handleCapsLock } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
     import BoldLink from '../../components/BoldLink.svelte';
-  import Spinner from '../../components/Spinner.svelte';
+    import Spinner from '../../components/Spinner.svelte';
+    import CapsLockWarning from '../../components/CapsLockWarning.svelte';
   
 
     let userId   = "";
     let password = "";
 
-    let isLoginLoading = false;
-
+    let capsLockWarning = false;
+    let isLoginLoading  = false;
+    
     function isValidForm() {
         if (userId == "") {
             alert("아이디를 입력하여 주세요");
@@ -62,6 +64,8 @@
         alert('로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 한번 확인해 주세요.');
         return;
     }
+
+    
 </script>
 
 <GnbPublisher />
@@ -70,15 +74,26 @@
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
     <article class="login">
-        <form action="/account/login" method="post" id="loginForm" on:submit={onSubmitLogin}>
+        <form action="/account/login" method="post" id="loginForm" on:submit={ onSubmitLogin }>
             <ul class="login_normal">
                 <li>
                     <label for="id">아이디</label>
-                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={userId} autofocus="" maxlength="24">
+                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={ userId } autofocus="" maxlength="24">
                 </li>
                 <li>
                     <label for="password">비밀번호</label>
-                    <input type="password" id="password" name="password" placeholder="비밀번호" bind:value={password} maxlength="16">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="비밀번호" 
+                        maxlength="16" 
+                        bind:value={ password }
+                        on:keypress={ (event) => handleCapsLock(event, (value) => capsLockWarning = value) }
+                    >
+                    {#if capsLockWarning}
+                        <CapsLockWarning />
+                    {/if}
                 </li>
 
                 <li class="msg" id="validationMsg">
@@ -170,8 +185,7 @@
     }
 
     input::placeholder {
-        opacity: 0.5; /* 투명도 조절 */
-        margin-left: 0px;
+        color: #bec5cc;
     }
 
     .login .login_normal li.btn button {
