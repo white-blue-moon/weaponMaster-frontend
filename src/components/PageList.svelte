@@ -11,7 +11,7 @@
     import HeaderBanner from "./HeaderBanner.svelte";
     import Menu2nd from './Menu2nd.svelte';
     import Footer from "./Footer.svelte";
-    import AdminArthor from "./AdminArthor.svelte";
+    import AdminAuthor from "./AdminAuthor.svelte";
     import Spinner from "./Spinner.svelte";
     import Top from "./Top.svelte";
 
@@ -232,9 +232,11 @@
                     </li>
                     {#if categoryType != CATEGORY_TYPE.NEWS}
                         {#if article.isAdminMode}
-                            <AdminArthor />
+                            <AdminAuthor />
                         {:else}
-                            <li class="arthor">{ article.userId }</li>
+                            <li class="author">
+                                { article.userId }
+                            </li>
                         {/if}
                     {/if}
                     <li class="date">{ article.createDate.split('T')[0] }</li>
@@ -564,6 +566,10 @@
     .board_list ul li.title b {
         color: #3392ff;
         font-weight: 500;
+    }
+
+    .board_list ul li.author {
+        width: 140px;
     }
 
     .news_list ul li.date {

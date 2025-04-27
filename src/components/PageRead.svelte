@@ -15,6 +15,7 @@
     import Comment from './Comment.svelte';
     import Spinner from './Spinner.svelte';
     import Top from './Top.svelte';
+    import AdminAuthor from './AdminAuthor.svelte';
     
     let url     = window.location.pathname;
     let pageId  = url.split('/').pop();
@@ -95,7 +96,13 @@
                         {/if}
                     </p>
                     <p class="sinfo">
-                        <span class="arthor">{ article.userId }</span> <!-- TODO 새소식에서는 안 보이는 게 좋을지 고민중 -->
+                        <span class="author">
+                            {#if article.isAdminMode}
+                                <AdminAuthor />
+                            {:else}
+                                { article.userId }
+                            {/if}
+                        </span> <!-- TODO 새소식에서는 안 보이는 게 좋을지 고민중 -->
                         <span class="date">{ formatDate(article.createDate) }</span>
                         <span class="hits">{ article.viewCount }</span>
                     </p>
@@ -134,7 +141,7 @@
             <Comment 
                 categoryType={ article.categoryType }
                 articleType={ article.articleType }
-                arthor={ article.userId }
+                author={ article.userId }
             /> <!-- 공지사항에는 댓글 기재 불가능 -->
         {/if}
 
@@ -254,7 +261,7 @@
         margin-left: 60px;
     }
 
-    .board_view dl dd p.sinfo .arthor {
+    .board_view dl dd p.sinfo .author {
         margin-left: 0; /* 기본 마진 제거 */
         margin-right: auto; /* 남은 공간을 오른쪽으로 밀어 좌측 정렬 */
         padding-left: 30px;

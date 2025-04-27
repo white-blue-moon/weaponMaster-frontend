@@ -3,7 +3,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
-    import AdminArthor from "./AdminArthor.svelte";
+    import AdminAuthor from "./AdminAuthor.svelte";
     import Spinner from "./Spinner.svelte";
 
 
@@ -111,7 +111,7 @@
             <!-- svelte-ignore a11y-missing-attribute -->
             <a class="name {reCommentId > 0 ? 'reply' : ''}">
                 {#if $isAdmin}
-                    <AdminArthor />
+                    <AdminAuthor />
                 {:else}
                     { $userInfo }
                 {/if}

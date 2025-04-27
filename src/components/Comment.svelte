@@ -8,12 +8,12 @@
     import { ARTICLE_TYPE, CATEGORY_TYPE } from "../constants/articles";
 
     import CommentEnter from "./CommentEnter.svelte";
-    import AdminArthor from "./AdminArthor.svelte";
+    import AdminAuthor from "./AdminAuthor.svelte";
     import Spinner from "./Spinner.svelte";
 
     export let categoryType;
     export let articleType;
-    export let arthor;
+    export let author;
 
     const url = window.location.pathname;
     let articleId = 0;
@@ -131,7 +131,7 @@
                                 <!-- svelte-ignore a11y-missing-attribute -->
                                 <a class="name dnf_charac_name_tag">
                                     {#if comment.isAdminMode}
-                                        <AdminArthor />
+                                        <AdminAuthor />
                                     {:else}
                                         { comment.userId }
                                     {/if}
@@ -170,7 +170,7 @@
 
                 {#if reCommentVisible[comment.id]}
                     {#if isPrivacyArticle() }
-                        {#if arthor == $userInfo || $isAdmin }
+                        {#if author == $userInfo || $isAdmin }
                             <CommentEnter reCommentId={comment.id} /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
                         {:else}
                             <CommentEnter reCommentId={comment.id} privacyMode={ true }/>
@@ -194,7 +194,7 @@
                                         <!-- svelte-ignore a11y-missing-attribute -->
                                         <a class="name dnf_charac_name_tag">
                                             {#if replyComment.isAdminMode}
-                                                <AdminArthor />
+                                                <AdminAuthor />
                                             {:else}
                                                 { replyComment.userId }
                                             {/if}
@@ -225,7 +225,7 @@
         </div>
 
         {#if isPrivacyArticle() }
-            {#if arthor == $userInfo || $isAdmin }
+            {#if author == $userInfo || $isAdmin }
                 <CommentEnter /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
             {:else}
                 <CommentEnter privacyMode={ true }/>
