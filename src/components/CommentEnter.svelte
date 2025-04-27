@@ -112,7 +112,7 @@
             <a class="name {reCommentId > 0 ? 'reply' : ''}">
                 {#if $isAdmin}
                     <AdminAuthor />
-                {:else}
+                {:else if $userInfo}
                     { $userInfo }
                 {/if}
             </a>
@@ -240,14 +240,14 @@
         cursor: pointer;
     }
 
-.comment_enter ul li a.name.reply::before {
-    content: '';
-    display: inline-block;
-    margin: -4px 13px 0 0;
-    width: 8px;
-    height: 8px;
-    border-left: 1px solid #6a6e76;
-    border-bottom: 1px solid #6a6e76;
-    vertical-align: middle;
-}
+    .comment_enter ul li a.name.reply::before {
+        content: '';
+        display: inline-block;
+        margin: -4px 13px 0 0;
+        width: 8px;
+        height: 8px;
+        border-left: 1px solid #6a6e76;
+        border-bottom: 1px solid #6a6e76;
+        vertical-align: middle;
+    }
 </style>
