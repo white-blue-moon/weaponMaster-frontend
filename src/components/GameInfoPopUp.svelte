@@ -451,10 +451,20 @@
                                     <span class="item-img" style="background-image: url('{ item.imgUrl }');"></span>
                 
                                     <!-- 아이템 이름 -->
-                                    <span class="item-name">{ @html formatItemName(item.itemInfo.itemName) }</span>
+                                    <span class="item-name">
+                                        { @html formatItemName(item.itemInfo.itemName) }
+                                        {#if item.itemInfo.count > 1}
+                                            (x{ item.itemInfo.count })
+                                        {/if}
+                                    </span>
                                     
                                     <!-- 가격 -->
-                                    <span class="item-price">{ item.itemInfo.currentPrice.toLocaleString() } G</span>
+                                    <span class="item-price">
+                                        { item.itemInfo.currentPrice.toLocaleString() } G
+                                        {#if item.itemInfo.count > 1}
+                                            ({(item.itemInfo.currentPrice/item.itemInfo.count).toLocaleString()})
+                                        {/if}
+                                    </span>
                                     
                                     <!-- 등록일 -->
                                     <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>

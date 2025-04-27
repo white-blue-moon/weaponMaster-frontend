@@ -12,6 +12,7 @@
     import Footer from '../components/Footer.svelte';
     import Spinner from '../components/Spinner.svelte';
     import Top from '../components/Top.svelte';
+    import CharacterBanner from '../components/CharacterBanner.svelte';
     
     let focusBanners     = [];
     let newsArticles     = [];
@@ -93,6 +94,8 @@
 </div>
 
 <Top />
+
+<CharacterBanner />
 
 <!-- TODO 풀 배너 이벤트 등록하기 -->
 <!-- <FullBanner /> -->
