@@ -2,32 +2,37 @@
     import { onMount } from 'svelte';
 
 
-    export let banners   = [];
+    export let banners = [];
 
+    let bannerMap    = new Map();
     let activeBanner = {};
-    let activeCharacterType; 
+    let activeCharacterType;
+    
     let selectedDetailType = 1;
 
     onMount(() => {
-        activeCharacterType = banners[0].characterType; // 기본적으로 맨 첫번째 항목 출력
-        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        if (banners.length > 0) {
+            bannerMap           = new Map(banners.map(b => [b.characterType, b]));
+            activeCharacterType = banners[0].characterType;
+            activeBanner        = bannerMap.get(activeCharacterType);
+        }
     });
 
     function movePrev() {
-        const idx     = banners.findIndex(b => b.characterType === activeCharacterType);
+        const idx = banners.findIndex(b => b.characterType === activeCharacterType);
         const prevIdx = (idx - 1 + banners.length) % banners.length;
 
         activeCharacterType = banners[prevIdx].characterType;
-        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        activeBanner        = bannerMap.get(activeCharacterType);
         selectedDetailType  = 1;
     }
 
     function moveNext() {
-        const idx     = banners.findIndex(b => b.characterType === activeCharacterType);
+        const idx = banners.findIndex(b => b.characterType === activeCharacterType);
         const nextIdx = (idx + 1) % banners.length;
 
         activeCharacterType = banners[nextIdx].characterType;
-        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        activeBanner        = bannerMap.get(activeCharacterType);
         selectedDetailType  = 1;
     }
 
@@ -35,6 +40,7 @@
         selectedDetailType = detailType;
     }
 </script>
+
   
 
 <section class="char_info " id="characSection">
