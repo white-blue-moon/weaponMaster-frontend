@@ -44,15 +44,19 @@
   
 
 <section class="char_info " id="characSection">
+    <!-- 좌, 우 컨트롤러 -->
     <article class="char_control">
         <a class="arrow_l" on:click={() => movePrev()}>prev</a>
         <a class="arrow_r" on:click={() => moveNext()}>next</a>
+        
+        <!-- 캐릭터 이름 이미지 -->
         <span class="mc_txt" style="background: url('{activeBanner.nameImgUrl}');"></span>
     </article>
     {#each banners as banner}
-        <article class="c_box  {banner.characterType === activeCharacterType ? 'on' : 'off'}">
+        <article class="c_box {banner.characterType === activeCharacterType ? 'on' : 'off'}">
             <ul class="char_bnr">
                 {#each banner.bannerDetails as detail}
+                    <!-- 메인 배너 이미지 -->
                     <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
                         <a href="{detail.homepageLinkUrl}" target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
                         <p class="name">{detail.characterName}</p>
@@ -60,13 +64,15 @@
                     </li>
                 {/each}
             </ul>
+
+            <!-- 하단 썸네일 이미지 -->
             <p class="char_thum">
                 {#each banner.bannerDetails as detail, idx}
                     <a 
                         class="c_pos{idx + 1} {idx + 1 === selectedDetailType ? 'on' : ''}" 
                         on:click={() => clickDetailType(idx+1)}
                         style="--thumb-img-url: url('{banner.thumbImgUrl}');"
-                    >
+                    >   <!-- 하단 썸네일 이미지 > 캐릭터 직업 이름 -->
                         <i>{detail.characterName}</i>
                     </a>
                 {/each}
