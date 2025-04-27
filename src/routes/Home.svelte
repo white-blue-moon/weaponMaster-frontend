@@ -11,6 +11,7 @@
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     import Spinner from '../components/Spinner.svelte';
+    import Top from '../components/Top.svelte';
     
     let focusBanners     = [];
     let newsArticles     = [];
@@ -90,8 +91,12 @@
         <ListBox articles={ bestViewArticles }/>
     {/if}
 </div>
+
+<Top />
+
 <!-- TODO 풀 배너 이벤트 등록하기 -->
 <!-- <FullBanner /> -->
+
 <Footer />
 
 

@@ -9,7 +9,6 @@
 
     import Spinner from "./Spinner.svelte";
     import AgreeBox from "./AgreeBox.svelte";
-    import BlueButton from "./BlueButton.svelte";
   
 
     export let slackBotInstallUrl;

@@ -13,6 +13,7 @@
     import Footer from "./Footer.svelte";
     import AdminArthor from "./AdminArthor.svelte";
     import Spinner from "./Spinner.svelte";
+    import Top from "./Top.svelte";
 
     export let categoryType;
     export let articleType;
@@ -266,8 +267,7 @@
     </article>
 </section>
 
-<!-- TODO 별도 컴포넌트로 빼기 -->
-<a class="top" style="position: fixed; display: inline;" id="gnbTopBtn">TOP</a>
+<Top />
 
 <div class="footer">
     <Footer />
@@ -676,24 +676,6 @@
 
     .bold {
         font-weight: 500 !important;
-    }
-
-    /* top 버튼 */
-    .top {
-        display: none;
-        position: absolute;
-        right: 40px;
-        bottom: 40px;
-        width: 70px;
-        height: 70px;
-        background: #484e5f;
-        box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.12);
-        text-align: center;
-        color: #fff;
-        font-size: 13px;
-        line-height: 70px;
-        cursor: pointer;
-        z-index: 100;
     }
 
     .footer {

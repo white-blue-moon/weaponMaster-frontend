@@ -14,6 +14,7 @@
     import Footer from '../components/Footer.svelte';
     import Comment from './Comment.svelte';
     import Spinner from './Spinner.svelte';
+    import Top from './Top.svelte';
     
     let url     = window.location.pathname;
     let pageId  = url.split('/').pop();
@@ -141,6 +142,7 @@
 {/if}
 
 <!-- TODO 하단에 게시물 목록 출력하기 -->
+<Top />
 
 <div class="footer">
     <Footer />

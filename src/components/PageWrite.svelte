@@ -16,6 +16,7 @@
     import Menu2nd from "./Menu2nd.svelte";
     import Footer from "../components/Footer.svelte";
     import Spinner from './Spinner.svelte';
+    import Top from './Top.svelte';
 
     const url = window.location.pathname;
 
@@ -278,6 +279,8 @@
         <a class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
 </section>
+
+<Top />
 
 <div class="footer">
     <Footer />
