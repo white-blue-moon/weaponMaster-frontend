@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { PATHS } from "../constants/paths";
     import { createEventDispatcher } from "svelte";
     import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
@@ -75,6 +75,13 @@
         isApiLoaded = true;
     });
 
+    onDestroy(async () => {
+        // 웹소켓 연결 해제
+        if (client && client.active) {
+            await client.deactivate();
+        }
+    });
+
     function connectWebSocket() {
         client = new Client({
             brokerURL: "", // 직접 WebSocket 쓰지 않고 sockjs 로
@@ -84,15 +91,13 @@
             onConnect: () => {
                 client.subscribe(WEB_SOCKET_API.AUCTION_STATE, (message) => {
                     const response = JSON.parse(message.body);
-
-                    // 판매완료/기간만료 처리
-                    handleAuctionStateChange(response);
+                    handleAuctionStateChange(response); // 판매완료/기간만료 처리
                 });
             },
 
             onStompError: (frame) => {
-                console.error('Broker reported error: ' + frame.headers['message']);
-                console.error('Additional details: ' + frame.body);
+                console.error('[WebSocket error] Broker reported error: ' + frame.headers['message']);
+                console.error('[WebSocket error] Additional details: ' + frame.body);
             }
         });
 
