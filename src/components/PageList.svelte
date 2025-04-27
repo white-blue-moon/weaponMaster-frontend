@@ -12,7 +12,7 @@
     import Menu2nd from './Menu2nd.svelte';
     import Footer from "./Footer.svelte";
     import AdminArthor from "./AdminArthor.svelte";
-  import Spinner from "./Spinner.svelte";
+    import Spinner from "./Spinner.svelte";
 
     export let categoryType;
     export let articleType;

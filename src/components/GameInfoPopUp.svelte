@@ -21,7 +21,7 @@
 
     const dispatch = createEventDispatcher(); // TODO new 를 사용할 때와 그렇지 않을 떄의 차이점 확인 필요
     let searchInput;
-    let maxNoticeCount = 5; // 한 번에 추적할 수 있는 최대 판매 알림 개수
+    let maxNoticeCount = 5; // 한 번에 추적할 수 있는 최대 판매 알림 개수 (백엔드에서 몇 개 등록 가능한지 받아옴)
 
     let search = {
         list:       [],
@@ -82,11 +82,8 @@
             reconnectDelay: 5000, // 연결 끊겼을 때 재연결
 
             onConnect: () => {
-                console.log("WebSocket connected!");
-
                 client.subscribe(WEB_SOCKET_API.AUCTION_STATE, (message) => {
                     const response = JSON.parse(message.body);
-                    console.log("판매 상태 변경 알림 수신: ", response);
 
                     // 판매완료/기간만료 처리
                     handleAuctionStateChange(response);
@@ -174,7 +171,6 @@
             }
 
             loadingButtonMap[item.itemInfo.auctionNo] = true;
-            loadingButtonMap = { ...loadingButtonMap }; // 반응성 트리거
 
             const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.CREATE, {
                 method: "POST",
@@ -188,22 +184,18 @@
 
             if (response.success) {
                 loadingButtonMap[item.itemInfo.auctionNo] = false;
-                loadingButtonMap = { ...loadingButtonMap };
-
                 item.auctionState = AUCTION_STATE.SELLING;
-                watch.list = [item, ...watch.list];
+                watch.list        = [item, ...watch.list];
                 updatePagination(watch);
                 return;
             }
 
             loadingButtonMap[item.itemInfo.auctionNo] = false;
-            loadingButtonMap = { ...loadingButtonMap };
             alert('판매 알림 등록에 실패하였습니다');
             return;
         }
 
         loadingButtonMap[item.itemInfo.auctionNo] = true;
-        loadingButtonMap = { ...loadingButtonMap }; // 반응성 트리거
 
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
             method: "DELETE",
@@ -216,16 +208,12 @@
 
         if (response.success) {
             loadingButtonMap[item.itemInfo.auctionNo] = false;
-            loadingButtonMap = { ...loadingButtonMap };
-
             watch.list = watch.list.filter(w => w.itemInfo.auctionNo !== item.itemInfo.auctionNo);
             updatePagination(watch);
             return;
         }
 
         loadingButtonMap[item.itemInfo.auctionNo] = false;
-        loadingButtonMap = { ...loadingButtonMap };
-
         alert('판매 알림 해제에 실패하였습니다');
         return;
     }

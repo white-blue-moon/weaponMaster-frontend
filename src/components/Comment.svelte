@@ -36,7 +36,6 @@
         }
 
         deleteLoadingMap[commentId] = true;
-        deleteLoadingMap = { ...deleteLoadingMap }; // 반응성 트리거
 
         const response = await apiFetch(API.COMMENTS.DELETE(commentId), {
             method: 'DELETE',
@@ -49,16 +48,12 @@
 
         if (response.success) {
             deleteLoadingMap[commentId] = false;
-            deleteLoadingMap = { ...deleteLoadingMap };
-
             alert('댓글이 삭제되었습니다.');
             location.reload();
             return;
         }
         
         deleteLoadingMap[commentId] = false;
-        deleteLoadingMap = { ...deleteLoadingMap };
-
         alert('댓글 삭제에 실패하였습니다.');
         return;
     }
@@ -99,10 +94,10 @@
         return false;
     }
 
-    let reCommentVisible = {}; // 각 댓글별로 답글창 ON/OFF 상태 관리
+    // 각 댓글별로 답글창 ON/OFF 상태 관리
+    let reCommentVisible = {}; 
     function toggleReply(commentId) {
         reCommentVisible[commentId] = !reCommentVisible[commentId];
-        reCommentVisible = { ...reCommentVisible }; // 상태 갱신 트리거 (Svelte 상태 변경 인식)
     }
 </script>
 
