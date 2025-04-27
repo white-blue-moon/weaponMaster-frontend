@@ -1,105 +1,170 @@
 <script>
-    // ===== DB 컬럼 구조 ======
-    // -  배너 리스트 버전
-    // 0. 캐릭터 타입 (번호 타입 <-> 매칭)
-    // -  캐릭터 설명 (참고용)
-    // 1. 캐릭터 이름 이미지 url 
-    // 2. 배너 출력 순서
+    import { onMount } from 'svelte';
 
-    // -  배너 리스트 버전
-    // 1. 캐릭터 타입 (번호 타입 <-> 매칭) -> 클래스 변수 -> 자동으로 char04 할당하기
-    // 2. 캐릭터(직업) 이름
-    // 3. 캐릭터(직업) 소개 1줄
-    // 4. 메인 이미지 (선택) char_bnr
-    // 5. 작은 이미지 (목록) char_thum
-    // 6. 작은 이미지 (목록) char_thum 순서
+
+    let banners = [];
+    let activeBanner;
+    let activeCharacterType; 
+
+    let isLoading = true;
+    
+    onMount(async () => {
+        await fetchBanners();
+        isLoading = false;
+    });
+
+    function movePrev() {
+        const idx     = banners.findIndex(b => b.characterType === activeCharacterType);
+        const prevIdx = (idx - 1 + banners.length) % banners.length;
+
+        activeCharacterType = banners[prevIdx].characterType;
+        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        selectedDetailType  = 1;
+    }
+
+    function moveNext() {
+        const idx     = banners.findIndex(b => b.characterType === activeCharacterType);
+        const nextIdx = (idx + 1) % banners.length;
+
+        activeCharacterType = banners[nextIdx].characterType;
+        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        selectedDetailType  = 1;
+    }
+
+    // 예시: API로 받아온 데이터
+    async function fetchBanners() {
+        // 실제로는 API 호출로 바꿔야 함 -> export 해서 home 에서 받아오게 하기
+        banners = [
+            {
+            characterType: 4, // 격투가(여)
+            nameImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt04.png",
+            thumbImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_04.png",
+            bannerDetails: [
+                {
+                characterName: "넨마스터(여)",
+                characterIntro: "넨의 힘을 활용하기 위한 수련을 한 격투가",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg14_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim14",
+                characterDetailType: 1,
+                },
+                {
+                characterName: "스트라이커(여)",
+                characterIntro: "육체를 극한까지 단련한 정통파 격투가",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg15_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim15",
+                characterDetailType: 2,
+                },
+                {
+                characterName: "스트리트파이터(여)",
+                characterIntro: "이기는 싸움을 추구하는 실전 격투가",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg16_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim16",
+                characterDetailType: 3,
+                },
+                {
+                characterName: "그래플러(여)",
+                characterIntro: "잡기 기술을 극한까지 연마한 격투가",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg17_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim17",
+                characterDetailType: 4,
+                },
+            ],
+            },
+            {
+            characterType: 1, // 귀검사(남)
+            nameImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt01.png",
+            thumbImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_01.png",
+            bannerDetails: [
+                {
+                characterName: "웨펀마스터",
+                characterIntro: "귀수에 깃든 귀신을 억누르며 검술 연마에 매진하는 귀검사",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg01_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim01",
+                characterDetailType: 1,
+                },
+                {
+                characterName: "소울브링어",
+                characterIntro: "귀신과 소통함으로써 그 힘을 활용할 수 있게 된 귀검사",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg02_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim02",
+                characterDetailType: 2,
+                },
+                {
+                characterName: "버서커",
+                characterIntro: "강력한 힘을 위해 부작용을 감수하며 카잔증후군을 받아들인 귀검사",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg03_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim03",
+                characterDetailType: 3,
+                },
+                {
+                characterName: "아수라",
+                characterIntro: "파동의 힘을 느끼기 위해 스스로 시력을 포기한 귀검사",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg04_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim04",
+                characterDetailType: 4,
+                },
+                {
+                characterName: "검귀",
+                characterIntro: "원귀의 혼과 융합하여 귀신과 인간의 경계에 선 귀검사",
+                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg05_3.jpg",
+                homepageLinkUrl: "/pg/characters/cim05",
+                characterDetailType: 5,
+                },
+            ],
+            },
+        ];
+
+        activeCharacterType = banners[0].characterType; // 기본 활성화 타입 세팅
+        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
+        
+    }
+
+    let selectedDetailType = 1;
+    function clickDetailType(detailType) {
+        selectedDetailType = detailType;
+    }
+
+    function getCharClassName(characterType) {
+        const charNo = String(characterType).padStart(2, '0'); // 01, 04 와 같이 두 자리로 만들어줌
+        return "char" + charNo;
+    }
 </script>
+  
 
+{#if !isLoading}
+    <section class="char_info { getCharClassName(activeCharacterType) }" id="characSection">
+        <article class="char_control">
+            <a class="arrow_l" on:click={() => movePrev()}>prev</a>
+            <a class="arrow_r" on:click={() => moveNext()}>next</a>
+            <span class="mc_txt" style="background: url('{activeBanner.nameImgUrl}');"></span>
+        </article>
 
-<section class="char_info char04" id="characSection">
-    <article class="char_control">
-        <a class="arrow_l">prev</a>
-        <a class="arrow_r">next</a>
-        <span class="mc_txt"></span>
-    </article>
-
-    <article class="c_box char04 on">
-        <ul class="char_bnr">
-        <li style="background: url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg14_3.jpg') no-repeat" class="on">
-            <a href="/pg/characters/cim14" class="on" data-gtm-type="character-section"></a>
-            <p class="name">넨마스터(여)</p>
-            <p class="info">넨의 힘을 활용하기 위한 수련을 한 격투가</p>
-        </li>
-        <li style="background: url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg15_3.jpg') no-repeat">
-            <a href="/pg/characters/cim15" data-gtm-type="character-section" class="on"></a>
-            <p class="name">스트라이커(여)</p>
-            <p class="info">육체를 극한까지 단련한 정통파 격투가</p>
-        </li>
-        <li style="background: url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg16_3.jpg') no-repeat">
-            <a href="/pg/characters/cim16" data-gtm-type="character-section" class="on"></a>
-            <p class="name">스트리트파이터(여)</p>
-            <p class="info">이기는 싸움을 추구하는 실전 격투가</p>
-        </li>
-        <li style="background: url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg17_3.jpg') no-repeat">
-            <a href="/pg/characters/cim17" data-gtm-type="character-section" class="on"></a>
-            <p class="name">그래플러(여)</p>
-            <p class="info">잡기 기술을 극한까지 연마한 격투가</p>
-        </li>
-        </ul>
-    
-        <p class="char_thum">
-        <a class="c_pos1 on"><i>넨마스터(여)</i></a>
-        <a class="c_pos2"><i>스트라이커(여)</i></a>
-        <a class="c_pos3"><i>스트리트파이터(여)</i></a>
-        <a class="c_pos4"><i>그래플러(여)</i></a>
-        </p>
-    </article>
-
-    <!-- <article class="c_box char01 off">
-        <ul class="char_bnr">
-        <li 
-            class="on"
-            style="background:url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg01_3.jpg') no-repeat"
-        >
-            <a href="/pg/characters/cim01" class="on" data-gtm-type="character-section"></a>
-            <p class="name">웨펀마스터</p>
-            <p class="info">귀수에 깃든 귀신을 억누르며 검술 연마에 매진하는 귀검사</p>
-        </li>
-    
-        <li style="background:url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg02_3.jpg') no-repeat">
-            <a href="/pg/characters/cim02" class="on" data-gtm-type="character-section"></a>
-            <p class="name">소울브링어</p>
-            <p class="info">귀신과 소통함으로써 그 힘을 활용할 수 있게 된 귀검사</p>
-        </li>
-    
-        <li style="background:url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg03_3.jpg') no-repeat">
-            <a href="/pg/characters/cim03" class="on" data-gtm-type="character-section"></a>
-            <p class="name">버서커</p>
-            <p class="info">강력한 힘을 위해 부작용을 감수하며 카잔증후군을 받아들인 귀검사</p>
-        </li>
-    
-        <li style="background:url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg04_3.jpg') no-repeat">
-            <a href="/pg/characters/cim04" class="on" data-gtm-type="character-section"></a>
-            <p class="name">아수라</p>
-            <p class="info">파동의 힘을 느끼기 위해 스스로 시력을 포기한 귀검사</p>
-        </li>
-    
-        <li style="background:url('https://bbscdn.df.nexon.com/pg/characters/img/bg/bg05_3.jpg') no-repeat">
-            <a href="/pg/characters/cim05" class="on" data-gtm-type="character-section"></a>
-            <p class="name">검귀</p>
-            <p class="info">원귀의 혼과 융합하여 귀신과 인간의 경계에 선 귀검사</p>
-        </li>
-        </ul>
-    
-        <p class="char_thum">
-        <a class="c_pos1 on"><i>웨펀마스터</i></a>
-        <a class="c_pos2"><i>소울브링어</i></a>
-        <a class="c_pos3"><i>버서커</i></a>
-        <a class="c_pos4"><i>아수라</i></a>
-        <a class="c_pos5"><i>검귀</i></a>
-        </p>
-    </article> -->      
-</section>  
+        {#each banners as banner}
+            <article class="c_box { getCharClassName(banner.characterType) } {banner.characterType === activeCharacterType ? 'on' : 'off'}">
+                <ul class="char_bnr">
+                    {#each banner.bannerDetails as detail}
+                        <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
+                        <a href="{detail.homepageLinkUrl}" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
+                        <p class="name">{detail.characterName}</p>
+                        <p class="info">{detail.characterIntro}</p>
+                        </li>
+                    {/each}
+                </ul>
+                <p class="char_thum">
+                    {#each banner.bannerDetails as detail, idx}
+                        <a 
+                            class="c_pos{idx + 1} {idx + 1 === selectedDetailType ? 'on' : ''}" 
+                            on:click={() => clickDetailType(idx+1)}
+                            style="--thumb-img-url: url('{banner.thumbImgUrl}');"
+                        >
+                            <i>{detail.characterName}</i>
+                        </a>
+                    {/each}
+                </p>
+            </article>
+        {/each}
+    </section>
+{/if}
 
 
 <style lang="scss">
@@ -390,22 +455,8 @@
         height: 100px;
     }
 
-    .char01 .mc_txt {
-        background: url('https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt01.png') no-repeat;
-    }
-
-    /* ê²©íˆ¬ê°€(ë‚¨) */
-    .char04 .mc_txt {
-        background: url('https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt04.png') no-repeat;
-    }
-
-    /* ì•„ì²˜ */
-    .char01 .char_thum a::before {
-        background: url('https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_01.png') no-repeat;
-    }
-
-    /* ê²©íˆ¬ê°€(ë‚¨) */
-    .char04 .char_thum a::before {
-        background: url('https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_04.png') no-repeat;
+    .char_thum a::before {
+        content: "";
+        background: var(--thumb-img-url) no-repeat;
     }
 </style>
