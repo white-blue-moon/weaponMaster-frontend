@@ -2,15 +2,15 @@
     import { onMount } from 'svelte';
 
 
-    let banners = [];
-    let activeBanner;
-    let activeCharacterType; 
+    export let banners   = [];
 
-    let isLoading = true;
-    
-    onMount(async () => {
-        await fetchBanners();
-        isLoading = false;
+    let activeBanner = {};
+    let activeCharacterType; 
+    let selectedDetailType = 1;
+
+    onMount(() => {
+        activeCharacterType = banners[0].characterType; // 기본적으로 맨 첫번째 항목 출력
+        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
     });
 
     function movePrev() {
@@ -31,134 +31,43 @@
         selectedDetailType  = 1;
     }
 
-    // 예시: API로 받아온 데이터
-    async function fetchBanners() {
-        // 실제로는 API 호출로 바꿔야 함 -> export 해서 home 에서 받아오게 하기
-        banners = [
-            {
-            characterType: 4, // 격투가(여)
-            nameImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt04.png",
-            thumbImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_04.png",
-            bannerDetails: [
-                {
-                characterName: "넨마스터(여)",
-                characterIntro: "넨의 힘을 활용하기 위한 수련을 한 격투가",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg14_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim14",
-                characterDetailType: 1,
-                },
-                {
-                characterName: "스트라이커(여)",
-                characterIntro: "육체를 극한까지 단련한 정통파 격투가",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg15_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim15",
-                characterDetailType: 2,
-                },
-                {
-                characterName: "스트리트파이터(여)",
-                characterIntro: "이기는 싸움을 추구하는 실전 격투가",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg16_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim16",
-                characterDetailType: 3,
-                },
-                {
-                characterName: "그래플러(여)",
-                characterIntro: "잡기 기술을 극한까지 연마한 격투가",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg17_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim17",
-                characterDetailType: 4,
-                },
-            ],
-            },
-            {
-            characterType: 1, // 귀검사(남)
-            nameImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/main/mc_txt01.png",
-            thumbImgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/thum/thum_char_01.png",
-            bannerDetails: [
-                {
-                characterName: "웨펀마스터",
-                characterIntro: "귀수에 깃든 귀신을 억누르며 검술 연마에 매진하는 귀검사",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg01_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim01",
-                characterDetailType: 1,
-                },
-                {
-                characterName: "소울브링어",
-                characterIntro: "귀신과 소통함으로써 그 힘을 활용할 수 있게 된 귀검사",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg02_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim02",
-                characterDetailType: 2,
-                },
-                {
-                characterName: "버서커",
-                characterIntro: "강력한 힘을 위해 부작용을 감수하며 카잔증후군을 받아들인 귀검사",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg03_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim03",
-                characterDetailType: 3,
-                },
-                {
-                characterName: "아수라",
-                characterIntro: "파동의 힘을 느끼기 위해 스스로 시력을 포기한 귀검사",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg04_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim04",
-                characterDetailType: 4,
-                },
-                {
-                characterName: "검귀",
-                characterIntro: "원귀의 혼과 융합하여 귀신과 인간의 경계에 선 귀검사",
-                imgUrl: "https://bbscdn.df.nexon.com/pg/characters/img/bg/bg05_3.jpg",
-                homepageLinkUrl: "/pg/characters/cim05",
-                characterDetailType: 5,
-                },
-            ],
-            },
-        ];
-
-        activeCharacterType = banners[0].characterType; // 기본 활성화 타입 세팅
-        activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
-    }
-
-    let selectedDetailType = 1;
     function clickDetailType(detailType) {
         selectedDetailType = detailType;
     }
 </script>
   
 
-{#if !isLoading}
-    <section class="char_info " id="characSection">
-        <article class="char_control">
-            <a class="arrow_l" on:click={() => movePrev()}>prev</a>
-            <a class="arrow_r" on:click={() => moveNext()}>next</a>
-            <span class="mc_txt" style="background: url('{activeBanner.nameImgUrl}');"></span>
+<section class="char_info " id="characSection">
+    <article class="char_control">
+        <a class="arrow_l" on:click={() => movePrev()}>prev</a>
+        <a class="arrow_r" on:click={() => moveNext()}>next</a>
+        <span class="mc_txt" style="background: url('{activeBanner.nameImgUrl}');"></span>
+    </article>
+    {#each banners as banner}
+        <article class="c_box  {banner.characterType === activeCharacterType ? 'on' : 'off'}">
+            <ul class="char_bnr">
+                {#each banner.bannerDetails as detail}
+                    <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
+                        <a href="{detail.homepageLinkUrl}" target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
+                        <p class="name">{detail.characterName}</p>
+                        <p class="info">{detail.characterIntro}</p>
+                    </li>
+                {/each}
+            </ul>
+            <p class="char_thum">
+                {#each banner.bannerDetails as detail, idx}
+                    <a 
+                        class="c_pos{idx + 1} {idx + 1 === selectedDetailType ? 'on' : ''}" 
+                        on:click={() => clickDetailType(idx+1)}
+                        style="--thumb-img-url: url('{banner.thumbImgUrl}');"
+                    >
+                        <i>{detail.characterName}</i>
+                    </a>
+                {/each}
+            </p>
         </article>
-
-        {#each banners as banner}
-            <article class="c_box  {banner.characterType === activeCharacterType ? 'on' : 'off'}">
-                <ul class="char_bnr">
-                    {#each banner.bannerDetails as detail}
-                        <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
-                            <a href="{detail.homepageLinkUrl}" target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
-                            <p class="name">{detail.characterName}</p>
-                            <p class="info">{detail.characterIntro}</p>
-                        </li>
-                    {/each}
-                </ul>
-                <p class="char_thum">
-                    {#each banner.bannerDetails as detail, idx}
-                        <a 
-                            class="c_pos{idx + 1} {idx + 1 === selectedDetailType ? 'on' : ''}" 
-                            on:click={() => clickDetailType(idx+1)}
-                            style="--thumb-img-url: url('{banner.thumbImgUrl}');"
-                        >
-                            <i>{detail.characterName}</i>
-                        </a>
-                    {/each}
-                </p>
-            </article>
-        {/each}
-    </section>
-{/if}
+    {/each}
+</section>
 
 
 <style lang="scss">

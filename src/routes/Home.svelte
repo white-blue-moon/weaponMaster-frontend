@@ -17,6 +17,7 @@
     let focusBanners     = [];
     let newsArticles     = [];
     let bestViewArticles = [];
+    let characterBanners = [];
     
     let mainFocusBanner, newsFirstBanner, newsSecondBanner;
     let isLoading = true; // 데이터 로딩 중 상태를 관리할 변수
@@ -37,7 +38,8 @@
             focusBanners     = response.data.focusBanners;
             newsArticles     = response.data.newsArticles;
             bestViewArticles = response.data.bestViewArticles;
-            isLoading          = false;
+            characterBanners = response.data.characterBanners;
+            isLoading        = false;
         }
     }
 
@@ -89,13 +91,13 @@
 </div>
 <div class="guide-and-recommand">
     {#if !isLoading}
-        <ListBox articles={ bestViewArticles }/>
+        <ListBox articles={ bestViewArticles } />
     {/if}
 </div>
 
 <Top />
 
-<CharacterBanner />
+{#if !isLoading} <CharacterBanner banners={ characterBanners } /> {/if}
 
 <!-- TODO 풀 배너 이벤트 등록하기 -->
 <!-- <FullBanner /> -->
