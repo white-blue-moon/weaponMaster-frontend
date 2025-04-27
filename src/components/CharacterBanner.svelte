@@ -116,23 +116,17 @@
 
         activeCharacterType = banners[0].characterType; // 기본 활성화 타입 세팅
         activeBanner        = banners.find(banner => banner.characterType === activeCharacterType);
-        
     }
 
     let selectedDetailType = 1;
     function clickDetailType(detailType) {
         selectedDetailType = detailType;
     }
-
-    function getCharClassName(characterType) {
-        const charNo = String(characterType).padStart(2, '0'); // 01, 04 와 같이 두 자리로 만들어줌
-        return "char" + charNo;
-    }
 </script>
   
 
 {#if !isLoading}
-    <section class="char_info { getCharClassName(activeCharacterType) }" id="characSection">
+    <section class="char_info " id="characSection">
         <article class="char_control">
             <a class="arrow_l" on:click={() => movePrev()}>prev</a>
             <a class="arrow_r" on:click={() => moveNext()}>next</a>
@@ -140,13 +134,13 @@
         </article>
 
         {#each banners as banner}
-            <article class="c_box { getCharClassName(banner.characterType) } {banner.characterType === activeCharacterType ? 'on' : 'off'}">
+            <article class="c_box  {banner.characterType === activeCharacterType ? 'on' : 'off'}">
                 <ul class="char_bnr">
                     {#each banner.bannerDetails as detail}
                         <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
-                        <a href="{detail.homepageLinkUrl}" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
-                        <p class="name">{detail.characterName}</p>
-                        <p class="info">{detail.characterIntro}</p>
+                            <a href="{detail.homepageLinkUrl}" target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
+                            <p class="name">{detail.characterName}</p>
+                            <p class="info">{detail.characterIntro}</p>
                         </li>
                     {/each}
                 </ul>
