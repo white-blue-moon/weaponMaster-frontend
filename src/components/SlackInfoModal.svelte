@@ -121,7 +121,7 @@
         </article>
     {:else}
         <div class="stxt">
-            ※ Slack 연동이 완료된 상태입니다.<br />
+            ※ Slack 연동이 완료되었습니다.<br />
             경매 알림 및 1:1 문의 알림이 Slack으로 전달됩니다.
         </div>
         <article class="register-box">
