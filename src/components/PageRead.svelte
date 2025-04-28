@@ -39,6 +39,47 @@
         await fetchArticle();
     });
 
+    let isToggling = false;
+
+    async function handleTogglePin(isPinned) {
+        let confirmMessage = "정말 해당 게시물을 상단 고정하시겠습니까?";
+        if (isPinned) {
+            confirmMessage = "정말 해당 게시물의 상단 고정을 해제 하시겠습니까?";
+        }
+
+        const isConfirm = confirm(confirmMessage);
+        if (!isConfirm) {
+            return;
+        }
+
+        isToggling = true;
+
+        const response = await apiFetch(API.ARTICLES.TOGGLE_PIN(pageId), {
+            method: 'PATCH',
+            body: JSON.stringify({
+                "isAdminMode": $isAdmin,
+                "userId":      $userInfo,
+            }),
+        }).catch(handleApiError);
+
+        if (response.success) {
+            isToggling = false;
+
+            let alertMesseage = "게시물을 상단 고정하였습니다."
+            if (isPinned) {
+                alertMesseage = "게시물 상단 고정을 해제하였습니다."
+            }
+            alert(alertMesseage);
+
+            window.location.href = page.listPath;
+            return;
+        }
+        
+        isToggling = false;
+        alert('게시물 상단 고정 상태 변환에 실패하였습니다.');
+        return;
+    }
+
     async function handleDelete() {
         const isConfirm = confirm("정말 해당 게시물을 삭제하시겠습니까?");
         if (!isConfirm) {
@@ -128,7 +169,25 @@
             <div class="btnst2">
                 <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
                 {#if article.userId == $userInfo || $isAdmin}
+                    {#if $isAdmin}
+                        {#if article.isPinned}
+                            <!-- 고정 해제 버튼 -->
+                            <a on:click={ handleTogglePin } id="pinToggleButton" class="btn btntype_bk46 btntype_unpin bold" style="width:140px">
+                                {#if isToggling}<Spinner colorTheme="white"/>{/if} 고정 해제
+                            </a>
+                        {:else}
+                            <!-- 상단 고정 버튼 -->
+                            <a on:click={ handleTogglePin } id="pinToggleButton" class="btn btntype_bk46 bold" style="width:140px">
+                                {#if isToggling}<Spinner colorTheme="white"/>{/if} 상단 고정
+                            </a>
+                        {/if}
+                        
+                    {/if}
+
+                    <!-- 수정 버튼 -->
                     <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
+                    
+                    <!-- 삭제 버튼 -->
                     <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">
                         {#if isLoading}<Spinner colorTheme="white"/>{/if} 삭제
                     </a>
@@ -360,6 +419,10 @@
         background: #484e5f;
         color: #fff;
         font-size: 13px;
+    }
+
+    .btntype_unpin {
+        background: #e53935;
     }
     
     .btn {

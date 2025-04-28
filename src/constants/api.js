@@ -14,11 +14,12 @@ export const API = {
         CHECK_USER_ID_EXISTS: (userId) => `${ROOT}/accounts/${userId}/exists`,
     },
     ARTICLES: {
-        CREATE: `${ROOT}/articles`,
-        LIST:   (categoryType, articleType) => `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
-        READ:   (id) => `${ROOT}/articles/${id}`,
-        UPDATE: (id) => `${ROOT}/articles/${id}`,
-        DELETE: (id) => `${ROOT}/articles/${id}`,
+        CREATE:     `${ROOT}/articles`,
+        LIST:       (categoryType, articleType) => `${ROOT}/articles?categoryType=${categoryType}&articleType=${articleType}`,
+        READ:       (id) => `${ROOT}/articles/${id}`,
+        UPDATE:     (id) => `${ROOT}/articles/${id}`,
+        DELETE:     (id) => `${ROOT}/articles/${id}`,
+        TOGGLE_PIN: (id) => `${ROOT}/articles/${id}/pin`,
     },
     COMMENTS: {
         CREATE: `${ROOT}/comments`,
