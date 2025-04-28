@@ -26,6 +26,7 @@
 
     let articles          = [];
     let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
+    let pinnedArticles    = [];
 
     let totalPageNum      = 1;
     let currentPageNum    = 1;
@@ -45,8 +46,9 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            isLoading = false;
-            articles  = response.data;
+            isLoading      = false;
+            articles       = response.data;
+            pinnedArticles = articles.filter(article => article.isPinned); 
 
             buildArticlesMap();
             updateDisplayedArticles();
@@ -153,6 +155,8 @@
 <section class="content news">
     <h3>{ ARTICLE_TYPE_TEXT[categoryType][articleType] }</h3>
     <article class="news_header">
+
+        <!-- 필터링 버튼 -->
         <div class="category_type_c">
             {#each articleFilters as articleFilter}
                 <a class:selected={selectedFilters.has(String(articleFilter.filterType))} on:click={() => toggleFilter(articleFilter.filterType)}>
@@ -161,6 +165,7 @@
             {/each}
         </div>
 
+        <!-- 검색 바 -->
         <div class="board_srch">
             <div class="select_gy" style="width:120px">
                 <div class="select">
@@ -194,7 +199,42 @@
         </div>
     </article>
 
+    <!-- 게시물 목록 -->
     <article class="board_list news_list">
+        <!-- 상단 고정 게시물 리스트 -->
+        {#each pinnedArticles as article}
+            {#if !isLoading}
+                <ul class="notice">
+                    <li class="category">
+                        {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
+                            <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
+                        {:else}
+                            { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
+                        {/if}
+                    </li>
+                    <li class="title" data-no={ article.id }>
+                        <a href={ page.readPath(article.id) }>{ article.title }</a>
+                        {#if article.commentCount > 0}
+                            <b>({ article.commentCount })</b>
+                        {/if}
+                        <div class="iconset"></div>
+                    </li>
+                    {#if categoryType != CATEGORY_TYPE.NEWS}
+                        {#if article.isAdminMode}
+                            <AdminAuthor />
+                        {:else}
+                            <li class="author">
+                                { article.userId }
+                            </li>
+                        {/if}
+                    {/if}
+                    <li class="date">{ article.createDate.split('T')[0] }</li>
+                    <li class="hits">{ article.viewCount.toLocaleString() }</li>
+                </ul>
+            {/if}
+        {/each}
+
+        <!-- 게시물 리스트 -->
         {#if displayedArticles.length === 0}
             {#if isLoading}
                 <ul>
@@ -206,16 +246,12 @@
                 </ul>
             {:else}
                 <ul>
-                    {#if searchKeyword == ""}
-                        <li><div class="no-results">검색 결과가 없습니다.</div></li>
-                    {:else}
-                        <li><div class="no-results">"{ searchKeyword }" 에 대한 검색 결과가 없습니다.</div></li>
-                    {/if} 
+                    <li>검색 결과가 없습니다.</li>
                 </ul>
             {/if}
         {:else}
             {#each displayedArticles as article}
-                <ul class:notice={ article.isPinned }>
+                <ul>
                     <li class="category">
                         {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
                             <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
