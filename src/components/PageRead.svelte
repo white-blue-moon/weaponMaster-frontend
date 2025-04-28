@@ -422,7 +422,7 @@
     }
 
     .btntype_unpin {
-        background: #e53935;
+        background: #DC143C;
     }
     
     .btn {
