@@ -172,12 +172,12 @@
                     {#if $isAdmin}
                         {#if article.isPinned}
                             <!-- 고정 해제 버튼 -->
-                            <a on:click={ handleTogglePin } id="pinToggleButton" class="btn btntype_bk46 btntype_unpin bold" style="width:140px">
+                            <a on:click={ handleTogglePin(article.isPinned) } id="pinToggleButton" class="btn btntype_bk46 btntype_unpin bold" style="width:140px">
                                 {#if isToggling}<Spinner colorTheme="white"/>{/if} 고정 해제
                             </a>
                         {:else}
                             <!-- 상단 고정 버튼 -->
-                            <a on:click={ handleTogglePin } id="pinToggleButton" class="btn btntype_bk46 bold" style="width:140px">
+                            <a on:click={ handleTogglePin(article.isPinned) } id="pinToggleButton" class="btn btntype_bk46 bold" style="width:140px">
                                 {#if isToggling}<Spinner colorTheme="white"/>{/if} 상단 고정
                             </a>
                         {/if}
