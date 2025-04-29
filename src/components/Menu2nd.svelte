@@ -2,8 +2,8 @@
     import { getMenu2nd } from '../utils/page'
 
     export let categoryType = 0;
-    export let articleType = 0;
-    export let isActiveOn = true;
+    export let articleType  = 0;
+    export let isActiveOn   = true;
 
     let menu2nd = getMenu2nd(categoryType, articleType);
 </script>

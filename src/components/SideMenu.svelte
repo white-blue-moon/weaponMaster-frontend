@@ -56,12 +56,13 @@
                     <h2 class="gnbAcchidden">서비스</h2>
                     <ul>
                         <li obj="P_GNB">
-                            <a target="_self" href="#">
+                            <a target="_self">
+                                <!-- TODO 추후 회원정보 수정 페이지 추가 필요 -->
                                 <span class="gnbIcon gnbIconService1"></span>준비중
                             </a>
                         </li>
                     </ul>
-                    <a class="gnbBtAll" href="#" obj="P_GNB">
+                    <a class="gnbBtAll" href={ PATHS.INTRODUCE.PURPOSE } obj="P_GNB">
                         전체가이드
                     </a>
                 </div>

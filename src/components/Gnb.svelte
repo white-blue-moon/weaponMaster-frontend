@@ -1,10 +1,10 @@
 <script>
   import { PATHS } from '../constants/paths';
-  import { DF_UI } from '../constants/resourcePath'
   import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
 
   import GameInfoPopUp from './GameInfoPopUp.svelte';
 
+  
   let isLoginAreaVisible = false;
   let isGameInfoPopUpVisible = false;
 
@@ -26,8 +26,8 @@
     <ul class="main-menu">
       <li><a class="logo" href="/"><img src="/images/logo.png" alt="Dungeon & Fighter"></a></li>
       <li><a href={ PATHS.NEWS.NOTICE.LIST }>새소식</a></li>
-      <li><a href="/">사이트소개</a></li>
-      <li><a href="/">가이드</a></li>
+      <li><a href={ PATHS.INTRODUCE.PURPOSE }>사이트소개</a></li>
+      <li><a href={ PATHS.GUIDE.HOW_TO_USE }>가이드</a></li>
       <li><a href={ PATHS.COMMUNITY.ALL.LIST }>커뮤니티</a></li>
       <li><a href={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST }>서비스센터</a></li>
       <li> <!-- 공간 확보를 위해 비워둠 --> </li>
@@ -38,16 +38,15 @@
     <div class="submenu">
       <div><!-- 로고 밑 비워둠 --></div> 
       <div>
-        <!-- TODO 텍스트들도 상수로 할당할지 고민 중 -->
         <a href={ PATHS.NEWS.NOTICE.LIST }>공지사항</a>
         <a href={ PATHS.NEWS.UPDATE.LIST }>업데이트</a>
         <a href={ PATHS.NEWS.DEV_NOTE.LIST }>개발자노트</a>
       </div>
       <div>
-        <a href="/pg/aboutPurpose">페이지 용도</a>
+        <a href={ PATHS.INTRODUCE.PURPOSE }>홈페이지 용도</a>
       </div>
       <div>
-        <a href="/guide">제작가이드</a>
+        <a href={ PATHS.GUIDE.HOW_TO_USE }>홈페이지 가이드</a>
       </div>
       <div>
         <a href={ PATHS.COMMUNITY.ALL.LIST }>전체</a>

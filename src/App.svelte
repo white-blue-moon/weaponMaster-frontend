@@ -22,6 +22,9 @@
 	import TalkList from './routes/community/talk/TalkList.svelte';
   	import PrivateContactList from './routes/service/private_contact/PrivateContactList.svelte';
 
+	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
+	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
+
 	let isInspectionOn = false;
 	let endDate;
 
@@ -68,6 +71,12 @@
 		<Route path={ PATHS.NEWS.WRITE }         component={ PageWrite } />
 		<Route path={ PATHS.NEWS.READ_TEPLATE }  component={ PageRead } />
 		<Route path={ PATHS.NEWS.EDIT_TEMPLATE } component={ PageWrite } />
+
+		<!-- 사이트소개 -->
+		<Route path={ PATHS.INTRODUCE.PURPOSE } component={ HomePagePurpose } />
+
+		<!-- 가이드 -->
+		<Route path={ PATHS.GUIDE.HOW_TO_USE }  component={ HomePageGuide } />
 
 		<!-- 커뮤니티 -->
 		<Route path={ PATHS.COMMUNITY.ALL.LIST } 	  component={ AllList } />

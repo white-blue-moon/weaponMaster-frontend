@@ -9,6 +9,14 @@ export function getPage(categoryType, articleType) {
             bannerBackground: `${DF_UI}/img/visual/bg_news.jpg`,
             paths: PATHS.NEWS,
         },
+        [CATEGORY_TYPE.INTRODUCE]: {
+            bannerBackground: `${DF_UI}/img/visual/bg_news.jpg`,
+            paths: PATHS.INTRODUCE,
+        },
+        [CATEGORY_TYPE.GUIDE]: {
+            bannerBackground: `${DF_UI}/img/visual/bg_news.jpg`,
+            paths: PATHS.GUIDE,
+        },
         [CATEGORY_TYPE.COMMUNITY]: {
             bannerBackground: `${DF_UI}/img/visual/bg_community.jpg`,
             paths: PATHS.COMMUNITY,

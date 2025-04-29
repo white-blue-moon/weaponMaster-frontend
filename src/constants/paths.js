@@ -6,6 +6,15 @@ export const PATHS = {
         LOGIN:       '/account/login',
         LOGIN_ADMIN: '/account/login/admin',
     },
+
+    INTRODUCE: {    
+        PURPOSE: '/introduce/purpose',
+    },
+
+    GUIDE: {    
+        HOW_TO_USE: '/guide/how-to-use',
+    },
+
     NEWS: {    
         READ:   (id) => `/news/${id}`,
         EDIT:   (id) => `/news/edit/${id}`,
@@ -18,6 +27,8 @@ export const PATHS = {
         UPDATE:     { LIST: '/news/update/list' },
         DEV_NOTE:   { LIST: '/news/devnote/list' },
     },
+
+
     COMMUNITY: {
         READ:   (id) => `/community/${id}`,
         EDIT:   (id) => `/community/edit/${id}`,
@@ -30,6 +41,7 @@ export const PATHS = {
         ASK:     { LIST: '/community/ask/list' },
         TALK:    { LIST: '/community/talk/list' },
     },
+
     SERVICE_CENTER: {
         READ:   (id) => `/service/${id}`,
         EDIT:   (id) => `/service/edit/${id}`,

@@ -3,10 +3,14 @@ export const CATEGORY_TYPE = {
     NEWS:           1,
     COMMUNITY:      2,
     SERVICE_CENTER: 3,
+    INTRODUCE:      4,
+    GUIDE:          5,
 };
 
 export const CATEGORY_TYPE_TEXT = {
     [CATEGORY_TYPE.NEWS]:           "새소식",
+    [CATEGORY_TYPE.INTRODUCE]:      "사이트소개",
+    [CATEGORY_TYPE.GUIDE]:          "가이드",
     [CATEGORY_TYPE.COMMUNITY]:      "커뮤니티",
     [CATEGORY_TYPE.SERVICE_CENTER]: "서비스센터",
 };
@@ -18,6 +22,14 @@ export const ARTICLE_TYPE = {
         NOTICE:   1,
         UPDATE:   2,
         DEV_NOTE: 3,
+    },
+
+    INTRODUCE: {
+        HOME_PAGE_PURPOSE: 1,
+    },
+
+    GUIDE: {
+        HOME_PAGE_GUIDE: 1,
     },
 
     COMMUNITY: {
@@ -38,6 +50,14 @@ export const ARTICLE_TYPE_TEXT = {
         [ARTICLE_TYPE.NEWS.DEV_NOTE]: "개발자노트",
     },
 
+    [CATEGORY_TYPE.INTRODUCE]: {
+        [ARTICLE_TYPE.INTRODUCE.HOME_PAGE_PURPOSE]: "홈페이지 용도",
+    },
+
+    [CATEGORY_TYPE.GUIDE]: {
+        [ARTICLE_TYPE.GUIDE.HOME_PAGE_GUIDE]: "홈페이지 가이드",
+    },
+
     [CATEGORY_TYPE.COMMUNITY]: {
         [ARTICLE_TYPE.COMMUNITY.ALL]:  "전체",
         [ARTICLE_TYPE.COMMUNITY.ASK]:  "질문",
@@ -45,7 +65,7 @@ export const ARTICLE_TYPE_TEXT = {
     },
 
     [CATEGORY_TYPE.SERVICE_CENTER]: {
-        [ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT]:  "1:1문의",
+        [ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT]: "1:1문의",
     },
 }
 
