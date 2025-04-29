@@ -2,21 +2,22 @@
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
-    import { getPage, getArticleFilterText } from '../../utils/page';
+    import { getPage } from '../../utils/page';
     import { userInfo, isAdmin } from "../../utils/auth";
     import { formatDate } from "../../utils/time"
-    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../../constants/articles';
+    import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
     import HeaderBanner from "../../components/HeaderBanner.svelte";
     import Menu2nd from '../../components/Menu2nd.svelte';
     import Footer from '../../components/Footer.svelte';
-    import Comment from '../../components/Comment.svelte';
-    import Spinner from '../../components/Spinner.svelte';
     import Top from '../../components/Top.svelte';
     import AdminAuthor from '../../components/AdminAuthor.svelte';
+    import CopyUrlButton from '../../components/CopyUrlButton.svelte';
+    import CampaignBanner from '../../components/CampaignBanner.svelte';
     
+
     const HOME_PAGE_PURPOSE_ARTICLE_ID = 419;
     const ARTICLE_FILTER_TEXT          = "소개";
 
@@ -127,7 +128,6 @@
     <Menu2nd categoryType={ article.categoryType } articleType={ article.articleType }/>
 
     <section class="content news">
-        <!-- <h3>{ ARTICLE_TYPE_TEXT[article.categoryType][article.articleType] }</h3> -->
         <div class="board_view news_view">
             <dl>
                 <dt>{ ARTICLE_FILTER_TEXT }</dt>
@@ -145,7 +145,7 @@
                             {:else}
                                 { article.userId }
                             {/if}
-                        </span> <!-- TODO 새소식에서는 안 보이는 게 좋을지 고민중 -->
+                        </span>
                         <span class="date">{ formatDate(article.createDate) }</span>
                         <span class="hits">{ article.viewCount }</span>
                     </p>
@@ -158,19 +158,8 @@
             </div>
         </div>
 
-        <!-- TODO 랜덤으로 배너 이미지 띄우도록 바꾸기 -->
-        <article class="bdview_bnrarea">
-            <a href="/community/news/notice/2838879">
-                <img src="https://bbscdn.df.nexon.com/data6/commu/202408/3619ee93-0fa1-455d-ed97-34e61638f387.jpg" alt="지인 사칭 피싱 방지 배너 1">
-            </a>
-        </article>
-        <article class="bdview_btnarea line">
-            <div class="btnst1">
-                <a href="javascript:void(0);" class="btncopy">텍스트복사</a>
-            </div>
-                   
-        </article>
-
+        <CampaignBanner />
+        <CopyUrlButton />
     </section>
 {/if}
 
@@ -328,77 +317,6 @@
         color: rgb(57, 132, 198) !important;
     }
 
-    .bdview_bnrarea {
-        position: relative;
-        margin-bottom: 80px;
-        width: 100%;
-        height: 200px;
-    }
-    
-    .bdview_btnarea.line {
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eeedf2;
-    }
-    
-    .bdview_btnarea {
-        position: relative;
-        vertical-align: top;
-        overflow: hidden;
-    }
-    
-    .bdview_btnarea .btnst1 {
-        float: left;
-    }
-    
-    .bdview_btnarea .btnst1 a.btncopy {
-        margin-right: 25px;
-    }
-    
-    .bdview_btnarea .btnst1 a {
-        display: inline-block;
-        height: 46px;
-        line-height: 46px;
-        color: #6a6e76;
-        font-size: 14px;
-        font-weight: 500;
-        text-align: center;
-    }
-    
-    .btncopy {
-        width: 49px;
-        background: #484e5f url('#{$DF_UI}/img/board/board_ico_copy.png') no-repeat 50%;
-        text-indent: -9999px;
-    }
-    
-    .bdview_btnarea .btnst2 {
-        float: right;
-        font-size: 0;
-    }
-    
-    .bdview_btnarea .btnst2 a {
-        margin-left: 4px;
-        cursor: pointer;
-    }
-    
-    .btntype_bk46 {
-        height: 46px;
-        line-height: 45px;
-        background: #484e5f;
-        color: #fff;
-        font-size: 13px;
-    }
-
-    .btntype_unpin {
-        background: #DC143C;
-    }
-    
-    .btn {
-        position: relative;
-        display: inline-block;
-        min-width: 90px;
-        text-align: center;
-    }
-    
     .bold {
         font-weight: 500 !important;
     }

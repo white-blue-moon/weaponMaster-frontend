@@ -16,6 +16,8 @@
     import Spinner from './Spinner.svelte';
     import Top from './Top.svelte';
     import AdminAuthor from './AdminAuthor.svelte';
+    import CopyUrlButton from './CopyUrlButton.svelte';
+    import CampaignBanner from './CampaignBanner.svelte';
     
     let url     = window.location.pathname;
     let pageId  = url.split('/').pop();
@@ -156,15 +158,11 @@
             </div>
         </div>
 
-        <!-- TODO 랜덤으로 배너 이미지 띄우도록 바꾸기 -->
-        <article class="bdview_bnrarea">
-            <a href="/community/news/notice/2838879">
-                <img src="https://bbscdn.df.nexon.com/data6/commu/202408/3619ee93-0fa1-455d-ed97-34e61638f387.jpg" alt="지인 사칭 피싱 방지 배너 1">
-            </a>
-        </article>
+        <CampaignBanner />
+
         <article class="bdview_btnarea line">
             <div class="btnst1">
-                <a href="javascript:void(0);" class="btncopy">텍스트복사</a>
+                <CopyUrlButton />
             </div>
             <div class="btnst2">
                 <!-- 수정, 삭제는 관리자/소유자에게만 보이기 -->
@@ -381,26 +379,6 @@
     
     .bdview_btnarea .btnst1 {
         float: left;
-    }
-    
-    .bdview_btnarea .btnst1 a.btncopy {
-        margin-right: 25px;
-    }
-    
-    .bdview_btnarea .btnst1 a {
-        display: inline-block;
-        height: 46px;
-        line-height: 46px;
-        color: #6a6e76;
-        font-size: 14px;
-        font-weight: 500;
-        text-align: center;
-    }
-    
-    .btncopy {
-        width: 49px;
-        background: #484e5f url('#{$DF_UI}/img/board/board_ico_copy.png') no-repeat 50%;
-        text-indent: -9999px;
     }
     
     .bdview_btnarea .btnst2 {
