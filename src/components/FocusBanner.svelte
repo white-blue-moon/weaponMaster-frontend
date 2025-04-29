@@ -1,19 +1,24 @@
 <script>
-    export let width = "560px";
-    export let height = "280px";
-    export let imageUrls = [];
+    export let width          = "560px";
+    export let height         = "280px";
+    export let imageUrls      = [];
+    export let isOverlayExist = false;
     
-    let currentIndex      = 0;
-    let isPaused          = false;
+    
+    let currentIndex   = 0;
+    let isPaused       = false;
+    let overlayVisible = true;
     let autoPlayInterval;
-    let overlayVisible    = true;
+
+    const SLIDE_TERM    = 5000; // 슬라이드 변경 텀 (단위: ms)
+    const OVERLAY_TERM  = 200;  // 오버레이 이미지 등장/전환 텀 (단위: ms)
 
     function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
             if (!isPaused) {
                 nextSlide();
             }
-        }, 5000); // 5초마다 슬라이드 변경
+        }, SLIDE_TERM);
     }
 
     function stopAutoPlay() {
@@ -25,7 +30,7 @@
         setTimeout(() => {
             currentIndex = (currentIndex + 1) % imageUrls.length;
             overlayVisible = true; // Overlay 다시 표시
-        }, 200); // transition 시간에 맞게 설정
+        }, OVERLAY_TERM);
     }
 
     function prevSlide() {
@@ -33,7 +38,7 @@
         setTimeout(() => {
             currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
             overlayVisible = true;
-        }, 200);
+        }, OVERLAY_TERM);
     }
 
     function togglePause() {
@@ -43,10 +48,12 @@
     startAutoPlay();
 </script>
 
+<!-- svelte-ignore a11y-no-redundant-roles -->
 <section
-    on:mouseenter={stopAutoPlay}
-    on:mouseleave={startAutoPlay}
+    on:mouseenter={ stopAutoPlay }
+    on:mouseleave={ startAutoPlay }
     style="--swiper-width: {width}; --swiper-height: {height};"
+    role="region"
 >
     {#if imageUrls.length > 0}
         <li
@@ -55,9 +62,8 @@
             aria-label="{currentIndex + 1} / {imageUrls.length}"
             style="--swiper-background: url('{imageUrls[currentIndex]}');"
         >
-            {#if height == "600px"}
-                <a href="#"
-                   class="swiper-overlay {overlayVisible ? 'visible' : ''}"></a>
+            {#if isOverlayExist}
+                <a class="swiper-overlay {overlayVisible ? 'visible' : ''}"></a>
             {/if}
 
             <p class="pay_ctrl">
@@ -66,7 +72,7 @@
                    tabindex="0" 
                    role="button" 
                    aria-label="Previous slide"
-                   on:click|preventDefault={prevSlide}>
+                   on:click|preventDefault={ prevSlide }>
                     <span class="icon prev"></span>
                 </a>
 
@@ -80,11 +86,11 @@
                    tabindex="0" 
                    role="button" 
                    aria-label="Next slide"
-                   on:click|preventDefault={nextSlide}>
+                   on:click|preventDefault={ nextSlide }>
                     <span class="icon next"></span>
                 </a>
 
-                <i class="pause" on:click={togglePause}>
+                <i class="pause" on:click={ togglePause }>
                     {#if isPaused}
                         ||
                     {:else}

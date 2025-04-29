@@ -124,7 +124,6 @@
 <style lang="scss">
   .gnb {
     position: relative;
-    height: 300px;
     z-index: 2; /* Banner보다 위에 위치하도록 설정 */
   }
 

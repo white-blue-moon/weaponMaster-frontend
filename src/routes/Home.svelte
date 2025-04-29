@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { PATHS } from '../constants/paths';
 
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
@@ -13,6 +14,7 @@
     import Spinner from '../components/Spinner.svelte';
     import Top from '../components/Top.svelte';
     import CharacterBanner from '../components/CharacterBanner.svelte';
+  
     
     let focusBanners     = [];
     let newsArticles     = [];
@@ -66,7 +68,14 @@
     </div>
     <div class="focus-banner">
         {#if !isLoading}
-            <FocusBanner width="1450px" height="600px" imageUrls={ mainFocusBanner } />
+            <a href={ PATHS.INTRODUCE.PURPOSE }>
+                <FocusBanner 
+                    width="1450px" 
+                    height="600px" 
+                    imageUrls={ mainFocusBanner } 
+                    isOverlayExist={ true }
+                />
+            </a>
         {:else}
             <div class="spinner-container">
                 <Spinner /> <span class="loading-text">로딩중입니다.</span>
