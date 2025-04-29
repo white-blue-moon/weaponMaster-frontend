@@ -18,6 +18,7 @@
     import AdminAuthor from '../../components/AdminAuthor.svelte';
     
     const HOME_PAGE_PURPOSE_ARTICLE_ID = 419;
+    const ARTICLE_FILTER_TEXT          = "소개";
 
     let pageId  = HOME_PAGE_PURPOSE_ARTICLE_ID;
     let page    = {};
@@ -126,10 +127,10 @@
     <Menu2nd categoryType={ article.categoryType } articleType={ article.articleType }/>
 
     <section class="content news">
-        <h3>{ ARTICLE_TYPE_TEXT[article.categoryType][article.articleType] }</h3>
+        <!-- <h3>{ ARTICLE_TYPE_TEXT[article.categoryType][article.articleType] }</h3> -->
         <div class="board_view news_view">
             <dl>
-                <dt>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</dt>
+                <dt>{ ARTICLE_FILTER_TEXT }</dt>
                 <dd>
                     <p>
                         { article.title }
@@ -169,14 +170,6 @@
             </div>
                    
         </article>
-
-        {#if article.categoryType != CATEGORY_TYPE.NEWS}
-            <Comment 
-                categoryType={ article.categoryType }
-                articleType={ article.articleType }
-                author={ article.userId }
-            /> <!-- 공지사항에는 댓글 기재 불가능 -->
-        {/if}
 
     </section>
 {/if}
