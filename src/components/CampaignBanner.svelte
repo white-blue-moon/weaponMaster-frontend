@@ -1,6 +1,6 @@
 <script>
-    export let imgUrl = "https://bbscdn.df.nexon.com/data6/commu/202408/3619ee93-0fa1-455d-ed97-34e61638f387.jpg";
-    export let href   = "/";
+    export let imgUrl = "/images/campaign_banner.jpg";
+    export let href   = "https://df.nexon.com/"; // 던파 공식 홈페이지 주소 기본 할당
     export let alt    = "포트폴리오 용도 강조 알림 배너";
 </script>
 

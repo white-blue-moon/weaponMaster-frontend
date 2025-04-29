@@ -200,6 +200,10 @@
         font-size: 16px;
         cursor: pointer;
     }
+
+    .login .login_normal li.btn button:hover {
+        background: #9daab9;
+    }
  
     /* Nexon Login 스타일 */
     .login .login_admin {
