@@ -1,10 +1,16 @@
 <script>
+    function copyUrl() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url);
 
+        alert('URL이 복사되었습니다.');
+        return;
+    }
 </script>
+  
 
-
-<a class="btncopy">URL복사</a>    
-
+<a class="btncopy" on:click={ copyUrl }>URL복사</a>
+  
 
 <style lang="scss">
 * {
