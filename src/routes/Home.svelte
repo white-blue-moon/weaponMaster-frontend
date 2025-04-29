@@ -20,7 +20,7 @@
     let characterBanners = [];
     
     let mainFocusBanner, newsFirstBanner, newsSecondBanner;
-    let isLoading = true; // 데이터 로딩 중 상태를 관리할 변수
+    let isLoading = true;
 
     async function fetchFocusBanners() {
         const response = await apiFetch(API.PAGE.HOME, {
@@ -36,20 +36,25 @@
 
         if (response.success) {
             focusBanners     = response.data.focusBanners;
+            mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+            newsFirstBanner  = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
+            newsSecondBanner = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
+        
             newsArticles     = response.data.newsArticles;
             bestViewArticles = response.data.bestViewArticles;
             characterBanners = response.data.characterBanners;
+
             isLoading        = false;
+            return;
         }
+
+        isLoading = false;
+        console.log('홈페이지 정보 불러오기에 실패하였습니다.')
+        return;
     }
 
     onMount(async () => {
         await fetchFocusBanners();
-
-        // focusBanners가 업데이트된 후 각 변수에 할당
-        mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
-        newsFirstBanner  = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
-        newsSecondBanner = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
     });
 </script>
 

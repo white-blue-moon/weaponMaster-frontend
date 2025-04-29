@@ -3,10 +3,10 @@
     export let height = "280px";
     export let imageUrls = [];
     
-    let currentIndex = 0;
-    let isPaused = false;
+    let currentIndex      = 0;
+    let isPaused          = false;
     let autoPlayInterval;
-    let overlayVisible = true;
+    let overlayVisible    = true;
 
     function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
