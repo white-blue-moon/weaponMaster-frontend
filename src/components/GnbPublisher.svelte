@@ -44,7 +44,7 @@
       <span class="loginInfo">
         <!-- 유저 타입에 따라 다른 아이콘 출력되도록 하기 -->
         {#if $isAdmin}
-          <span>ADMIN MODE</span>
+          <span style="margin-right: 10px;">ADMIN MODE</span>
         {/if}
         <span class="platform-icon padding-2px platform-icon-nexon gnbText"></span>
         <span class="nickname gnbText">{ $userInfo }</span>

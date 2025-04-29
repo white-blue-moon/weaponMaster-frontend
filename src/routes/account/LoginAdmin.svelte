@@ -3,11 +3,14 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn, isAdmin, handleCapsLock } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
+    import { DF_UI } from '../../constants/resourcePath';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
     import CapsLockWarning from '../../components/CapsLockWarning.svelte';
+    import Spinner from '../../components/Spinner.svelte';
+  
   
     let userId   = "";
     let password = "";
@@ -64,8 +67,9 @@
     }
 </script>
 
+
 <GnbPublisher />
-<HeaderBanner bannerText="관리자모드 로그인" bannerTextColor="#333" bannerBackground="https://developers.neople.co.kr/img/svisual4.jpg"/>
+<HeaderBanner bannerText="관리자모드 로그인" bannerBackground="{DF_UI}/img/visual/bg_world.jpg"/>
 <section class="content">
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
@@ -120,7 +124,7 @@
 
     .content h3 {
         position: relative;
-        margin-top: 10px;
+        margin-top: 60px;
         color: #6a6e76;
         font-size: 16px;
         font-weight: 400;
