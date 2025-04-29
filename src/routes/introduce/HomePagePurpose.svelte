@@ -3,7 +3,6 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
     import { getPage } from '../../utils/page';
-    import { userInfo, isAdmin } from "../../utils/auth";
     import { formatDate } from "../../utils/time"
     import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
@@ -25,8 +24,6 @@
     let page    = {};
     let article = null;
 
-    let isLoading = false;
-
     async function fetchArticle() {
         const response = await apiFetch(API.ARTICLES.READ(pageId), {
             method: 'GET',
@@ -41,75 +38,6 @@
     onMount(async ()=> {
         await fetchArticle();
     });
-
-    let isToggling = false;
-
-    async function handleTogglePin(isPinned) {
-        let confirmMessage = "정말 해당 게시물을 상단 고정하시겠습니까?";
-        if (isPinned) {
-            confirmMessage = "정말 해당 게시물의 상단 고정을 해제 하시겠습니까?";
-        }
-
-        const isConfirm = confirm(confirmMessage);
-        if (!isConfirm) {
-            return;
-        }
-
-        isToggling = true;
-
-        const response = await apiFetch(API.ARTICLES.TOGGLE_PIN(pageId), {
-            method: 'PATCH',
-            body: JSON.stringify({
-                "isAdminMode": $isAdmin,
-                "userId":      $userInfo,
-            }),
-        }).catch(handleApiError);
-
-        if (response.success) {
-            isToggling = false;
-
-            let alertMesseage = "게시물을 상단 고정하였습니다."
-            if (isPinned) {
-                alertMesseage = "게시물 상단 고정을 해제하였습니다."
-            }
-            alert(alertMesseage);
-
-            window.location.href = page.listPath;
-            return;
-        }
-        
-        isToggling = false;
-        alert('게시물 상단 고정 상태 변환에 실패하였습니다.');
-        return;
-    }
-
-    async function handleDelete() {
-        const isConfirm = confirm("정말 해당 게시물을 삭제하시겠습니까?");
-        if (!isConfirm) {
-            return;
-        }
-
-        isLoading = true;
-
-        const response = await apiFetch(API.ARTICLES.DELETE(pageId), {
-            method: 'DELETE',
-            body: JSON.stringify({
-                "isAdminMode": $isAdmin,
-                "userId":      $userInfo,
-            }),
-        }).catch(handleApiError);
-
-        if (response.success) {
-            isLoading = false;
-            alert('게시물이 삭제되었습니다.');
-            window.location.href = page.listPath;
-            return;
-        }
-        
-        isLoading = false;
-        alert('게시물 삭제에 실패하였습니다.');
-        return;
-    }
 </script>
 
 
@@ -163,7 +91,6 @@
     </section>
 {/if}
 
-<!-- TODO 하단에 게시물 목록 출력하기 -->
 <Top />
 
 <div class="footer">
