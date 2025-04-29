@@ -42,13 +42,12 @@
 </script>
 
   
-
 <section class="char_info " id="characSection">
     <!-- 좌, 우 컨트롤러 -->
     <article class="char_control">
         <a class="arrow_l" on:click={() => movePrev()}>prev</a>
         <a class="arrow_r" on:click={() => moveNext()}>next</a>
-        
+
         <!-- 캐릭터 이름 이미지 -->
         <span class="mc_txt" style="background: url('{activeBanner.nameImgUrl}');"></span>
     </article>

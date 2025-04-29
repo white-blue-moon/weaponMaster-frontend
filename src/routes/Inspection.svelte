@@ -40,7 +40,7 @@
 
 <header>
     <img 
-        src="https://cdn.df.nexon.com/img/insp/2023/logo.png" 
+        src="images/logo.png" 
         alt="Dungeon &amp; Fighter" 
     />
     <h3>이 홈페이지는 포트폴리오 제출용 홈페이지입니다.</h3>
@@ -165,7 +165,7 @@
     header img {
         display: block;
         margin: 0 auto;
-        width: 230px;
+        width: 176px;
         height: 122px;
     }
 

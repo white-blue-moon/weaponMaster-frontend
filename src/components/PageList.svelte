@@ -245,7 +245,7 @@
                     </li>
                 </ul>
             {:else}
-                <ul>
+                <ul class="nodata">
                     <li>검색 결과가 없습니다.</li>
                 </ul>
             {/if}
@@ -630,6 +630,24 @@
     .board_list ul li {
         color: #898c92;
         font-weight: 400;
+    }
+
+    .board_list ul.nodata {
+        cursor: default;
+    }
+
+    .board_list ul.nodata li {
+        width: 1300px;
+        height: 200px;
+        color: #36393f;
+        font-size: 26px;
+        font-weight: 300;
+        text-align: center;
+        line-height: 200px;
+    }
+
+    .board_list ul.nodata:hover {
+        background: none;
     }
 
     .news_list ul li.category b {
