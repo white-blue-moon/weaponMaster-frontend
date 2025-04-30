@@ -6,7 +6,7 @@ export const API = {
     },
     PAGE: {
         HOME:        `${ROOT}/page/home`,
-        INSPECTIOIN: (bannerType) => `${ROOT}/page/inspection/${bannerType}`,
+        MAINTENANCE: (bannerType) => `${ROOT}/page/maintenance/${bannerType}`,
     },
     ACCOUNT: {
         JOIN:  `${ROOT}/accounts`,
@@ -57,7 +57,7 @@ export const WEB_SOCKET_API = {
 // 어드민 툴 백엔드 서버 API
 const ADMIN_ROOT = 'http://localhost:7770';
 export const ADMIN_API = {
-    INSPECTIOIN: {
-        GET_ACTIVE: `${ADMIN_ROOT}/inspection/active`,
+    MAINTENANCE: {
+        GET_ACTIVE: `${ADMIN_ROOT}/maintenance/active`,
     }
 };

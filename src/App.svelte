@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 
 	import Home from './routes/Home.svelte';
-	import Inspection from './routes/Inspection.svelte';
+	import Maintenance from './routes/Maintenance.svelte';
 	import Join from './routes/account/Join.svelte';
 	import LoginNormal from './routes/account/LoginNormal.svelte';
 	import LoginAdmin from './routes/account/LoginAdmin.svelte';
@@ -25,35 +25,35 @@
 	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
 	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
 
-	let isInspectionOn = false;
+	let isMaintenanceOn = false;
 	let endDate;
 
-	async function fetchActiveInspection() {
-		const response = await apiFetch(ADMIN_API.INSPECTIOIN.GET_ACTIVE, {
+	async function fetchActiveMaintenance() {
+		const response = await apiFetch(ADMIN_API.MAINTENANCE.GET_ACTIVE, {
             method: 'GET',
         }).catch(handleApiError);
 
-		// 점검 중일 때는 모든 경로를 Inspection 으로 리다이렉트
+		// 점검 중일 때는 모든 경로를 Maintenance 으로 리다이렉트
         if (response != null) {	
-			if (response.isInspectionOn) {
-				isInspectionOn = response.isInspectionOn;
-				endDate		   = response.inspection.end_date;
-				navigate(PATHS.INSPECTION, { replace: true });
+			if (response.isMaintenanceOn) {
+				isMaintenanceOn = response.isMaintenanceOn;
+				endDate		    = response.maintenance.end_date;
+				navigate(PATHS.MAINTENANCE, { replace: true });
 			}
         }
     }
 
     onMount(async () => {
-        await fetchActiveInspection();
+        await fetchActiveMaintenance();
     })
 </script>
   
   
 <Router>
-	<!-- 점검 중일 때는 모든 경로를 INSPECTION 으로 리다이렉트 -->
-	{#if isInspectionOn}
-        <Route path={ PATHS.INSPECTION } let:params>
-			<Inspection { endDate }/>
+	<!-- 점검 중일 때는 모든 경로를 MAINTENANCE 으로 리다이렉트 -->
+	{#if isMaintenanceOn}
+        <Route path={ PATHS.MAINTENANCE } let:params>
+			<Maintenance { endDate }/>
 		</Route>
     {:else}
 		<!-- 홈 -->
@@ -76,7 +76,7 @@
 		<Route path={ PATHS.INTRODUCE.PURPOSE } component={ HomePagePurpose } />
 
 		<!-- 가이드 -->
-		<Route path={ PATHS.GUIDE.HOW_TO_USE }  component={ HomePageGuide } />
+		<Route path={ PATHS.GUIDE.HOW_TO_USE } component={ HomePageGuide } />
 
 		<!-- 커뮤니티 -->
 		<Route path={ PATHS.COMMUNITY.ALL.LIST } 	  component={ AllList } />

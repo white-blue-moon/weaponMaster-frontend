@@ -6,5 +6,5 @@ export const FOCUS_BANNER_TYPE = {
     NEWS_SECOND: 3,
 
     // 점검페이지에서 사용하는 포커스 배너 타입 종류
-    INSPECTION_MAIN: 1001,
+    MAINTENANCE_MAIN: 1001,
 };

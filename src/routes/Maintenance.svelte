@@ -26,13 +26,13 @@
     let latestDevNote = {};
 
     onMount(async () => {
-          const response = await apiFetch(API.PAGE.INSPECTIOIN(FOCUS_BANNER_TYPE.INSPECTION_MAIN), {
+          const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAINTENANCE_MAIN), {
               method: "GET",
           }).catch(handleApiError);
 
           if (response.success) {
             const focusBanner = response.data.focusBanners;
-            bannerImgUrls     = focusBanner[FOCUS_BANNER_TYPE.INSPECTION_MAIN]?.map(banner => banner.imgUrl);
+            bannerImgUrls     = focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN]?.map(banner => banner.imgUrl);
             latestDevNote     = response.data.devNote;
           }
     });
