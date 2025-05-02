@@ -22,7 +22,11 @@
                 clearInterval(loadingDataTimer);
             }
         }, 22); // 약 2200ms
+    });
 
+    async function fetchPassWordCheck() {
+        loadingDelayPercent = 20
+        
         // TODO access 비밀번호 입력했을 때 loadingDelayPercent = 20 정도 할당하기
         // TODO access 비밀번호 확인 API 로 수정하기
         const response = await apiFetch(API.PAGE.HOME, {
@@ -50,21 +54,74 @@
             }, 1200); // cover transition: 1s + 여유
 
         }, loadingDataAniTime); 
-    });
-</script>
+    }
 
+    let code = ['', '', '', '', '', ''];
+
+    function handleInput(e, index) {
+        code[index] = e.target.value;
+
+        // 현재 입력값이 있으면, 다음 칸으로 포커스 이동
+        if (e.target.value && index < 5) {
+            const next = document.getElementById(`code-${index + 1}`);
+            next?.focus();
+            return;
+        }
+
+        // 값이 지워졌다면, 이전 칸으로 포커스 이동
+        if (!e.target.value && index > 0) {
+            const prev = document.getElementById(`code-${index - 1}`);
+            prev?.focus();
+            return;
+        }
+
+        // 마지막 칸 값 입력하면 API 호출
+        if (index === 5 && e.target.value) {
+            e.target.blur();
+            fetchPassWordCheck();
+            return;
+        }
+    }
+
+    // Backspace 키 눌렀을 때, 현재 칸이 비어 있으면 이전 칸으로 포커스 이동
+    function handleKeyDown(e, index) {
+        if (e.key === 'Backspace') {
+            if (!code[index] && index > 0) {
+                const prev = document.getElementById(`code-${index - 1}`);
+                prev?.focus();
+                return;
+            }
+        }
+    }
+</script>
 
 {#if !removeIntro}
     <div class="intro {introOn ? 'on' : ''}">
         <div class="cover1 cover"></div>
-        <div class="cover2 cover"></div>
-        <div class="loading_data"  style="width: {loadingDataPercent}vw;"></div>
+        <div class="cover2 cover">
+            <div class="code-inputs">
+                {#each code as _, i}
+                    <input
+                        id="code-{i}"
+                        class="code-box"
+                        maxlength="1"
+                        autocomplete="off"
+                        inputmode="numeric"
+                        bind:value={ code[i] }
+                        on:input={ (e) => handleInput(e, i) }
+                        on:keydown={ (e) => handleKeyDown(e, i) }
+                    />
+                {/each}
+            </div>
+        </div>
+        <div class="loading_data" style="width: {loadingDataPercent}vw;"></div>
         <div class="loading_delay" style="width: {loadingDelayPercent}vw;"></div>
     </div>
 {/if}
+
   
 
-  <style>
+<style>
 .intro{position:fixed;left:0;top:0;height:100vh;background:url('/images/intro_logo.png') 50% 50% no-repeat #151922;z-index:200}
 .intro .cover1{position:absolute;left:0;top:0;width:100vw;height:50vh;background:#151922;z-index:100}
 .intro .cover2{position:absolute;left:0;top:50%;width:100vw;height:50vh;background:#151922;overflow:hidden}
@@ -76,5 +133,29 @@
 .intro.on .loading_delay{transition:0.3s;opacity:0;}
 .intro.on .cover1{transition:1s;top:-61vh}
 .intro.on .cover2{transition:1s;top:111vh}
-  </style>
+
+.code-inputs {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 64px;
+}
+
+.code-box {
+  width: 40px;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: white;
+  outline: none;
+}
+
+.code-box:focus {
+  border-color: #ff3300;
+}
+</style>
   
