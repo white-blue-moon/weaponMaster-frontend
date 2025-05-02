@@ -24,6 +24,7 @@
 
 	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
 	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
+  	import AccessGate from './routes/AccessGate.svelte';
 
 	let isMaintenanceOn = false;
 	let endDate;
@@ -57,6 +58,7 @@
 		</Route>
     {:else}
 		<!-- 홈 -->
+		<Route path="/accessGate" component={ AccessGate } />
 		<Route path={ PATHS.HOME } component={ Home } />
 
 		<!-- 계졍 관련 -->
