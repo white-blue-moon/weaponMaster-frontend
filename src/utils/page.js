@@ -179,9 +179,11 @@ export function getPagePath(article) {
     let category;
 
     switch(article.categoryType) {
-        case CATEGORY_TYPE.NEWS:           category = "news";      break;
-        case CATEGORY_TYPE.COMMUNITY:      category = "community"; break;
-        case CATEGORY_TYPE.SERVICE_CENTER: category = "service";   break;
+        case CATEGORY_TYPE.NEWS:           category = "news";       break;
+        case CATEGORY_TYPE.INTRODUCE:      category = "introduce";  break;
+        case CATEGORY_TYPE.GUIDE:          category = "guide";      break;
+        case CATEGORY_TYPE.COMMUNITY:      category = "community";  break;
+        case CATEGORY_TYPE.SERVICE_CENTER: category = "service";    break;
         default: throw new Error("Unknown categoryType, can't get page path");
     }
 
