@@ -5,9 +5,11 @@
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     
 
-    let introOn     = false;
-    let removeIntro = false;
-    let isLoading   = false;
+    let introOn      = false;
+    let removeIntro  = false;
+    let isLoading    = false;
+    let showSkillGif = false;
+
 
     let loadingDataPercent  = 0;    // 고정 시간 동안 진행될 로딩바 진행 상태 (0 → 100%)
     let loadingDelayPercent = 0;    // 실제 통신 진척도 로딩바 진행 상태 (0 → 100%)
@@ -41,19 +43,12 @@
 
     async function fetchPassWordCheck() {
         loadingDelayPercent = 20
-        isLoading = true;
+        isLoading           = true;
         
         // TODO access 비밀번호 입력했을 때 loadingDelayPercent = 20 정도 할당하기
         // TODO access 비밀번호 확인 API 로 수정하기
-        const response = await apiFetch(API.PAGE.HOME, {
-            method: 'POST',
-            body: JSON.stringify({
-                "bannerTypes": [
-                    FOCUS_BANNER_TYPE.MAIN,
-                    FOCUS_BANNER_TYPE.NEWS_FIRST,
-                    FOCUS_BANNER_TYPE.NEWS_SECOND,
-                ]
-            }),
+        const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAIN), {
+            method: 'GET',
         }).catch(handleApiError);
 
         if (response.success) {
@@ -61,7 +56,8 @@
 
             // 기본 연출 시간 동안 대기 후 cover 분리 애니메이션 시작
             setTimeout(() => {
-                introOn = true;
+                introOn      = true;
+                showSkillGif = true;
 
                 // cover 전환 이후 DOM 제거
                 setTimeout(() => {
@@ -166,6 +162,9 @@
         <div class="loading_delay" style="width: {loadingDelayPercent}vw;"></div>
     </div>
 {/if}
+{#if showSkillGif}
+    <img src="/images/skill_scene.gif" alt="Skill Scene" class="skill-scene-gif" />
+{/if}
 
   
 <style>
@@ -203,6 +202,18 @@
 
 .code-box:focus {
   border-color: #ff3300;
+}
+
+.skill-scene-gif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: 10;
+    pointer-events: none;
 }
 </style>
   
