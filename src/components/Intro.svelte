@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
@@ -7,6 +7,7 @@
 
     let introOn     = false;
     let removeIntro = false;
+    let isLoading   = false;
 
     let loadingDataPercent  = 0;    // 고정 시간 동안 진행될 로딩바 진행 상태 (0 → 100%)
     let loadingDelayPercent = 0;    // 실제 통신 진척도 로딩바 진행 상태 (0 → 100%)
@@ -14,6 +15,8 @@
     let loadingDataAniTime  = 2200; // 기본 연출 시간 (로딩바 + 커버 전환 시간)
   
     onMount(async () => {
+        document.addEventListener('mousedown', handleClickOutside);
+
         // loading_data 로딩바 진행을 위한 타이머
         let loadingDataTimer = setInterval(() => {
             if (loadingDataPercent < 100) {
@@ -24,8 +27,21 @@
         }, 22); // 약 2200ms
     });
 
+    onDestroy(() => {
+        document.removeEventListener('mousedown', handleClickOutside);
+    });
+
+    // 배경 클릭 시 비밀 코드 포커스를 유지하기 위한 함수
+    function handleClickOutside(event) {
+        if (focusedIndex !== -1) {
+            const input = document.getElementById(`code-${focusedIndex}`);
+            requestAnimationFrame(() => input?.focus());
+        }
+    }
+
     async function fetchPassWordCheck() {
         loadingDelayPercent = 20
+        isLoading = true;
         
         // TODO access 비밀번호 입력했을 때 loadingDelayPercent = 20 정도 할당하기
         // TODO access 비밀번호 확인 API 로 수정하기
@@ -42,18 +58,25 @@
 
         if (response.success) {
             loadingDelayPercent = 100;
+
+            // 기본 연출 시간 동안 대기 후 cover 분리 애니메이션 시작
+            setTimeout(() => {
+                introOn = true;
+
+                // cover 전환 이후 DOM 제거
+                setTimeout(() => {
+                    removeIntro = true;
+                }, 1200); // cover transition: 1s + 여유
+
+            }, loadingDataAniTime);
+            
+            isLoading = false;
+            return;
         }
 
-        // 기본 연출 시간 동안 대기 후 cover 분리 애니메이션 시작
-        setTimeout(() => {
-            introOn = true;
-
-            // cover 전환 이후 DOM 제거
-            setTimeout(() => {
-                removeIntro = true;
-            }, 1200); // cover transition: 1s + 여유
-
-        }, loadingDataAniTime); 
+        alert('잘못된 비밀번호 코드입니다.');
+        isLoading = false;
+        return;
     }
 
     let code = ['', '', '', '', '', ''];
@@ -70,7 +93,7 @@
 
         // 값이 지워졌다면, 이전 칸으로 포커스 이동
         if (!e.target.value && index > 0) {
-            const prev = document.getElementById(`code-${index - 1}`);
+            const prev = document.getElementById(`code-${index}`);
             prev?.focus();
             return;
         }
@@ -93,7 +116,30 @@
             }
         }
     }
+
+    // input 각각의 disabled 상태를 담는 배열
+    let disabledInputs = [];
+    $: disabledInputs  = code.map((_, i) => isDisabled(i));
+
+    function isDisabled(i) {
+        if (isLoading) { return true; }
+
+        // 첫 번째 칸은 항상 활성화
+        if (i === 0) { return false; }
+
+        // 이전 칸이 비어 있으면 비활성화
+        if (code[i - 1] === '') { return true; }
+
+        return false;
+    }
+
+    let focusedIndex = -1;
+
+    function handleFocus(index) {
+        focusedIndex = index;
+    }
 </script>
+
 
 {#if !removeIntro}
     <div class="intro {introOn ? 'on' : ''}">
@@ -107,9 +153,11 @@
                         maxlength="1"
                         autocomplete="off"
                         inputmode="numeric"
+                        disabled={ disabledInputs[i] }
                         bind:value={ code[i] }
                         on:input={ (e) => handleInput(e, i) }
                         on:keydown={ (e) => handleKeyDown(e, i) }
+                        on:focusin={ () => handleFocus(i) }
                     />
                 {/each}
             </div>
@@ -120,7 +168,6 @@
 {/if}
 
   
-
 <style>
 .intro{position:fixed;left:0;top:0;height:100vh;background:url('/images/intro_logo.png') 50% 50% no-repeat #151922;z-index:200}
 .intro .cover1{position:absolute;left:0;top:0;width:100vw;height:50vh;background:#151922;z-index:100}
