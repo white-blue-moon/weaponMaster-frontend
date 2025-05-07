@@ -1,8 +1,10 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
+    import { navigate } from 'svelte-routing';
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
+    import { PATHS } from '../constants/paths';
     
 
     let introOn      = false;
@@ -62,7 +64,8 @@
                 // cover 전환 이후 DOM 제거
                 setTimeout(() => {
                     removeIntro = true;
-                }, 1200); // cover transition: 1s + 여유
+                    navigate(PATHS.HOME);
+                }, 3000);
 
             }, loadingDataAniTime);
             
