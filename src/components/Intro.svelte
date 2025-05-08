@@ -47,7 +47,6 @@
         loadingDelayPercent = 20
         isLoading           = true;
         
-        // TODO access 비밀번호 입력했을 때 loadingDelayPercent = 20 정도 할당하기
         // TODO access 비밀번호 확인 API 로 수정하기
         const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAIN), {
             method: 'GET',
@@ -65,11 +64,11 @@
                 setTimeout(() => {
                     removeIntro = true;
                     navigate(PATHS.HOME);
-                }, 3000);
+                }, 6000);
 
             }, loadingDataAniTime);
             
-            isLoading = false;
+            // isLoading = false; -> 추가 입력 막도록 하기 위해 true 유지
             return;
         }
 
