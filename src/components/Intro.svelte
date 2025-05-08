@@ -12,9 +12,9 @@
     let isLoading    = false;
     let showSkillGif = false;
 
-
     let loadingDataPercent  = 0;    // 고정 시간 동안 진행될 로딩바 진행 상태 (0 → 100%)
     let loadingDelayPercent = 0;    // 실제 통신 진척도 로딩바 진행 상태 (0 → 100%)
+    let delayProgressTimer;
     
     let loadingDataAniTime  = 2200; // 기본 연출 시간 (로딩바 + 커버 전환 시간)
   
@@ -44,16 +44,17 @@
     }
 
     async function fetchPassWordCheck() {
-        loadingDelayPercent = 20
-        isLoading           = true;
+        isLoading = true;
+        startDelayProgress();
         
-        // TODO access 비밀번호 확인 API 로 수정하기
         const response = await apiFetch(API.PAGE.VERIFY_ACCESS_GATE, {
             method: 'POST',
             body: JSON.stringify({
                 "password": code,
             }),
         }).catch(handleApiError);
+
+        stopDelayProgress();
 
         if (response.success) {
             loadingDelayPercent = 100;
@@ -81,6 +82,21 @@
         loadingDelayPercent = 0;
         alert('잘못된 비밀번호 코드입니다.\n다시 입력해 주세요.');
         return;
+    }
+
+    function startDelayProgress() {
+        function loop() {
+            if (loadingDelayPercent < 80) {
+                loadingDelayPercent += 0.6;
+                delayProgressTimer = requestAnimationFrame(loop);
+            }
+        }
+
+        delayProgressTimer = requestAnimationFrame(loop);
+    }
+
+    function stopDelayProgress() {
+        cancelAnimationFrame(delayProgressTimer);
     }
 
     let code = ['', '', '', '', '', ''];
@@ -167,7 +183,7 @@
             </div>
             {#if $canAccessPage}
                 <div class="authenticated-message">
-                    <h3>접근 권한이 이미 확인되었습니다.</h3>
+                    <p>접근 권한이 이미 확인되었습니다.</p>
                 </div>
             {/if}
         </div>
@@ -197,6 +213,11 @@
     text-align: center;
     margin-top: 10vh;
     color: #b0b0b0;
+}
+
+.authenticated-message p {
+    padding-left: 9px;
+    font-size: 13px;
 }
 
 .code-inputs {
