@@ -63,8 +63,8 @@
                 // cover 전환 이후 DOM 제거
                 setTimeout(() => {
                     removeIntro = true;
-                    navigate(PATHS.HOME);
-                }, 6000);
+                    navigate(PATHS.HOME, { state: { fromAccessGate: true } });
+                }, 5920);
 
             }, loadingDataAniTime);
             
