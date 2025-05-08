@@ -5,7 +5,7 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { PATHS } from '../constants/paths';
-    
+
 
     let introOn      = false;
     let removeIntro  = false;

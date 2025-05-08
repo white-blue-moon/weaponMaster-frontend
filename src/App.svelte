@@ -4,6 +4,7 @@
 	import { apiFetch, handleApiError } from './utils/apiFetch';
 	import { ADMIN_API } from './constants/api';
 	import { onMount } from 'svelte';
+	import { canAccessPage } from './utils/auth';
 
 	import Home from './routes/Home.svelte';
 	import Maintenance from './routes/Maintenance.svelte';
@@ -34,7 +35,7 @@
             method: 'GET',
         }).catch(handleApiError);
 
-		// 점검 중일 때는 모든 경로를 Maintenance 으로 리다이렉트
+		// 점검 중일 때는 모든 경로를 Maintenance 로 리다이렉트
         if (response != null) {	
 			if (response.isMaintenanceOn) {
 				isMaintenanceOn = response.isMaintenanceOn;
@@ -45,20 +46,28 @@
     }
 
     onMount(async () => {
+		// 홈페이지 접근 비밀번호 입력해야 하는 상태면 ACCESS_GATE 로 리다이렉트
+		if (!$canAccessPage) {
+			navigate(PATHS.ACCESS_GATE, { replace: true });
+			return;
+		}
+
         await fetchActiveMaintenance();
     })
 </script>
   
   
 <Router>
-	<!-- 점검 중일 때는 모든 경로를 MAINTENANCE 으로 리다이렉트 -->
+	<!-- 점검 중일 때는 모든 경로를 MAINTENANCE 로 리다이렉트 -->
 	{#if isMaintenanceOn}
-        <Route path={ PATHS.MAINTENANCE } let:params>
+		<Route path={ PATHS.MAINTENANCE } let:params>
 			<Maintenance { endDate }/>
 		</Route>
-    {:else}
+	{:else}
+		<!-- 홈페이지 접근 비밀번호 입력 페이지 -->
+		<Route path={ PATHS.ACCESS_GATE } component={ AccessGate } />
+		
 		<!-- 홈 -->
-		<Route path="/accessGate" component={ AccessGate } />
 		<Route path={ PATHS.HOME } component={ Home } />
 
 		<!-- 계졍 관련 -->

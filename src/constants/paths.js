@@ -1,4 +1,5 @@
 export const PATHS = {
+    ACCESS_GATE: '/accessGate',
     HOME: '/',
     MAINTENANCE: '/',
     ACCOUNT: {
