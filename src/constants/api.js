@@ -5,8 +5,9 @@ export const API = {
         PUBLISHER:   `${ROOT}/logo/publisher`,
     },
     PAGE: {
-        HOME:        `${ROOT}/page/home`,
-        MAINTENANCE: (bannerType) => `${ROOT}/page/maintenance/${bannerType}`,
+        VERIFY_ACCESS_GATE: `${ROOT}/page/access-gate/verify`,
+        HOME:               `${ROOT}/page/home`,
+        MAINTENANCE: (bannerType) => `${ROOT}/page/maintenance?bannerType=${bannerType}`,
     },
     ACCOUNT: {
         JOIN:  `${ROOT}/accounts`,

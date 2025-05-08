@@ -3,8 +3,8 @@
     import { navigate } from 'svelte-routing';
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { PATHS } from '../constants/paths';
+    import { canAccessPage, setCookie } from '../utils/auth';
 
 
     let introOn      = false;
@@ -36,7 +36,7 @@
     });
 
     // 배경 클릭 시 비밀 코드 포커스를 유지하기 위한 함수
-    function handleClickOutside(event) {
+    function handleClickOutside() {
         if (focusedIndex !== -1) {
             const input = document.getElementById(`code-${focusedIndex}`);
             requestAnimationFrame(() => input?.focus());
@@ -48,8 +48,11 @@
         isLoading           = true;
         
         // TODO access 비밀번호 확인 API 로 수정하기
-        const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAIN), {
-            method: 'GET',
+        const response = await apiFetch(API.PAGE.VERIFY_ACCESS_GATE, {
+            method: 'POST',
+            body: JSON.stringify({
+                "password": code,
+            }),
         }).catch(handleApiError);
 
         if (response.success) {
@@ -63,6 +66,7 @@
                 // cover 전환 이후 DOM 제거
                 setTimeout(() => {
                     removeIntro = true;
+                    setCookie('canAccessPage', true);
                     navigate(PATHS.HOME, { state: { fromAccessGate: true } });
                 }, 5920);
 
@@ -72,8 +76,10 @@
             return;
         }
 
-        alert('잘못된 비밀번호 코드입니다.');
         isLoading = false;
+        code      = ['', '', '', '', '', ''];
+        loadingDelayPercent = 0;
+        alert('잘못된 비밀번호 코드입니다.\n다시 입력해 주세요.');
         return;
     }
 
@@ -142,7 +148,7 @@
 {#if !removeIntro}
     <div class="intro {introOn ? 'on' : ''}">
         <div class="cover1 cover"></div>
-        <div class="cover2 cover">
+        <div class="cover2 cover">  
             <div class="code-inputs">
                 {#each code as _, i}
                     <input
@@ -159,6 +165,11 @@
                     />
                 {/each}
             </div>
+            {#if $canAccessPage}
+                <div class="authenticated-message">
+                    <h3>접근 권한이 이미 확인되었습니다.</h3>
+                </div>
+            {/if}
         </div>
         <div class="loading_data" style="width: {loadingDataPercent}vw;"></div>
         <div class="loading_delay" style="width: {loadingDelayPercent}vw;"></div>
@@ -181,6 +192,12 @@
 .intro.on .loading_delay{transition:0.3s;opacity:0;}
 .intro.on .cover1{transition:1s;top:-61vh}
 .intro.on .cover2{transition:1s;top:111vh}
+
+.authenticated-message {
+    text-align: center;
+    margin-top: 10vh;
+    color: #b0b0b0;
+}
 
 .code-inputs {
   display: flex;
