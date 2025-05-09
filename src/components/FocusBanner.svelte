@@ -3,6 +3,8 @@
     export let height         = "280px";
     export let imageUrls      = [];
     export let isOverlayExist = false;
+
+    export let isDefaultCtrlShow = true;
     
     
     let currentIndex   = 0;
@@ -66,37 +68,39 @@
                 <a class="swiper-overlay {overlayVisible ? 'visible' : ''}"></a>
             {/if}
 
-            <p class="pay_ctrl">
-                <a href="#" 
-                   class="arrow_l swiper-button-prev" 
-                   tabindex="0" 
-                   role="button" 
-                   aria-label="Previous slide"
-                   on:click|preventDefault={ prevSlide }>
-                    <span class="icon prev"></span>
-                </a>
+            {#if isDefaultCtrlShow}
+                <p class="pay_ctrl">
+                    <a href="#" 
+                    class="arrow_l swiper-button-prev" 
+                    tabindex="0" 
+                    role="button" 
+                    aria-label="Previous slide"
+                    on:click|preventDefault={ prevSlide }>
+                        <span class="icon prev"></span>
+                    </a>
 
-                <i class="page_cnt swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
-                    <span class="swiper-pagination-current">{currentIndex + 1}</span> /
-                    <span class="swiper-pagination-total">{imageUrls.length}</span>
-                </i>
+                    <i class="page_cnt swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
+                        <span class="swiper-pagination-current">{currentIndex + 1}</span> /
+                        <span class="swiper-pagination-total">{imageUrls.length}</span>
+                    </i>
 
-                <a href="#"
-                   class="arrow_r swiper-button-next" 
-                   tabindex="0" 
-                   role="button" 
-                   aria-label="Next slide"
-                   on:click|preventDefault={ nextSlide }>
-                    <span class="icon next"></span>
-                </a>
+                    <a href="#"
+                    class="arrow_r swiper-button-next" 
+                    tabindex="0" 
+                    role="button" 
+                    aria-label="Next slide"
+                    on:click|preventDefault={ nextSlide }>
+                        <span class="icon next"></span>
+                    </a>
 
-                <i class="pause" on:click={ togglePause }>
-                    {#if isPaused}
-                        ||
-                    {:else}
-                    {/if}
-                </i>
-            </p>
+                    <i class="pause" on:click={ togglePause }>
+                        {#if isPaused}
+                            ||
+                        {:else}
+                        {/if}
+                    </i>
+                </p>
+            {/if}
         </li>
     {/if}
 </section>

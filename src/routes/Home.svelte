@@ -15,9 +15,9 @@
     import Spinner from '../components/Spinner.svelte';
     import Top from '../components/Top.svelte';
     import CharacterBanner from '../components/CharacterBanner.svelte';
+    import FocusControl from '../components/FocusControl.svelte';
     
   
-    
     let focusBanners     = [];
     let newsArticles     = [];
     let bestViewArticles = [];
@@ -84,16 +84,19 @@
         <div class="gnb">
             <Gnb />
         </div>
+
         <div class="focus-banner">
             {#if !isLoading}
                 <a href={ PATHS.INTRODUCE.PURPOSE }>
                     <FocusBanner 
-                        width="1450px" 
+                        width="100%" 
                         height="600px" 
                         imageUrls={ mainFocusBanner } 
                         isOverlayExist={ true }
+                        isDefaultCtrlShow={ false }
                     />
                 </a>
+                <FocusControl />
             {:else}
                 <div class="spinner-container">
                     <Spinner /> <span class="loading-text">로딩중입니다.</span>
@@ -156,14 +159,14 @@
         position: absolute;   
         top: 0;         /* 상단에 맞추기 */
         left: 0;        /* 왼쪽에 맞추기 */
-        width: 1450px;  
+        width: 100%;  
         height: 100px;  
         z-index: 20;    /* focus-banner 위로 올리기 위해 z-index 조정 */
     }
 
     .focus-banner {
         position: relative;  /* 위치를 상대적으로 설정하여 스피너 컨테이너와 겹치지 않도록 함 */
-        width: 1450px;       
+        width: 100%;       
         height: 600px;       
     }
 
