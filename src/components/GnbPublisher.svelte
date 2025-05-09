@@ -33,11 +33,11 @@
 
   <SideMenu isOpen={ isMenuOpen } onClose={ () => isMenuOpen = false } />
   
-  <div class="logo">
+  <a class="logo" href={ PATHS.HOME }>
     {#if publisherLogo}
       <img src="/images/logo_blue_moon.png" alt={ publisherLogo.alt }>
     {/if}
-  </div>
+  </a>
   
   <div class="actions">
     {#if $isLoggedIn}
@@ -110,6 +110,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%); /* 로고를 정확히 가운데 정렬 */
+    cursor: pointer;
   }
 
   .actions {
