@@ -57,6 +57,8 @@ export function setCookie(name, value, day = 1) {
 
     expires.setTime(expires.getTime() + (day * oneDayMs)); // day 일 후 만료
     document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires.toUTCString()};`;
+    
+    canAccessPage.set(true);
     return;
 }
 
