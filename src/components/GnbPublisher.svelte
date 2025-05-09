@@ -35,7 +35,7 @@
   
   <a class="logo" href={ PATHS.HOME }>
     {#if publisherLogo}
-      <img src="/images/logo_blue_moon.png" alt={ publisherLogo.alt }>
+      <img src={ publisherLogo.imgUrl } alt={ publisherLogo.alt }>
     {/if}
   </a>
   
