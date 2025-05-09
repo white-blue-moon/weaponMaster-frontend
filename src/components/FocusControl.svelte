@@ -1,13 +1,50 @@
 <script>
+    import { onMount, tick } from "svelte";
 
+    export let bannerRef;
+    export let isHovered;
+
+    let currentIndex = 0;
+    let slideLength  = 0;
+    let SLIDE_TERM   = 0;
+
+    onMount(async () => {
+        await tick(); // DOM과 바인딩 완료를 기다림
+        if (bannerRef) {
+            slideLength = bannerRef.getSlideLength();
+            SLIDE_TERM  = bannerRef.getSlideTerm();
+        }
+    });
+
+
+    function handlePrev() {
+        bannerRef.prevSlide();
+        currentIndex = (currentIndex - 1 + slideLength) % slideLength;
+        return;
+    }
+
+    function handleNext() {
+        bannerRef.nextSlide();
+        currentIndex = (currentIndex + 1) % slideLength;
+        return;
+    }
 </script>
 
-<div class="focus">
+
+<div class="focus"
+    bind:this={ bannerRef }
+    on:mouseenter={ bannerRef.stopAutoPlay }
+    on:mouseleave={ bannerRef.startAutoPlay }
+>
     <div class="focus_ctrl">
-        <div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
-        <div class="swiper-pagination swiper-pagination-custom swiper-pagination-horizontal"><span class="current">1</span><span class="divi"> /</span><span class="total">3</span></div>
-        <div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
-        <div class="pause"></div>
+        <div class="swiper-button-prev" on:click={ handlePrev } tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
+        <div class="swiper-pagination swiper-pagination-custom swiper-pagination-horizontal">
+            <span class="current">{ currentIndex + 1 }</span>
+            <span class="divi"> /</span>
+            <span class="total">{ slideLength }</span>
+        </div>
+        <div class="swiper-button-next" on:click={ handleNext } tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
+        <div class="pause { isHovered ? "play" : "" }"></div>
         <div class="autoplay-progress"><svg viewBox="0 0 100 10" style="--progress: 0.026599999999999957;"><line x1="0" y1="0" x2="207" y2="0"></line></svg></div>
     </div>
 </div>
@@ -38,4 +75,9 @@
 .focus .focus_ctrl .pause.play{background-position-y:0}
 .focus .focus_ctrl .autoplay-progress{position:absolute;left:10px;bottom:5px;z-index:10;width:207px;height:2px;background-color:rgba(0, 0, 0, 0.1);}
 .focus .focus_ctrl .autoplay-progress svg{--progress:0;position:absolute;left:0;top:0;z-index:10;width:100%;stroke-width:1px;stroke:#3392ff;fill:none;stroke-dashoffset:calc(100 * (1 - var(--progress)));stroke-dasharray:100;}
+
+
+.focus:hover .pause {
+    background-position-y:0;
+}
 </style>

@@ -22,6 +22,7 @@
     let newsArticles     = [];
     let bestViewArticles = [];
     let characterBanners = [];
+    let mainBannerRef;
     
     let mainFocusBanner, newsFirstBanner, newsSecondBanner;
     let isLoading = true;
@@ -76,6 +77,12 @@
 
         await fetchFocusBanners();
     });
+
+    let isMainFocusHovered = false;
+  
+    function updateHoverState(hovered) {
+        isMainFocusHovered = hovered;
+    }
 </script>
 
 <div class:fade-in={ show } class="home-wrapper">
@@ -94,9 +101,11 @@
                         imageUrls={ mainFocusBanner } 
                         isOverlayExist={ true }
                         isDefaultCtrlShow={ false }
+                        bind:this={ mainBannerRef }
+                        on:hoverState={event => updateHoverState(event.detail)}
                     />
                 </a>
-                <FocusControl />
+                <FocusControl bannerRef={ mainBannerRef } isHovered={ isMainFocusHovered }/>
             {:else}
                 <div class="spinner-container">
                     <Spinner /> <span class="loading-text">로딩중입니다.</span>

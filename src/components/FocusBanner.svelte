@@ -1,36 +1,39 @@
 <script>
+    import { onMount, createEventDispatcher } from "svelte";
+
     export let width             = "560px";
     export let height            = "280px";
     export let imageUrls         = [];
     export let isOverlayExist    = false;
     export let isDefaultCtrlShow = true;
     
+    const dispatch = createEventDispatcher();
+
     let currentIndex   = 0;
     let overlayVisible = true;
     let autoPlayInterval;
 
-    const SLIDE_TERM    = 5000; // 슬라이드 변경 텀 (단위: ms)
-    const OVERLAY_TERM  = 200;  // 오버레이 이미지 등장/전환 텀 (단위: ms)
+    const SLIDE_TERM   = 5000; // 슬라이드 변경 텀 (단위: ms)
+    const OVERLAY_TERM = 200;  // 오버레이 이미지 등장/전환 텀 (단위: ms)
 
-    function startAutoPlay() {
+    onMount(() => {
+        startAutoPlay();
+    });
+
+    export function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
             nextSlide();
         }, SLIDE_TERM);
+
+        dispatch('hoverState', false);
     }
 
-    function stopAutoPlay() {
+    export function stopAutoPlay() {
         clearInterval(autoPlayInterval);
+        dispatch('hoverState', true);
     }
 
-    function nextSlide() {
-        overlayVisible = false; // Overlay 숨기기
-        setTimeout(() => {
-            currentIndex = (currentIndex + 1) % imageUrls.length;
-            overlayVisible = true; // Overlay 다시 표시
-        }, OVERLAY_TERM);
-    }
-
-    function prevSlide() {
+    export function prevSlide() {
         overlayVisible = false;
         setTimeout(() => {
             currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
@@ -38,7 +41,21 @@
         }, OVERLAY_TERM);
     }
 
-    startAutoPlay();
+    export function nextSlide() {
+        overlayVisible = false; // Overlay 숨기기
+        setTimeout(() => {
+            currentIndex = (currentIndex + 1) % imageUrls.length;
+            overlayVisible = true; // Overlay 다시 표시
+        }, OVERLAY_TERM);
+    }
+
+    export function getSlideLength() {
+        return imageUrls.length;
+    }
+
+    export function getSlideTerm() {
+        return SLIDE_TERM;
+    }
 </script>
 
 <!-- svelte-ignore a11y-no-redundant-roles -->
