@@ -7,34 +7,65 @@
     let currentIndex = 0;
     let slideLength  = 0;
     let SLIDE_TERM   = 0;
+    let progress     = 0;
+    let autoplayInterval;
+
+    const TICK = 10;
+    let   PROGRESS_INCREMENT;
 
     onMount(async () => {
         await tick(); // DOM과 바인딩 완료를 기다림
         if (bannerRef) {
-            slideLength = bannerRef.getSlideLength();
-            SLIDE_TERM  = bannerRef.getSlideTerm();
+            slideLength        = bannerRef.getSlideLength();
+            SLIDE_TERM         = bannerRef.getSlideTerm();
+            PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK);
         }
+
+        startAutoProgress();
     });
 
 
     function handlePrev() {
+        progress = 0;
         bannerRef.prevSlide();
         currentIndex = (currentIndex - 1 + slideLength) % slideLength;
         return;
     }
 
     function handleNext() {
+        progress = 0;
         bannerRef.nextSlide();
         currentIndex = (currentIndex + 1) % slideLength;
         return;
+    }
+
+    function startAutoProgress() {
+        autoplayInterval = setInterval(() => {
+            if (!isHovered) {
+                progress += PROGRESS_INCREMENT;
+                if (progress >= 100) {
+                    progress = 0;
+                    currentIndex = (currentIndex + 1) % slideLength;
+                } 
+            }
+        }, TICK); // 10ms마다 진행 상태 업데이트
+    }
+
+    function handleMouseEnter() {
+        bannerRef.stopAutoPlay();
+        clearInterval(autoplayInterval);
+    }
+
+    function handleMouseLeave() {
+        bannerRef.startAutoPlay();
+        startAutoProgress(); 
     }
 </script>
 
 
 <div class="focus"
-    bind:this={ bannerRef }
-    on:mouseenter={ bannerRef.stopAutoPlay }
-    on:mouseleave={ bannerRef.startAutoPlay }
+    on:mouseenter={ handleMouseEnter }
+    on:mouseleave={ handleMouseLeave }
 >
     <div class="focus_ctrl">
         <div class="swiper-button-prev" on:click={ handlePrev } tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
@@ -45,7 +76,11 @@
         </div>
         <div class="swiper-button-next" on:click={ handleNext } tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
         <div class="pause { isHovered ? "play" : "" }"></div>
-        <div class="autoplay-progress"><svg viewBox="0 0 100 10" style="--progress: 0.026599999999999957;"><line x1="0" y1="0" x2="207" y2="0"></line></svg></div>
+        <div class="autoplay-progress">
+            <svg viewBox="0 0 100 10" style="--progress: { progress / 100 };">
+                <line x1="0" y1="0" x2="207" y2="0"></line>
+            </svg>
+        </div>    
     </div>
 </div>
 

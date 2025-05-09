@@ -12,9 +12,14 @@
     let currentIndex   = 0;
     let overlayVisible = true;
     let autoPlayInterval;
+    
+    let progress = 0;
 
     const SLIDE_TERM   = 5000; // 슬라이드 변경 텀 (단위: ms)
     const OVERLAY_TERM = 200;  // 오버레이 이미지 등장/전환 텀 (단위: ms)
+
+    const TICK = 10; // 10ms 마다 업데이트
+    const PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK); // 10ms마다 증가량
 
     onMount(() => {
         startAutoPlay();
@@ -22,8 +27,13 @@
 
     export function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
-            nextSlide();
-        }, SLIDE_TERM);
+            progress += PROGRESS_INCREMENT;
+
+            if (progress >= 100) {
+                progress = 0;
+                nextSlide();
+            }
+        }, TICK);
 
         dispatch('hoverState', false);
     }
@@ -34,6 +44,7 @@
     }
 
     export function prevSlide() {
+        progress       = 0;
         overlayVisible = false;
         setTimeout(() => {
             currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
@@ -42,6 +53,7 @@
     }
 
     export function nextSlide() {
+        progress       = 0;
         overlayVisible = false; // Overlay 숨기기
         setTimeout(() => {
             currentIndex = (currentIndex + 1) % imageUrls.length;
