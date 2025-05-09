@@ -6,16 +6,22 @@
     export let bannerTextColor  = "#fff";
     export let isLogoVisible    = true;
     export let bannerBackground = `${DF_UI}/img/mem/bg.png`;
+    export let logoPaddingTop   = "0px";
+
     const logoBackground        = `/images/logo_background.png`;
 </script>
 
 <header class="banner" style="--banner-background: url({ bannerBackground })">
     {#if isLogoVisible}
-    <h1>
-        <a href="/" style="--logo-background: url({ logoBackground })">{ homeName }</a>
-    </h1>
+        <h1 style="padding-top: {logoPaddingTop};">
+            <a href="/" style="--logo-background: url({ logoBackground })">{ homeName }</a>
+        </h1>
     {/if}
-    <h2 class:isLogoVisible={ isLogoVisible } class:notLogoVisible={ !isLogoVisible } style="color: { bannerTextColor };">
+    <h2 
+        class:isLogoVisible={ isLogoVisible } 
+        class:notLogoVisible={ !isLogoVisible } 
+        style="color: { bannerTextColor };"
+    >
         { bannerText }
     </h2>
 </header>

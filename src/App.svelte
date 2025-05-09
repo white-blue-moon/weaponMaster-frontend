@@ -26,6 +26,7 @@
 	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
 	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
   	import AccessGate from './routes/AccessGate.svelte';
+  	import NotFoundPage from './components/NotFoundPage.svelte';
 
 	let isMaintenanceOn = false;
 	let endDate;
@@ -102,6 +103,9 @@
 		<Route path={ PATHS.SERVICE_CENTER.WRITE } 				  component={ PageWrite } />
 		<Route path={ PATHS.SERVICE_CENTER.READ_TEPLATE } 		  component={ PageRead } />
 		<Route path={ PATHS.SERVICE_CENTER.EDIT_TEMPLATE } 		  component={ PageWrite } />
+
+		<!-- 잘못된 경로 -->
+		<Route path="*" component={ NotFoundPage } />
 	{/if}
 </Router>
   
