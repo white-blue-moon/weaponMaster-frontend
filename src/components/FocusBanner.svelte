@@ -1,14 +1,11 @@
 <script>
-    export let width          = "560px";
-    export let height         = "280px";
-    export let imageUrls      = [];
-    export let isOverlayExist = false;
-
+    export let width             = "560px";
+    export let height            = "280px";
+    export let imageUrls         = [];
+    export let isOverlayExist    = false;
     export let isDefaultCtrlShow = true;
     
-    
     let currentIndex   = 0;
-    let isPaused       = false;
     let overlayVisible = true;
     let autoPlayInterval;
 
@@ -17,9 +14,7 @@
 
     function startAutoPlay() {
         autoPlayInterval = setInterval(() => {
-            if (!isPaused) {
-                nextSlide();
-            }
+            nextSlide();
         }, SLIDE_TERM);
     }
 
@@ -41,10 +36,6 @@
             currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
             overlayVisible = true;
         }, OVERLAY_TERM);
-    }
-
-    function togglePause() {
-        isPaused = !isPaused;
     }
 
     startAutoPlay();
@@ -71,11 +62,12 @@
             {#if isDefaultCtrlShow}
                 <p class="pay_ctrl">
                     <a href="#" 
-                    class="arrow_l swiper-button-prev" 
-                    tabindex="0" 
-                    role="button" 
-                    aria-label="Previous slide"
-                    on:click|preventDefault={ prevSlide }>
+                        class="arrow_l swiper-button-prev" 
+                        tabindex="0" 
+                        role="button" 
+                        aria-label="Previous slide"
+                        on:click|preventDefault={ prevSlide }
+                    >
                         <span class="icon prev"></span>
                     </a>
 
@@ -85,27 +77,23 @@
                     </i>
 
                     <a href="#"
-                    class="arrow_r swiper-button-next" 
-                    tabindex="0" 
-                    role="button" 
-                    aria-label="Next slide"
-                    on:click|preventDefault={ nextSlide }>
+                        class="arrow_r swiper-button-next" 
+                        tabindex="0" 
+                        role="button" 
+                        aria-label="Next slide"
+                        on:click|preventDefault={ nextSlide }
+                    >
                         <span class="icon next"></span>
                     </a>
 
-                    <i class="pause" on:click={ togglePause }>
-                        {#if isPaused}
-                            ||
-                        {:else}
-                        {/if}
-                    </i>
+                    <i class="pause"></i>
                 </p>
             {/if}
         </li>
     {/if}
 </section>
 
-<style>
+<style lang="scss">
     .swiper-slide {
         background: var(--swiper-background) 50% 0px no-repeat;
         background-size: cover;
@@ -142,10 +130,10 @@
         right: 0;
         display: flex;
         align-items: center;
-        gap: 7px;
+        gap: 4px;
         background: rgba(0, 0, 0, 0.7);
-        padding: 5px 0px 5px 6px;
-        font-size: 14px;
+        padding: 5px 6px 5px 6px;
+        font-size: 13px;
         z-index: 10;
         margin-bottom: 0;
     }
@@ -163,7 +151,7 @@
     .arrow_l .icon::before {
         content: ""; /* 가상요소 before 에서는 반드시 content를 설정 */
         display: block; /* 블록 요소로 렌더링 */
-        background: url('https://resource.df.nexon.com/ui/img/main/focus_prev.png') no-repeat center center;
+        background: url('#{$DF_UI}/img/main/focus_prev.png') no-repeat center center;
         background-size: contain; /* 이미지 크기를 부모에 맞춤 */
         width: 41px; /* 아이콘 크기 설정 */
         height: 41px;
@@ -172,7 +160,7 @@
     .arrow_r .icon::before {
         content: ""; /* 가상요소 before 에서는 반드시 content를 설정 */
         display: block; /* 블록 요소로 렌더링 */
-        background: url('https://resource.df.nexon.com/ui/img/main/focus_next.png') no-repeat center center;
+        background: url('#{$DF_UI}/img/main/focus_next.png') no-repeat center center;
         background-size: contain; /* 이미지 크기를 부모에 맞춤 */
         width: 41px; /* 아이콘 크기 설정 */
         height: 41px;
@@ -182,7 +170,7 @@
     .page_cnt {
         padding-top: 1px;
         color: #bec5cc;
-        font-size: 14px;
+        font-size: 13px;
     }
 
     .swiper-pagination-current {
@@ -193,9 +181,17 @@
         margin: 0;
         right: 6px;
         top: 6px;
-        background: url('https://resource.df.nexon.com/ui/img/main/focus_play.png') no-repeat -15px -56.1px;
+        background: url('#{$DF_UI}/img/main/sbnr_play.png') no-repeat 0 -50px;
         width: 23px; /* 아이콘 크기 설정 */
         height: 29px;
         cursor: pointer;
+    }
+
+    section:hover .pause {
+        background-position-y: 0;
+    }
+
+    i {
+        font-style: normal !important;
     }
 </style>

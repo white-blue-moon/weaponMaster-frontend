@@ -5,7 +5,7 @@
 <div class="focus">
     <div class="focus_ctrl">
         <div class="swiper-button-prev" tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
-        <div class="swiper-pagination swiper-pagination-custom swiper-pagination-horizontal"><span class="current">1</span><span class="divi"> /</span><span class="total">9</span></div>
+        <div class="swiper-pagination swiper-pagination-custom swiper-pagination-horizontal"><span class="current">1</span><span class="divi"> /</span><span class="total">3</span></div>
         <div class="swiper-button-next" tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
         <div class="pause"></div>
         <div class="autoplay-progress"><svg viewBox="0 0 100 10" style="--progress: 0.026599999999999957;"><line x1="0" y1="0" x2="207" y2="0"></line></svg></div>
