@@ -40,7 +40,7 @@
 
 <header>
     <img 
-        src="images/logo.png" 
+        src="images/logo_background.png" 
         alt="Dungeon &amp; Fighter" 
     />
     <h3>이 홈페이지는 포트폴리오 제출용 홈페이지입니다.</h3>
@@ -165,8 +165,6 @@
     header img {
         display: block;
         margin: 0 auto;
-        width: 176px;
-        height: 122px;
     }
 
     header h1 {
