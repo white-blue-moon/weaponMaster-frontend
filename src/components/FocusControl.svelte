@@ -4,19 +4,19 @@
     export let bannerRef;
     export let isHovered;
 
+    let banners      = [];
     let currentIndex = 0;
-    let slideLength  = 0;
     let SLIDE_TERM   = 0;
     let progress     = 0;
     let autoplayInterval;
-
+    
     const TICK = 10;
     let   PROGRESS_INCREMENT;
 
     onMount(async () => {
         await tick(); // DOM과 바인딩 완료를 기다림
         if (bannerRef) {
-            slideLength        = bannerRef.getSlideLength();
+            banners            = bannerRef.getBanners();
             SLIDE_TERM         = bannerRef.getSlideTerm();
             PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK);
         }
@@ -28,14 +28,14 @@
     function handlePrev() {
         progress = 0;
         bannerRef.prevSlide();
-        currentIndex = (currentIndex - 1 + slideLength) % slideLength;
+        currentIndex = (currentIndex - 1 + banners.length) % banners.length;
         return;
     }
 
     function handleNext() {
         progress = 0;
         bannerRef.nextSlide();
-        currentIndex = (currentIndex + 1) % slideLength;
+        currentIndex = (currentIndex + 1) % banners.length;
         return;
     }
 
@@ -45,7 +45,7 @@
                 progress += PROGRESS_INCREMENT;
                 if (progress >= 100) {
                     progress = 0;
-                    currentIndex = (currentIndex + 1) % slideLength;
+                    currentIndex = (currentIndex + 1) % banners.length;
                 } 
             }
         }, TICK); // 10ms마다 진행 상태 업데이트
@@ -60,19 +60,31 @@
         bannerRef.startAutoPlay();
         startAutoProgress(); 
     }
+
+    let isOpen = false;
+
+	function toggleBannerList() {
+		isOpen = !isOpen;
+	}
+
+    function handleBannerListClick(index) {
+		progress     = 0;
+		currentIndex = index;
+        bannerRef.moveToSlide(index);
+	}
 </script>
 
 
-<div class="focus"
-    on:mouseenter={ handleMouseEnter }
-    on:mouseleave={ handleMouseLeave }
->
-    <div class="focus_ctrl">
+<div class="focus">
+    <div class="focus_ctrl"
+        on:mouseenter={ handleMouseEnter }
+        on:mouseleave={ handleMouseLeave }
+    >
         <div class="swiper-button-prev" on:click={ handlePrev } tabindex="0" role="button" aria-label="Previous slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
         <div class="swiper-pagination swiper-pagination-custom swiper-pagination-horizontal">
             <span class="current">{ currentIndex + 1 }</span>
             <span class="divi"> /</span>
-            <span class="total">{ slideLength }</span>
+            <span class="total">{ banners.length }</span>
         </div>
         <div class="swiper-button-next" on:click={ handleNext } tabindex="0" role="button" aria-label="Next slide" aria-controls="swiper-wrapper-df3ec51c1d70d5df"></div>
         <div class="pause { isHovered ? "play" : "" }"></div>
@@ -82,6 +94,19 @@
             </svg>
         </div>    
     </div>
+
+    <div class="bnr_lst">
+        <a class="bnr_tot {isOpen ? 'open' : ''}" on:click={ toggleBannerList }></a>
+        <div style="display: {isOpen ? 'block' : 'none'};">
+            <p>
+                {#each banners as banner, index}
+                    <a on:click={ () => handleBannerListClick(index) }>
+                        { banner.imgComment }
+                    </a>
+                {/each}
+            </p>
+        </div>
+    </div>
 </div>
 
 
@@ -90,6 +115,10 @@
     margin: 0px;
     padding: 0px;
     box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
 }
 
 .swiper-pagination {
@@ -111,8 +140,96 @@
 .focus .focus_ctrl .autoplay-progress{position:absolute;left:10px;bottom:5px;z-index:10;width:207px;height:2px;background-color:rgba(0, 0, 0, 0.1);}
 .focus .focus_ctrl .autoplay-progress svg{--progress:0;position:absolute;left:0;top:0;z-index:10;width:100%;stroke-width:1px;stroke:#3392ff;fill:none;stroke-dashoffset:calc(100 * (1 - var(--progress)));stroke-dasharray:100;}
 
-
 .focus:hover .pause {
     background-position-y:0;
+}
+
+.focus .bnr_lst {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    margin-left: 350px;
+    width: 300px;
+    height: 550px;
+}
+
+.focus .bnr_lst .bnr_tot {
+    z-index: 9;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 73px;
+    height: 69px;
+    cursor: pointer;
+    background: #197cff url('#{$DF_UI}/img/main/bnr_menu.png') no-repeat center center;
+}
+
+.focus .bnr_lst .bnr_tot.open {
+    background: #f2f4f6 url('#{$DF_UI}/img/main/bnr_menu_close.png') no-repeat center center;
+}
+
+.focus .bnr_lst div {
+    z-index: 9;
+    display: none;
+    position: absolute;
+    bottom: 69px;
+    width: 300px;
+    max-height: 381px;
+    padding: 25px 10px 25px 20px;
+    background: #f2f4f6;
+}
+
+.focus .bnr_lst div p {
+    max-height: 331px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.focus .bnr_lst p a {
+    position: relative;
+    display: block;
+    width: 240px;
+    padding-left: 8px;
+    border-bottom: 1px solid #e4e5ec;
+    color: #6a6e76;
+    line-height: 47px;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.focus .bnr_lst p a::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 2px;
+    margin-top: -1px;
+    background: #898c92;
+}
+
+.focus .bnr_lst p a:hover {
+    color: #3392ff;
+    cursor: pointer;
+}
+
+.focus .bnr_lst p a:last-child {
+    border-bottom: none;
+}
+
+.focus .bnr_lst ::-webkit-scrollbar {
+    width: 10px;
+}
+
+.focus .bnr_lst ::-webkit-scrollbar-thumb {
+    border-radius: 0;
+    background-color: #484e5f;
+}
+
+.focus .bnr_lst ::-webkit-scrollbar-track {
+    background-color: #d2d4d6;
 }
 </style>

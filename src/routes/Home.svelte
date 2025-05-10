@@ -44,7 +44,7 @@
 
         if (response.success) {
             focusBanners     = response.data.focusBanners;
-            mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
+            // mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
             newsFirstBanner  = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
             newsSecondBanner = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
         
@@ -98,7 +98,7 @@
                     <FocusBanner 
                         width="100%" 
                         height="600px" 
-                        imageUrls={ mainFocusBanner } 
+                        banners={ focusBanners[FOCUS_BANNER_TYPE.MAIN] }
                         isOverlayExist={ true }
                         isDefaultCtrlShow={ false }
                         bind:this={ mainBannerRef }
@@ -123,10 +123,10 @@
             {#if !isLoading}
                 <!-- 두 번째와 세 번째 배너 데이터로 FocusBanner 렌더링 -->
                 <div class="news-left-focus-banner">
-                    <FocusBanner width="560px" height="280px" imageUrls={newsFirstBanner} />
+                    <FocusBanner width="560px" height="280px" banners={ focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST] } />
                 </div>
                 <div class="news-right-focus-banner">
-                    <FocusBanner width="300px" height="280px" imageUrls={newsSecondBanner} />
+                    <FocusBanner width="300px" height="280px" banners={ focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND] } />
                 </div>
             {:else}
                 <!-- 로딩 중 상태 -->

@@ -3,7 +3,7 @@
 
     export let width             = "560px";
     export let height            = "280px";
-    export let imageUrls         = [];
+    export let banners           = [];
     export let isOverlayExist    = false;
     export let isDefaultCtrlShow = true;
     
@@ -46,29 +46,49 @@
     export function prevSlide() {
         progress       = 0;
         overlayVisible = false;
+
         setTimeout(() => {
-            currentIndex = (currentIndex - 1 + imageUrls.length) % imageUrls.length;
+            currentIndex = (currentIndex - 1 + banners.length) % banners.length;
             overlayVisible = true;
         }, OVERLAY_TERM);
     }
 
     export function nextSlide() {
         progress       = 0;
-        overlayVisible = false; // Overlay 숨기기
+        overlayVisible = false;    // Overlay 숨기기
+
         setTimeout(() => {
-            currentIndex = (currentIndex + 1) % imageUrls.length;
+            currentIndex = (currentIndex + 1) % banners.length;
             overlayVisible = true; // Overlay 다시 표시
         }, OVERLAY_TERM);
     }
 
-    export function getSlideLength() {
-        return imageUrls.length;
+    export function moveToSlide(index) {
+        if (index < 0 || index >= banners.length) {
+            return;
+        } 
+
+        progress       = 0;
+        overlayVisible = false;
+
+        setTimeout(() => {
+            currentIndex   = index;
+            overlayVisible = true;
+        }, OVERLAY_TERM);
+
+        return;
+    }
+
+
+    export function getBanners() {
+        return banners;
     }
 
     export function getSlideTerm() {
         return SLIDE_TERM;
     }
 </script>
+
 
 <!-- svelte-ignore a11y-no-redundant-roles -->
 <section
@@ -77,12 +97,12 @@
     style="--swiper-width: {width}; --swiper-height: {height};"
     role="region"
 >
-    {#if imageUrls.length > 0}
+    {#if banners.length > 0}
         <li
             class="swiper-slide swiper-slide-active"
             role="group"
-            aria-label="{currentIndex + 1} / {imageUrls.length}"
-            style="--swiper-background: url('{imageUrls[currentIndex]}');"
+            aria-label="{currentIndex + 1} / {banners.length}"
+            style="--swiper-background: url('{banners[currentIndex].imgUrl}');"
         >
             {#if isOverlayExist}
                 <a class="swiper-overlay {overlayVisible ? 'visible' : ''}"></a>
@@ -102,7 +122,7 @@
 
                     <i class="page_cnt swiper-pagination swiper-pagination-fraction swiper-pagination-horizontal">
                         <span class="swiper-pagination-current">{currentIndex + 1}</span> /
-                        <span class="swiper-pagination-total">{imageUrls.length}</span>
+                        <span class="swiper-pagination-total">{banners.length}</span>
                     </i>
 
                     <a href="#"
@@ -121,6 +141,7 @@
         </li>
     {/if}
 </section>
+
 
 <style lang="scss">
     .swiper-slide {

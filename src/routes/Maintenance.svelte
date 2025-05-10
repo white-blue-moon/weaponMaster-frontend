@@ -22,7 +22,7 @@
     const formatHours   = hours   < 10 ? `0${hours}`   : hours; 
     const formatMinutes = minutes < 10 ? `0${minutes}` : minutes; 
     
-    let bannerImgUrls = [];
+    let focusBanner   = [];
     let latestDevNote = {};
 
     onMount(async () => {
@@ -31,9 +31,8 @@
           }).catch(handleApiError);
 
           if (response.success) {
-            const focusBanner = response.data.focusBanners;
-            bannerImgUrls     = focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN]?.map(banner => banner.imgUrl);
-            latestDevNote     = response.data.devNote;
+            focusBanner   = response.data.focusBanners;
+            latestDevNote = response.data.devNote;
           }
     });
 </script>
@@ -60,9 +59,7 @@
         </div>
     </article>
     <article class="focus">
-        <!-- {#if bannerImgUrls.length > 0} -->
-            <FocusBanner width="650px" height="650px" imageUrls={ bannerImgUrls } />
-        <!-- {/if} -->
+        <FocusBanner width="650px" height="650px" banners={ focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN] } />
     </article>
 </section>
 
