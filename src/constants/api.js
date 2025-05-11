@@ -1,5 +1,8 @@
-export const BACKEND_ROOT = 'https://d1cb-2001-e60-1060-d022-849e-82fb-68b6-7e4e.ngrok-free.app'; // ngrok 을 이용한 임시 배포 주소
-const  ROOT               = 'http://localhost:7070'; // TODO .env 파일을 통한 경로 관리 추후 고려 ex) const ROOT = import.meta.env.API_ROOT
+// 환경에 따른 API 경로 설정 (개발/배포 환경)
+const isDevelopment = window.location.hostname === 'localhost';
+
+export const BACKEND_ROOT = 'https://weapon-master-portfolio.duckdns.org/weapon-back'; // 실제 배포 주소 -> slack 연동 시 참조
+const  ROOT               = isDevelopment ? 'http://localhost:7070' : 'https://weapon-master-portfolio.duckdns.org/weapon-back';
 export const API = {
     LOGO: {
         PUBLISHER:   `${ROOT}/logo/publisher`,
@@ -56,7 +59,7 @@ export const WEB_SOCKET_API = {
 }
 
 // 어드민 툴 백엔드 서버 API
-const ADMIN_ROOT = 'http://localhost:7770';
+const ADMIN_ROOT = isDevelopment ? 'http://localhost:7770' : 'https://weapon-master-portfolio.duckdns.org/admin-back';
 export const ADMIN_API = {
     MAINTENANCE: {
         GET_ACTIVE: `${ADMIN_ROOT}/maintenance/active`,
