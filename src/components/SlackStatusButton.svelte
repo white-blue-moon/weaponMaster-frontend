@@ -19,8 +19,8 @@
   >
     <img
       src={ slackInfoExists && !slackErrorExists
-              ? "/images/icon/icon_quest.png"
-              : "/images/icon/icon_ex.png"
+              ? "images/icon/icon_quest.png"
+              : "images/icon/icon_ex.png"
           }
       alt={ slackInfoExists && !slackErrorExists ? "도움말 아이콘" : "주의 아이콘" }
       class="status-icon"
