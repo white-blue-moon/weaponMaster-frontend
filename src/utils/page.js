@@ -151,15 +151,15 @@ export function getListPath(categoryType, articleType) {
 
 
 export function getCategoryTypeByURL(url) {
-    if (url.startsWith('/news')) {
+    if (url.startsWith(`${BASE}/news`)) {
         return CATEGORY_TYPE.NEWS;
     }
 
-    if (url.startsWith('/community')) {
+    if (url.startsWith(`${BASE}/community`)) {
         return CATEGORY_TYPE.COMMUNITY;
     }
 
-    if (url.startsWith('/service')) {
+    if (url.startsWith(`${BASE}/service`)) {
         return CATEGORY_TYPE.SERVICE_CENTER;
     }
 
