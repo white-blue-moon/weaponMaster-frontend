@@ -168,7 +168,7 @@
     display: inline-block;
     width: 16px;
     height: 18px;
-    background: transparent url(/images/img_logo.png) 0 0 no-repeat;
+    background: transparent url(images/img_logo.png) 0 0 no-repeat;
     background-size: contain; /* 아이콘이 컨테이너 크기에 맞게 조정되도록 설정 */
   }
 

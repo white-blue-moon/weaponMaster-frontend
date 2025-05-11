@@ -1,58 +1,60 @@
+const BASE = '/weapon-front';
+
 export const PATHS = {
-    ACCESS_GATE: '/access-gate',
-    HOME: '/',
-    MAINTENANCE: '/',
+    ACCESS_GATE: `${BASE}/access-gate`,
+    HOME: `${BASE}/`,
+    MAINTENANCE: `${BASE}/`,
     ACCOUNT: {
-        JOIN:        '/account/join',
-        LOGIN:       '/account/login',
-        LOGIN_ADMIN: '/account/login/admin',
+        JOIN:        `${BASE}/account/join`,
+        LOGIN:       `${BASE}/account/login`,
+        LOGIN_ADMIN: `${BASE}/account/login/admin`,
     },
 
     INTRODUCE: {    
-        PURPOSE: '/introduce/purpose',
+        PURPOSE: `${BASE}/introduce/purpose`,
     },
 
     GUIDE: {    
-        HOW_TO_USE: '/guide/how-to-use',
+        HOW_TO_USE: `${BASE}/guide/how-to-use`,
     },
 
     NEWS: {    
-        READ:   (id) => `/news/${id}`,
-        EDIT:   (id) => `/news/edit/${id}`,
-        WRITE:  '/news/write',
+        READ:   (id) => `${BASE}/news/${id}`,
+        EDIT:   (id) => `${BASE}/news/edit/${id}`,
+        WRITE:  `${BASE}/news/write`,
 
-        READ_TEPLATE:   '/news/:id',
-        EDIT_TEMPLATE:  '/news/edit/:id',
+        READ_TEPLATE:   `${BASE}/news/:id`,
+        EDIT_TEMPLATE:  `${BASE}/news/edit/:id`,
 
-        NOTICE:     { LIST: '/news/notice/list' },
-        UPDATE:     { LIST: '/news/update/list' },
-        DEV_NOTE:   { LIST: '/news/devnote/list' },
+        NOTICE:     { LIST: `${BASE}/news/notice/list` },
+        UPDATE:     { LIST: `${BASE}/news/update/list` },
+        DEV_NOTE:   { LIST: `${BASE}/news/devnote/list` },
     },
 
 
     COMMUNITY: {
-        READ:   (id) => `/community/${id}`,
-        EDIT:   (id) => `/community/edit/${id}`,
-        WRITE:  '/community/write',
+        READ:   (id) => `${BASE}/community/${id}`,
+        EDIT:   (id) => `${BASE}/community/edit/${id}`,
+        WRITE:  `${BASE}/community/write`,
 
-        READ_TEPLATE:   '/community/:id',
-        EDIT_TEMPLATE:  '/community/edit/:id',
+        READ_TEPLATE:   `${BASE}/community/:id`,
+        EDIT_TEMPLATE:  `${BASE}/community/edit/:id`,
 
-        ALL:     { LIST: '/community/all/list' },
-        ASK:     { LIST: '/community/ask/list' },
-        TALK:    { LIST: '/community/talk/list' },
+        ALL:     { LIST: `${BASE}/community/all/list` },
+        ASK:     { LIST: `${BASE}/community/ask/list` },
+        TALK:    { LIST: `${BASE}/community/talk/list` },
     },
 
     SERVICE_CENTER: {
-        READ:   (id) => `/service/${id}`,
-        EDIT:   (id) => `/service/edit/${id}`,
-        WRITE:  '/service/write',
+        READ:   (id) => `${BASE}/service/${id}`,
+        EDIT:   (id) => `${BASE}/service/edit/${id}`,
+        WRITE:  `${BASE}/service/write`,
 
-        READ_TEPLATE:   '/service/:id',
-        EDIT_TEMPLATE:  '/service/edit/:id',
+        READ_TEPLATE:   `${BASE}/service/:id`,
+        EDIT_TEMPLATE:  `${BASE}/service/edit/:id`,
 
-        PRIVATE_CONTACT: { LIST: '/service/private_contact/list' },
+        PRIVATE_CONTACT: { LIST: `${BASE}/service/private_contact/list` },
     },
 
-    ADMIN_TOOL: 'http://localhost:8880/'
+    ADMIN_TOOL: `https://weapon-master-portfolio.duckdns.org/admin-front/`
 };

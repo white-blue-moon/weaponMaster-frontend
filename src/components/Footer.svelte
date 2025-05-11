@@ -18,9 +18,9 @@
     본 사이트는 공식 제작물은 아닙니다.
   </p>
   <li class="flogo">
-    <a target="_blank"><img src="/images/logo_blue_moon_img.png" alt="블루문"></a>
-    <a href={ PATHS.ADMIN_TOOL } target="_blank"><img class="logo_admin" src="/images/logo_admin_tool.png" alt="어드민툴"></a>
-    <a href="http://developers.neople.co.kr" target="_blank"><img src="/images/neople_openAPI_logo.png" alt="Neople 오픈 API" /></a>
+    <a target="_blank"><img src="images/logo_blue_moon_img.png" alt="블루문"></a>
+    <a href={ PATHS.ADMIN_TOOL } target="_blank"><img class="logo_admin" src="images/logo_admin_tool.png" alt="어드민툴"></a>
+    <a href="http://developers.neople.co.kr" target="_blank"><img src="images/neople_openAPI_logo.png" alt="Neople 오픈 API" /></a>
   </li>
 </footer>
   

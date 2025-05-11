@@ -24,7 +24,7 @@
 <section class="gnb">
   <nav>
     <ul class="main-menu">
-      <li><a class="logo" href="/"><img src="/images/logo.png" alt="Dungeon & Fighter"></a></li>
+      <li><a class="logo" href={ PATHS.HOME }><img src="images/logo.png" alt="Dungeon & Fighter"></a></li>
       <li><a href={ PATHS.NEWS.NOTICE.LIST }>새소식</a></li>
       <li><a href={ PATHS.INTRODUCE.PURPOSE }>사이트소개</a></li>
       <li><a href={ PATHS.GUIDE.HOW_TO_USE }>가이드</a></li>
