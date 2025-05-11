@@ -155,7 +155,7 @@
     }
 
     .swiper-overlay {
-        background: url('/images/notice_overlay.png') 50% 0px no-repeat;
+        background: url('/weapon-front/images/notice_overlay.png') 50% 0px no-repeat;
         background-size: cover;
         width: 100%;
         height: 100%;
