@@ -1,5 +1,5 @@
 import { CATEGORY_TYPE, ARTICLE_TYPE, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT, CATEGORY_TYPE_TEXT } from '../constants/articles';
-import { PATHS } from '../constants/paths';
+import { BASE, PATHS } from '../constants/paths';
 import { DF_UI } from '../constants/resourcePath';
 
 // categoryType 별 페이지 정보 조회 함수
@@ -187,5 +187,5 @@ export function getPagePath(article) {
         default: throw new Error("Unknown categoryType, can't get page path");
     }
 
-    return `/${category}/${article.id}`;
+    return `${BASE}/${category}/${article.id}`;
 }

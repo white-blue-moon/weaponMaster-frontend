@@ -1,4 +1,4 @@
-const BASE = '/weapon-front';
+export const BASE = '/weapon-front';
 
 export const PATHS = {
     ACCESS_GATE: `${BASE}/access-gate`,
