@@ -24,7 +24,6 @@
     let characterBanners = [];
     let mainBannerRef;
     
-    let mainFocusBanner, newsFirstBanner, newsSecondBanner;
     let isLoading = true;
 
     let   show     = false;
@@ -44,10 +43,7 @@
 
         if (response.success) {
             focusBanners     = response.data.focusBanners;
-            // mainFocusBanner  = focusBanners[FOCUS_BANNER_TYPE.MAIN]?.map(banner => banner.imgUrl);
-            newsFirstBanner  = focusBanners[FOCUS_BANNER_TYPE.NEWS_FIRST]?.map(banner => banner.imgUrl);
-            newsSecondBanner = focusBanners[FOCUS_BANNER_TYPE.NEWS_SECOND]?.map(banner => banner.imgUrl);
-        
+
             newsArticles     = response.data.newsArticles;
             bestViewArticles = response.data.bestViewArticles;
             characterBanners = response.data.characterBanners;
