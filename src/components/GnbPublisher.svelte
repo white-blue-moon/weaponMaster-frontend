@@ -4,21 +4,44 @@
   import { API } from '../constants/api';
   import { apiFetch, handleApiError } from '../utils/apiFetch';
   import { onMount } from "svelte";
+  import { publisherLogo } from '../utils/stores';
 
   import SideMenu from './SideMenu.svelte';
 
 
-  let publisherLogo;
+  let logo;
   let isMenuOpen = false;
-  
+
+  // 최초 로고 설정 (기존 값 유지)
+  $: if ($publisherLogo && !logo) {
+      logo = $publisherLogo;
+  }
+
   onMount(async () => {
         const response = await apiFetch(API.LOGO.PUBLISHER, {
             method: "GET",
         }).catch(handleApiError);
 
         if (response.success) {
-            publisherLogo = response.data
+            const newLogo = response.data;
+
+            if (logo == null) {
+                publisherLogo.set(newLogo);
+                logo = newLogo;
+                return;
+            }
+            
+            if ($publisherLogo.alt !== newLogo.alt) {
+                publisherLogo.set(newLogo);
+                logo = newLogo;
+                return;
+            }
+
+            return;
         }
+
+        console.log('GET API.LOGO.PUBLISHER error');
+        return;
   });
 </script>
 
@@ -33,11 +56,11 @@
 
   <SideMenu isOpen={ isMenuOpen } onClose={ () => isMenuOpen = false } />
   
-  <a class="logo" href={ PATHS.HOME }>
-    {#if publisherLogo}
-      <img src={ publisherLogo.imgUrl } alt={ publisherLogo.alt }>
-    {/if}
-  </a>
+  {#if logo}
+    <a class="logo" href={ PATHS.HOME }>
+        <img src={ logo.imgUrl } alt={ logo.alt }>
+    </a>
+  {/if}
   
   <div class="actions">
     {#if $isLoggedIn}
@@ -168,7 +191,7 @@
     display: inline-block;
     width: 16px;
     height: 18px;
-    background: transparent url(images/img_logo.png) 0 0 no-repeat;
+    background: transparent url(/weapon-front/images/img_logo.png) 0 0 no-repeat;
     background-size: contain; /* 아이콘이 컨테이너 크기에 맞게 조정되도록 설정 */
   }
 
