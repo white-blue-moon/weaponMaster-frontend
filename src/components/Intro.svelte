@@ -68,7 +68,9 @@
                 setTimeout(() => {
                     removeIntro = true;
                     setCookie('canAccessPage', true);
-                    navigate(PATHS.HOME, { state: { fromAccessGate: true } });
+                    sessionStorage.setItem('fromAccessGate', 'true');
+                    
+                    navigate(PATHS.HOME);
                 }, 5920);
 
             }, loadingDataAniTime);
