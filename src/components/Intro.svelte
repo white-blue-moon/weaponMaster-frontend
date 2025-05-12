@@ -69,7 +69,7 @@
                     removeIntro = true;
                     setCookie('canAccessPage', true);
                     sessionStorage.setItem('fromAccessGate', 'true');
-                    
+
                     navigate(PATHS.HOME);
                 }, 5920);
 
@@ -199,7 +199,6 @@
     preload="auto"
     muted
     playsinline
-    loop
     class="skill-scene"
 ></video>
 

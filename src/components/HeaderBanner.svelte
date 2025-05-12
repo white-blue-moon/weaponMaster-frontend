@@ -8,7 +8,7 @@
     export let bannerBackground = `${DF_UI}/img/mem/bg.png`;
     export let logoPaddingTop   = "0px";
 
-    const logoBackground        = `/images/logo_background.png`;
+    const logoBackground        = `/weapon-front/images/logo_background.png`;
 </script>
 
 <header class="banner" style="--banner-background: url({ bannerBackground })">

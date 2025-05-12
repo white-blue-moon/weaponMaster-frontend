@@ -220,7 +220,7 @@
         margin: 0 auto;
         width: 123px;
         height: 42px;
-        background: url(/images/logo_blue_moon_img.png) no-repeat;
+        background: url(/weapon-front/images/logo_blue_moon_img.png) no-repeat;
     }
 
     .login .login_admin li {
