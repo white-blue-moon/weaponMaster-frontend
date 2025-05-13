@@ -28,11 +28,16 @@
     })
 
     function handleSlackWebhookResponse(event) {
+        console.log("Received message event: ", event); // 이벤트 로그 출력
+
         if (event.origin !== BACKEND_ROOT) {
+            console.log("Invalid origin, ignoring message");
             return;
         }
-        
+
         if (event.data?.success) {
+            console.log("Slack event success", event.data);
+
             if (event.source?.close) {
                 event.source.close(); // 새 탭으로 열린 슬랙 봇 연동 페이지 닫기
             }
