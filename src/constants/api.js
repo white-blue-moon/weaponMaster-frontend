@@ -1,8 +1,11 @@
-// 환경에 따른 API 경로 설정 (개발/배포 환경)
-const isDevelopment = window.location.hostname === 'localhost';
 
-export const BACKEND_ROOT = 'https://weapon-master-portfolio.duckdns.org/weapon-back'; // 실제 배포 주소 -> slack 연동 시 참조
-const  ROOT               = isDevelopment ? 'http://localhost:7070' : 'https://weapon-master-portfolio.duckdns.org/weapon-back';
+
+const  SERVICE_DOMAIN     = 'https://weapon-master-portfolio.uk';
+export const BACKEND_ROOT = `${SERVICE_DOMAIN}/weapon-back`; // 백엔드 실제 배포 주소 -> slack 연동 시 참조
+
+const isDevelopment = window.location.hostname === 'localhost'; 
+const ROOT          = isDevelopment ? 'http://localhost:7070' : BACKEND_ROOT; // (개발환경/배포환경)
+
 export const API = {
     LOGO: {
         PUBLISHER:   `${ROOT}/logo/publisher`,
@@ -59,7 +62,7 @@ export const WEB_SOCKET_API = {
 }
 
 // 어드민 툴 백엔드 서버 API
-const ADMIN_ROOT = isDevelopment ? 'http://localhost:7770' : 'https://weapon-master-portfolio.duckdns.org/admin-back';
+const ADMIN_ROOT = isDevelopment ? 'http://localhost:7770' : `${SERVICE_DOMAIN}/admin-back`;
 export const ADMIN_API = {
     MAINTENANCE: {
         GET_ACTIVE: `${ADMIN_ROOT}/maintenance/active`,
