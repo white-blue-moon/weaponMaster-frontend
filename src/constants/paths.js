@@ -1,3 +1,5 @@
+import { SERVICE_DOMAIN } from "./api";
+
 export const BASE = '/weapon-front';
 
 export const PATHS = {
@@ -56,5 +58,5 @@ export const PATHS = {
         PRIVATE_CONTACT: { LIST: `${BASE}/service/private_contact/list` },
     },
 
-    ADMIN_TOOL: `https://weapon-master-portfolio.duckdns.org/admin-front/`
+    ADMIN_TOOL: `${SERVICE_DOMAIN}/admin-front/`
 };
