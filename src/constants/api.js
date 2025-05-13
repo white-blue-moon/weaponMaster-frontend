@@ -56,7 +56,7 @@ export const SLACK_API = {
 }
 
 export const WEB_SOCKET_API = {
-    FACTORY:       `${ROOT}/ws`,
+    FACTORY: isDevelopment ? `${ROOT}/weapon-back/ws` : `${ROOT}/ws`,
     AUCTION_STATE: `/topic/auction-state`,
 }
 
