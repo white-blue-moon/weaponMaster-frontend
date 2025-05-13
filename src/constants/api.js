@@ -1,10 +1,9 @@
 
 
-const  SERVICE_DOMAIN     = 'https://weapon-master-portfolio.uk';
-export const BACKEND_ROOT = `${SERVICE_DOMAIN}/weapon-back`; // 백엔드 실제 배포 주소 -> slack 연동 시 참조
+export const SERVICE_DOMAIN = 'https://weapon-master-portfolio.uk';
 
 const isDevelopment = window.location.hostname === 'localhost'; 
-const ROOT          = isDevelopment ? 'http://localhost:7070' : BACKEND_ROOT; // (개발환경/배포환경)
+const ROOT          = isDevelopment ? 'http://localhost:7070' : `${SERVICE_DOMAIN}/weapon-back`; // (개발환경/배포환경)
 
 export const API = {
     LOGO: {

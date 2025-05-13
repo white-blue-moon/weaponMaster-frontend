@@ -1,6 +1,6 @@
 <script>
     import { onDestroy, onMount } from "svelte";
-    import { BACKEND_ROOT, SLACK_API } from '../constants/api';
+    import { SERVICE_DOMAIN, SLACK_API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { userInfo } from "../utils/auth";
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
@@ -28,21 +28,17 @@
     })
 
     function handleSlackWebhookResponse(event) {
-        console.log("Received message event: ", event); // 이벤트 로그 출력
-
-        if (event.origin !== BACKEND_ROOT) {
-            console.log("Invalid origin, ignoring message");
+        if (event.origin !== SERVICE_DOMAIN) {
             return;
         }
 
         if (event.data?.success) {
-            console.log("Slack event success", event.data);
-
             if (event.source?.close) {
                 event.source.close(); // 새 탭으로 열린 슬랙 봇 연동 페이지 닫기
             }
 
             dispatch('close', { slackInfo: event.data.slackInfo });
+            return;
         }
     }
 
