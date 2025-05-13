@@ -7,6 +7,7 @@ import terser from '@rollup/plugin-terser';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
+import deletePlugin from 'rollup-plugin-delete';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -41,6 +42,12 @@ export default {
 		entryFileNames: 'bundle.[hash].js', // JS 번들에 해시 적용
 	},
 	plugins: [
+		// 빌드 전에 이전 파일들 삭제
+		deletePlugin({
+			targets: 'public/weapon-front/build/*',
+			verbose: true, // 삭제된 파일들 출력
+		}),
+
 		svelte({
 			compilerOptions: {
 				dev: !production
