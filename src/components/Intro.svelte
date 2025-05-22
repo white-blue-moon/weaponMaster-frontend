@@ -4,7 +4,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { PATHS } from '../constants/paths';
-    import { canAccessPage, setCookie } from '../utils/auth';
+    import { canAccessPage } from '../utils/auth';
 
 
     let introOn        = false;
@@ -67,7 +67,7 @@
                 // cover 전환 이후 DOM 제거
                 setTimeout(() => {
                     removeIntro = true;
-                    setCookie('canAccessPage', true);
+                    canAccessPage.set(true);
                     sessionStorage.setItem('fromAccessGate', 'true');
 
                     navigate(PATHS.HOME);

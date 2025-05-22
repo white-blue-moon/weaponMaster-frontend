@@ -1,7 +1,7 @@
 <script>
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin, handleCapsLock } from "../../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin, handleCapsLock, adminToken } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
     import { DF_UI } from '../../constants/resourcePath';
 
@@ -55,6 +55,10 @@
             userInfo.set(userId);
             isLoggedIn.set(true);
             isAdmin.set(true);
+            adminToken.set(response.data.adminToken);
+
+            console.log('response: ', response)
+            console.log('response.adminToken: ', response.data.adminToken)
 
             alert(`관리자모드로 로그인합니다.\n${userId} 님 안녕하세요.`);
             window.location.href = PATHS.HOME;

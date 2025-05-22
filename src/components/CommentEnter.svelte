@@ -1,5 +1,5 @@
 <script>
-    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
 
@@ -88,6 +88,7 @@
                 "articleId":   articleId,
                 "reCommentId": reCommentId,
                 "contents":    contents,
+                "adminToken":  $adminToken,
             }),
         }).catch(handleApiError);
 

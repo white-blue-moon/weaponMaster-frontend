@@ -1,6 +1,6 @@
 <script>
     import { DF_UI } from "../constants/resourcePath";
-    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
@@ -40,9 +40,10 @@
         const response = await apiFetch(API.COMMENTS.DELETE(commentId), {
             method: 'DELETE',
             body: JSON.stringify({
-                "userId":    $userInfo,
-                "isAdmin":   $isAdmin,
-                "articleId": articleId,
+                "userId":     $userInfo,
+                "isAdmin":    $isAdmin,
+                "articleId":  articleId,
+                "adminToken": $adminToken,
             }),
         }).catch(handleApiError);
 

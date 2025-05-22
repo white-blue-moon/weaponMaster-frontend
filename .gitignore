@@ -2,3 +2,6 @@
 
 .DS_Store
 /public/weapon-front/build/
+deploy.sh
+deploy_build.sh
+deploy_local.sh

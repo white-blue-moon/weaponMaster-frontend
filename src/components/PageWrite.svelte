@@ -1,7 +1,7 @@
 <script>
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
+    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
     import { onMount } from 'svelte';
     import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
@@ -92,12 +92,12 @@
         if (isEditPage) {
             await fetchArticle();
 
-            categoryType = article.categoryType;
-            articleType = article.articleType;
-            articleDetailType = article.articleDetailType;
-            title = article.title;
+            categoryType          = article.categoryType;
+            articleType           = article.articleType;
+            articleDetailType     = article.articleDetailType;
+            title                 = article.title;
             editor.root.innerHTML = article.contents;
-            contents = article.contents;
+            contents              = article.contents;
 
             cachedArticleType = articleType;
             articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
@@ -169,6 +169,7 @@
                 "articleDetailType": articleDetailType,
                 "title":             title,
                 "contents":          contents,
+                "adminToken":        $adminToken,
             }),
         }).catch(handleApiError);
 
