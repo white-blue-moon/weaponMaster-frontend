@@ -124,7 +124,7 @@ function saveToLocalStorage(key, value, expireMs) {
     localStorage.setItem(key, JSON.stringify(toStore));
 }
   
-function localStorageWritable(key, defaultValue = "", expireMs = 1000 * 60 * 60 * 24) {
+function localStorageWritable(key, defaultValue = "", expireMs = 24 * 60 * 60 * 1000) {
     const stored = getStoredValue(key, defaultValue);
     const store  = writable(stored);
 

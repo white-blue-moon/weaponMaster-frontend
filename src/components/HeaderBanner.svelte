@@ -1,4 +1,5 @@
 <script>
+    import { PATHS } from "../constants/paths";
     import { DF_UI } from "../constants/resourcePath";
 
     export let homeName         = "weaponMaster";
@@ -14,7 +15,7 @@
 <header class="banner" style="--banner-background: url({ bannerBackground })">
     {#if isLogoVisible}
         <h1 style="padding-top: {logoPaddingTop};">
-            <a href="/" style="--logo-background: url({ logoBackground })">{ homeName }</a>
+            <a href={ PATHS.HOME } style="--logo-background: url({ logoBackground })">{ homeName }</a>
         </h1>
     {/if}
     <h2 
