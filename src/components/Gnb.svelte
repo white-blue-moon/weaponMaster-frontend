@@ -1,6 +1,6 @@
 <script>
   import { PATHS } from '../constants/paths';
-  import { userInfo, isLoggedIn, handleLogout } from "../utils/auth";
+  import { userInfo, isLoggedIn, authLogout } from "../utils/auth";
 
   import GameInfoPopUp from './GameInfoPopUp.svelte';
 
@@ -98,7 +98,7 @@
                   <span>님 안녕하세요</span>
                   <!-- TODO 일반/관리자 모드에 따른 아이콘 추가하기 -->
                 </div>
-                <a href="#" class="blue" on:click={ handleLogout }>로그아웃</a>
+                <a href="#" class="blue" on:click={ authLogout }>로그아웃</a>
               </li>
             {/if}
           </ul>
