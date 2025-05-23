@@ -227,6 +227,31 @@
         return datetime.split(" ")[0].slice(5) + " " + datetime.split(" ")[1];
     }
 
+    function getLeftTime(expireDateStr) {
+        const expireDate = new Date(expireDateStr);
+        const now        = new Date();
+        const diffMs     = expireDate - now; // 남은 시간 ms 단위
+
+        if (diffMs <= 0) {
+            return "판매마감";
+        }
+
+        const diffMinutes = Math.ceil(diffMs / (1000 * 60));      // 남은 시간 분 단위 올림
+        const diffHours   = Math.ceil(diffMs / (1000 * 60 * 60)); // 남은 시간 시간 단위 올림
+
+        if (diffMinutes <= 10) {
+            return "마감임박";
+        }
+
+        if (diffMinutes <= 59) {
+            return "1시간";
+        }
+
+        // 1시간 이상부터는 시간 단위로 표시
+        return diffHours + "시간";
+    }
+
+
     function updatePagination(target) {
         const totalPage   = Math.ceil(target.list.length / PAGE_SIZE) || 1;
         const currentPage = Math.min(target.currentPage, totalPage);
@@ -375,8 +400,8 @@
                                         {/if}
                                     </span>
                 
-                                    <!-- 등록일 -->
-                                    <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
+                                    <!-- 남은 마감 시간 -->
+                                    <span class="item-date">{ getLeftTime(item.itemInfo.expireDate) }</span>
                 
                                     <!-- 버튼 -->
                                     {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
@@ -466,7 +491,7 @@
                                         {/if}
                                     </span>
                                     
-                                    <!-- 등록일 -->
+                                    <!-- 판매 등록일 -->
                                     <span class="item-date">{ extractTime(item.itemInfo.regDate) }</span>
                                     
                                     <!-- 버튼 -->
