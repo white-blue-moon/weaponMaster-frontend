@@ -410,7 +410,7 @@
                                         </span>
                                     {:else if item.auctionState == AUCTION_STATE.EXPIRED}
                                         <span class="status-wrap">
-                                            <span class="expired">기간 만료</span>
+                                            <span class="expired" style="margin-left: 10px;">기간 만료</span>
                                         </span>
                                     {:else}
                                         <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "btn-register" } 
@@ -508,7 +508,7 @@
                                         </span>
                                     {:else if item.auctionState == AUCTION_STATE.EXPIRED}
                                         <span class="status-wrap">
-                                            <span class="expired">기간 만료</span>
+                                            <span class="expired" style="margin-left: 10px;">기간 만료</span>
                                             <button class="btn-x" on:click={() => toggleWatch(item)}>
                                                 {#if loadingButtonMap[item.itemInfo.auctionNo]}
                                                     <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px"/>
