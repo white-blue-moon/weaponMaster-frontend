@@ -18,39 +18,45 @@ export function authLogin(userId, token = "", isAdminMode = false) {
     if (isAdminMode) {
         isAdmin.set(true, expireMs);
         adminToken.set(token, expireMs);
-        userId = userId + " 관리자";
     }
     
-    alert(`로그인에 성공하였습니다.\n${userId} 님 안녕하세요.`)
-    window.location.href = PATHS.HOME;
     return;
 }
 
 export function authLogout() {
-    adminToken.set(null); // 토큰은 쿠키 관리
+    // 스토어 상태 초기화
+    adminToken.set(null);
     userInfo.set(null);
     isLoggedIn.set(false);
     isAdmin.set(false);
-
+    
+    // 쿠키 / 로컬 스토리지 제거
+    deleteCookie("adminToken");
     localStorage.removeItem("userInfo");
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("isAdmin");
-    
-    alert("로그아웃 되었습니다.");
-    window.location.href = PATHS.HOME;
+
     return;
 }
 
 export function isSessionExpired() {
     const isExpired = !getStoredValue("userInfo") || 
                       !getStoredValue("isLoggedIn") ||
-                      !getCookieValue("adminToken");  
+                      (isAdminMode() && !getCookieValue("adminToken"));
     
     if (isExpired) {
-      return true;
+        authLogout();
+        return true;
     }
 
     return false;
+}
+
+export function onLogout() {
+    authLogout();
+    alert("로그아웃 되었습니다.");
+    window.location.href = PATHS.HOME;
+    return;
 }
 
 // Caps Lock 감지
@@ -69,6 +75,10 @@ export function safeJsonParse(str) {
     } catch {
         return null;
     }
+}
+
+function isAdminMode() {
+    return getStoredValue("isAdmin") === true;
 }
 
 function cookieWritable(key, defaultValue = "") {
@@ -91,7 +101,12 @@ function getCookieValue(name) {
     // 정규식: "쿠키이름=값;" > "쿠키이름, =, 값, ;" > 값
     const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
     if (match) {
-        return decodeURIComponent(match[2]);
+        const cookieValue = decodeURIComponent(match[2]);
+        if (cookieValue === "null") {
+            return null;
+        }
+        
+        return cookieValue;
     }
 
     return null;
@@ -102,6 +117,10 @@ function setCookie(name, value, expireMs) {
     expires.setTime(expireMs);
 
     document.cookie = `${name}=${encodeURIComponent(value)}; path=/; expires=${expires.toUTCString()};`;
+}
+
+function deleteCookie(name) {
+    document.cookie = `${encodeURIComponent(name)}=; path=/; Max-Age=0;`;
 }
 
 // 초기값 파싱 유틸

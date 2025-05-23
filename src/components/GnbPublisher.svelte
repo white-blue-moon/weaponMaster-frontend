@@ -1,6 +1,6 @@
 <script>
   import { PATHS } from '../constants/paths';
-  import { userInfo, isLoggedIn, authLogout, isAdmin } from "../utils/auth";
+  import { userInfo, isLoggedIn, isAdmin, onLogout } from "../utils/auth";
   import { API } from '../constants/api';
   import { apiFetch, handleApiError } from '../utils/apiFetch';
   import { onMount } from "svelte";
@@ -72,7 +72,7 @@
         <span class="platform-icon padding-2px platform-icon-nexon gnbText"></span>
         <span class="nickname gnbText">{ $userInfo }</span>
       </span>
-      <a class="logout" href="#" on:click={ authLogout }>로그아웃</a>
+      <a class="logout" href="#" on:click={ onLogout }>로그아웃</a>
     {:else}
       <a class="join"  href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
       <a class="login" href={ PATHS.ACCOUNT.LOGIN }>로그인</a>

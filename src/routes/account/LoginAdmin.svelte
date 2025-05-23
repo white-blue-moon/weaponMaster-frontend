@@ -51,7 +51,12 @@
 
         if (response.success) {
             isLoginLoading = false;
-            authLogin(userId, response.data.adminToken, true);
+
+            const isAdminMode = true;
+            authLogin(userId, response.data.adminToken, isAdminMode);
+
+            alert(`관리자모드로 로그인합니다.\n${userId} 님 안녕하세요.`);
+            window.location.href = PATHS.HOME;
             return;
         }
 

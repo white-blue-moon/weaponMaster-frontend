@@ -1,7 +1,7 @@
 <script>
-    import { ADMIN_API, API } from '../../constants/api';
+    import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn, handleCapsLock, authLogin } from "../../utils/auth";
+    import { handleCapsLock, authLogin } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
@@ -52,6 +52,9 @@
         if (response.success) {
             isLoginLoading = false;
             authLogin(userId);
+
+            alert(`로그인에 성공하였습니다.\n${userId} 님 안녕하세요.`)
+            window.location.href = PATHS.HOME;
             return;
         }
 
