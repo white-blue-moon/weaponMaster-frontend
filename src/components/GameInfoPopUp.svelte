@@ -369,7 +369,7 @@
                                     
                                     <!-- 가격 -->
                                     <span class="item-price">
-                                        { item.itemInfo.currentPrice.toLocaleString() } G
+                                        { item.itemInfo.currentPrice.toLocaleString() } 골드
                                         {#if item.itemInfo.count > 1}
                                             ({(item.itemInfo.currentPrice/item.itemInfo.count).toLocaleString()})
                                         {/if}
@@ -460,7 +460,7 @@
                                     
                                     <!-- 가격 -->
                                     <span class="item-price">
-                                        { item.itemInfo.currentPrice.toLocaleString() } G
+                                        { item.itemInfo.currentPrice.toLocaleString() } 골드
                                         {#if item.itemInfo.count > 1}
                                             ({(item.itemInfo.currentPrice/item.itemInfo.count).toLocaleString()})
                                         {/if}

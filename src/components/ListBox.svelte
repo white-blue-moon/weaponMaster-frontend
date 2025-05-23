@@ -25,6 +25,31 @@
         }
     }
 
+    const DEFAULT_THUMBNAIL = `${DF_UI}/img/common/today_dnf_default.jpg`;
+
+    function extractFirstImageSrc(html) {
+        if (!html) {
+            return null;
+        }
+
+        // 첫 번째 <img> 태그의 src 속성 값 추출 (대소문자 구분 X)
+        const imgTagMatch = html.match(/<img\s+[^>]*src=["']([^"']+)["']/i);
+        if (imgTagMatch) {
+            return imgTagMatch[1];
+        }
+
+        return null;
+    }
+
+    function getThumbnailImg(article) {
+        const firstImage = extractFirstImageSrc(article.contents);
+        if (firstImage != null) {
+            return firstImage;
+        }
+
+        return DEFAULT_THUMBNAIL;
+    }
+
     $: visibleArticles = articles.slice(currentIndex, currentIndex + ITEMS_PER_SLIDE);
 </script>
 
@@ -47,7 +72,7 @@
           <li class="slide">
             <a href={ getPagePath(article) }>
               <div class="image-wrapper">
-                <img src="{DF_UI}/img/common/today_dnf_default.jpg" alt={ article.title } />
+                <img src={ getThumbnailImg(article) } alt={ article.title } />
               </div>
               <span class="category">{ CATEGORY_TYPE_TEXT[article.categoryType] }</span>
               <div class="info">
