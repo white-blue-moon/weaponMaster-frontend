@@ -733,7 +733,7 @@
     }
 
     .item-date {
-        text-align: right;
+        text-align: center;
         font-size: 13px;
         color: #777;
     }
