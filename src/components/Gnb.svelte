@@ -58,7 +58,7 @@
       </div>
       <div><!-- 공간 확보를 위해 비워둠 --></div>
       <div><!-- 로그인 밑 비워둠 --></div>
-      <div><!-- GAME INFO 밑 비워둠 --></div>
+      <div><!-- GAME MARKET 밑 비워둠 --></div>
     </div>
   </nav>
 
@@ -106,11 +106,11 @@
       {/if}
     </div>
 
-    <!-- GAME INFO -->
+    <!-- GAME MARKET -->
     <article class="gameinfo">
       <a id="gameinfo" on:click={ showGameInfoPopUp }>
           <span></span>
-          <b>GAME INFO</b>
+          <b>GAME MARKET</b>
       </a>
     </article>
   </div>
@@ -219,7 +219,7 @@
   }
 
   /* ================================== */
-  /* 로그인, GAME INFO 영역 */
+  /* 로그인, GAME MARKET 영역 */
   /* ================================== */
 
   .gameTab {
