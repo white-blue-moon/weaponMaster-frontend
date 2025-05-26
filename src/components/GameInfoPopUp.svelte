@@ -371,12 +371,25 @@
 
             <div class="result-list">
                 <h3>검색 결과</h3>
+                <div class="table-header">
+                    <span class="image-header"></span>
+                    <span class="name-header">이름</span>
+                    <span class="price-header">가격(골드)</span>
+                    <span class="deadline-header">마감</span>
+                    <span class="status-header">상태</span>
+                  </div>
+                  
+                  
                 {#if isSearching}
-                    <Spinner margin_bottom="5px"/>
-                    <p>검색 중입니다.</p>
+                    <div class="loading-result">
+                        <p>
+                            <Spinner margin_bottom="4px"/>
+                            검색 중입니다.
+                        </p>
+                    </div>
                 {:else}
                     {#if search.list.length === 0}
-                        <p>검색 결과 없음</p>
+                        <p class="no-result">검색 결과 없음</p>
                     {:else}
                         <ul>
                             {#each search.displayed as item}
@@ -463,11 +476,18 @@
                         <Spinner margin_top="4px"/>
                     {/if}
                 </div>
+                <div class="table-header">
+                    <span class="image-header"></span>
+                    <span class="name-header">이름</span>
+                    <span class="price-header">가격(골드)</span>
+                    <span class="register-header">경매 등록일</span>
+                    <span class="status-header">상태</span>
+                </div>
                 {#if !isApiLoaded}
-                    <p>판매 알림 목록을 불러오는 중입니다.</p>
+                    <p class="loading-result">판매 알림 목록을 불러오는 중입니다.</p>
                 {:else}
                     {#if watch.list.length === 0}
-                        <p>등록된 판매 알림이 없습니다.</p>
+                        <p class="no-result">등록된 판매 알림이 없습니다.</p>
                     {:else}
                         <ul>
                             {#each watch.displayed as item}
@@ -601,8 +621,49 @@
         text-align: center;
     }
 
+    .table-header {
+        width: 520px;
+        display: flex;
+        border-bottom: 1px solid #ccc;
+        padding: 0 5px 0 5px;
+        gap: 10px;
+    }
+
+    .table-header span {
+        display: flex;
+        justify-content: center; /* 가로 중앙 정렬 */
+        align-items: center;     /* 세로 중앙 정렬 */
+        font-size: 12px;
+        height: 40px;
+    }
+
+    .image-header {
+        width: 50px;
+    }
+
+    .name-header {
+        width: 108px;
+    }
+
+    .price-header {
+        padding-left: 20px;
+        width: 100px;
+    }
+
+    .deadline-header, .register-header {
+        width: 100px;
+    }
+
+    .status-header {
+        width: 112px;
+    }
+
+    .no-result, .loading-result {
+        padding-top: 10px;
+    }
+
     .ly_login_info .ly_logbox.logged-in {
-        min-height: 350px;
+        min-height: 400px;
     }
 
     .ly_login_info .ly_logbox a.ly_clse {
@@ -694,7 +755,7 @@
         grid-template-columns: 50px 2fr 100px 100px auto;
         align-items: start;
         gap: 10px;
-        padding: 10px;
+        padding: 5px;
         border-bottom: 1px solid #ddd;
         font-size: 14px;
     }
@@ -722,14 +783,15 @@
         color: #333;
         white-space: normal;
         word-wrap: break-word;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
     }
 
     .item-price {
         text-align: right;
         color: #2a9d8f;
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: 500;
     }
 
     .item-date {
@@ -757,7 +819,7 @@
     }
 
     .blank-space {
-        margin-bottom: 25px;
+        margin-bottom: 50px;
     }
 
     .status-wrap {
