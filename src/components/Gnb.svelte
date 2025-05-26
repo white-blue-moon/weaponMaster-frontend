@@ -2,22 +2,22 @@
   import { PATHS } from '../constants/paths';
   import { userInfo, isLoggedIn, onLogout } from "../utils/auth";
 
-  import GameInfoPopUp from './GameInfoPopUp.svelte';
+  import GameMarketPopUp from './GameMarketPopUp.svelte';
 
   
   let isLoginAreaVisible = false;
-  let isGameInfoPopUpVisible = false;
+  let isGameMarketPopUpVisible = false;
 
   function toggleLogin() {
     isLoginAreaVisible = !isLoginAreaVisible;
   }
 
-  function showGameInfoPopUp() {
-    isGameInfoPopUpVisible = true;
+  function showGameMarketPopUp() {
+    isGameMarketPopUpVisible = true;
   }
 
-  function closeGameInfoPopUp() {
-    isGameInfoPopUpVisible= false;
+  function closeGameMarketPopUp() {
+    isGameMarketPopUpVisible= false;
   }
 </script>
 
@@ -108,7 +108,7 @@
 
     <!-- GAME MARKET -->
     <article class="gameinfo">
-      <a id="gameinfo" on:click={ showGameInfoPopUp }>
+      <a id="gameinfo" on:click={ showGameMarketPopUp }>
           <span></span>
           <b>GAME MARKET</b>
       </a>
@@ -116,8 +116,8 @@
   </div>
 </section>
 
-{#if isGameInfoPopUpVisible}
-  <GameInfoPopUp on:close={ closeGameInfoPopUp }/>
+{#if isGameMarketPopUpVisible}
+  <GameMarketPopUp on:close={ closeGameMarketPopUp }/>
 {/if}
 
 
