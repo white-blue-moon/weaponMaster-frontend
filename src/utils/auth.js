@@ -55,7 +55,7 @@ export function isSessionExpired() {
 export function onLogout() {
     authLogout();
     alert("로그아웃 되었습니다.");
-    window.location.href = PATHS.HOME;
+    window.location.reload();
     return;
 }
 
