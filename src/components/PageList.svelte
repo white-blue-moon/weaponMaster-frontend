@@ -191,9 +191,9 @@
                 <input
                     type="text"
                     id="searchKeyword"
-                    bind:value={ searchInput }
                     class="search_input"
                     autocomplete="off"
+                    bind:value={ searchInput }
                     on:keydown={(e) => e.key === 'Enter' && handleSearch()}
                 >
                 <a class="btn_del" style:display={ searchInput ? 'block' : 'none' } on:click={ clearSearch }>삭제</a>
@@ -210,25 +210,27 @@
                     <Spinner /> 게시물 정보를 불러오는 중입니다.
                 </li>
             </ul>
-        {:else if displayedArticles.length === 0}
-            <ul class="nodata">
-                <li>검색 결과가 없습니다.</li>
-            </ul>
         {:else}
+            <!-- 고정 게시물은 항상 출력 -->
             {#each pinnedArticles as article}
-                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } isPinned={true} />
+                <ArticleRow article={article} articleUrl={page.readPath(article.id)} isPinned={true} />
             {/each}
-
-            {#each displayedArticles as article}
-                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } />
-            {/each}
+    
+            {#if displayedArticles.length > 0}
+                {#each displayedArticles as article}
+                    <ArticleRow article={article} articleUrl={page.readPath(article.id)} />
+                {/each}
+            {:else}
+                <ul class="nodata">
+                    <li>검색 결과가 없습니다.</li>
+                </ul>
+            {/if}
         {/if}
     </article>
     
-
     {#if canWrite}
         <article class="btnarea_r mt30">
-            <a href="{ page.writePath }" class="btn btntype_bu46 bold" id="newArticleButton" style="width:160px">글쓰기</a>
+            <a href="{ page.writePath }" class="btn btntype_bu46 bold" style="width:160px">글쓰기</a>
         </article>
     {/if}
 
