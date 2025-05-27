@@ -1,5 +1,5 @@
 <script>
-    import { userInfo, isAdmin, adminToken } from "../utils/auth";
+    import { userInfo, isAdmin, adminToken, isLoggedIn } from "../utils/auth";
     import { isAuthorOrAdmin, isPrivacyArticle, isPrivacyMode } from "../utils/authUtil";
     import { formatDate } from "../utils/time";
     import { apiFetch, handleApiError } from '../utils/apiFetch';
@@ -53,7 +53,10 @@
     }
 
     function showReplyButton() {
-        // 답글에는 버튼을 표시 X
+        if (!$isLoggedIn) {
+            return false;
+        }
+
         if (isReply) {
             return false;
         }
