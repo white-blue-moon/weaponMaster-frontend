@@ -2,8 +2,8 @@
     import { onMount } from "svelte";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { ARTICLE_DETAIL_TYPE, ARTICLE_TYPE_TEXT, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../constants/articles';
-    import { getArticleFilter, getArticleFilterText, getPage } from '../utils/page';
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { getArticleFilter, getPage } from '../utils/page';
     import { isAdmin, isLoggedIn } from '../utils/auth';
 
     import GnbPublisher from "./GnbPublisher.svelte";
@@ -11,9 +11,9 @@
     import HeaderBanner from "./HeaderBanner.svelte";
     import Menu2nd from './Menu2nd.svelte';
     import Footer from "./Footer.svelte";
-    import AdminAuthor from "./AdminAuthor.svelte";
     import Spinner from "./Spinner.svelte";
     import Top from "./Top.svelte";
+    import ArticleRow from "./ArticleRow.svelte";
 
     export let categoryType;
     export let articleType;
@@ -25,12 +25,14 @@
     const GROUP_PAGING_SIZE = 10;   // 한 그룹에 표시할 페이지 번호 개수
 
     let articles          = [];
-    let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
     let pinnedArticles    = [];
+    let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
 
     let totalPageNum      = 1;
     let currentPageNum    = 1;
+
     let displayedArticles = [];
+
     let searchKeyword     = "";
     let searchInput       = "";
 
@@ -143,6 +145,7 @@
                   (categoryType !== CATEGORY_TYPE.NEWS && $isLoggedIn);
 </script>
 
+
 <GnbPublisher />
 <div class="menu">
     <Gnb />
@@ -160,7 +163,7 @@
         <div class="category_type_c">
             {#each articleFilters as articleFilter}
                 <a class:selected={selectedFilters.has(String(articleFilter.filterType))} on:click={() => toggleFilter(articleFilter.filterType)}>
-                    {articleFilter.filterText}
+                    { articleFilter.filterText }
                 </a>
             {/each}
         </div>
@@ -201,86 +204,27 @@
 
     <!-- 게시물 목록 -->
     <article class="board_list news_list">
-        <!-- 상단 고정 게시물 리스트 -->
-        {#each pinnedArticles as article}
-            {#if !isLoading}
-                <ul class="notice">
-                    <li class="category">
-                        {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
-                            <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
-                        {:else}
-                            { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
-                        {/if}
-                    </li>
-                    <li class="title" data-no={ article.id }>
-                        <a href={ page.readPath(article.id) }>{ article.title }</a>
-                        {#if article.commentCount > 0}
-                            <b>({ article.commentCount })</b>
-                        {/if}
-                        <div class="iconset"></div>
-                    </li>
-                    {#if categoryType != CATEGORY_TYPE.NEWS}
-                        {#if article.isAdminMode}
-                            <AdminAuthor />
-                        {:else}
-                            <li class="author">
-                                { article.userId }
-                            </li>
-                        {/if}
-                    {/if}
-                    <li class="date">{ article.createDate.split('T')[0] }</li>
-                    <li class="hits">{ article.viewCount.toLocaleString() }</li>
-                </ul>
-            {/if}
-        {/each}
-
-        <!-- 게시물 리스트 -->
-        {#if displayedArticles.length === 0}
-            {#if isLoading}
-                <ul>
-                    <li>
-                        <div class="no-results">
-                            <Spinner /> 게시물 정보를 불러오는 중입니다.
-                        </div>
-                    </li>
-                </ul>
-            {:else}
-                <ul class="nodata">
-                    <li>검색 결과가 없습니다.</li>
-                </ul>
-            {/if}
+        {#if isLoading}
+            <ul>
+                <li>
+                    <Spinner /> 게시물 정보를 불러오는 중입니다.
+                </li>
+            </ul>
+        {:else if displayedArticles.length === 0}
+            <ul class="nodata">
+                <li>검색 결과가 없습니다.</li>
+            </ul>
         {:else}
+            {#each pinnedArticles as article}
+                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } isPinned={true} />
+            {/each}
+
             {#each displayedArticles as article}
-                <ul>
-                    <li class="category">
-                        {#if article.articleDetailType === ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION}
-                            <b>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</b>
-                        {:else}
-                            { getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }
-                        {/if}
-                    </li>
-                    <li class="title" data-no={ article.id }>
-                        <a href={ page.readPath(article.id) }>{ article.title }</a>
-                        {#if article.commentCount > 0}
-                            <b>({ article.commentCount })</b>
-                        {/if}
-                        <div class="iconset"></div>
-                    </li>
-                    {#if categoryType != CATEGORY_TYPE.NEWS}
-                        {#if article.isAdminMode}
-                            <AdminAuthor />
-                        {:else}
-                            <li class="author">
-                                { article.userId }
-                            </li>
-                        {/if}
-                    {/if}
-                    <li class="date">{ article.createDate.split('T')[0] }</li>
-                    <li class="hits">{ article.viewCount.toLocaleString() }</li>
-                </ul>
+                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } />
             {/each}
         {/if}
     </article>
+    
 
     {#if canWrite}
         <article class="btnarea_r mt30">
@@ -316,6 +260,29 @@
         box-sizing: border-box;
     }
 
+    a {
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    ul {
+        display: flex;
+        align-items: center;
+        padding: 17px 0 16px 0;
+        border-bottom: 1px solid #eeedf2;
+    }
+
+    ul li {
+        color: #898c92;
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+    }
+
     .menu {
         position: relative;
         height: 300px;
@@ -325,11 +292,6 @@
         position: absolute;
         width: 100%;
         top: 0;
-    }
-
-    a {
-        text-decoration: none;
-        cursor: pointer;
     }
 
     .news {
@@ -492,10 +454,6 @@
         cursor: pointer;
     }
 
-    li {
-        list-style: none;
-    }
-
     .board_srch .bs_ipt {
         display: flex;
         align-items: center;
@@ -545,91 +503,10 @@
         cursor: pointer;
     }
 
-    /* 공지사항 리스트 영역 */
-    .news_list {
-        border-top: none;
-    }
-
     .board_list {
         position: relative;
         width: 1300px;
-        border-top: 1px solid #eeedf2;
         clear: both;
-    }
-
-    .board_list ul.notice {
-        padding: 12px 0 14px 0;
-        background: #fbfbfd;
-    }
-
-    .board_list ul {
-        display: flex;
-        align-items: center;
-        padding: 17px 0 16px 0;
-        border-bottom: 1px solid #eeedf2;
-    }
-
-    .board_list ul li.category {
-        width: 120px;
-        font-weight: 500;
-    }
-
-    .board_list ul li {
-        color: #898c92;
-        font-size: 14px;
-        font-weight: 400;
-        text-align: center;
-    }
-
-    .board_list ul.notice li.title {
-        font-weight: 500;
-    }
-
-    .news_list ul li.title {
-        width: 870px;
-    }
-
-    .board_list ul li.title {
-        text-align: left;
-        font-size: 15px;
-        cursor: pointer;
-    }
-
-    .board_list ul li.title a {
-        color: #36393f;
-    }
-
-    .board_list ul li.title b {
-        color: #3392ff;
-        font-weight: 500;
-    }
-
-    .board_list ul li.author {
-        width: 140px;
-    }
-
-    .news_list ul li.date {
-        width: 200px;
-        font-size: 13px;
-    }
-
-    .board_list ul li {
-        color: #898c92;
-        font-weight: 400;
-        text-align: center;
-    }
-
-    .board_list ul li.hits {
-        width: 110px;
-        padding-left: 24px;
-        background: url("#{$DF_UI}/img/board/board_ico_view.png") no-repeat 0 calc(50% + 1px);
-        text-align: left;
-        font-size: 13px;
-    }
-
-    .board_list ul li {
-        color: #898c92;
-        font-weight: 400;
     }
 
     .board_list ul.nodata {
@@ -648,11 +525,6 @@
 
     .board_list ul.nodata:hover {
         background: none;
-    }
-
-    .news_list ul li.category b {
-        color: #d50000;
-        font-weight: 500;
     }
 
     /* 페이징 네비게이션 */

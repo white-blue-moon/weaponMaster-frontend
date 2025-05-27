@@ -73,7 +73,7 @@ export const ARTICLE_DETAIL_TYPE = {
     NEWS: {
         NOTICE: {
             NORMAL:     1,
-            INSPECTION: 2,
+            MAINTENANCE: 2,
         },
 
         UPDATE: {
@@ -94,7 +94,7 @@ export const ARTICLE_DETAIL_TYPE_TEXT = {
    [CATEGORY_TYPE.NEWS]: {
         [ARTICLE_TYPE.NEWS.NOTICE]: {
             [ARTICLE_DETAIL_TYPE.NEWS.NOTICE.NORMAL]:     "일반",
-            [ARTICLE_DETAIL_TYPE.NEWS.NOTICE.INSPECTION]: "점검",
+            [ARTICLE_DETAIL_TYPE.NEWS.NOTICE.MAINTENANCE]: "점검",
         },
 
         [ARTICLE_TYPE.NEWS.UPDATE]: {

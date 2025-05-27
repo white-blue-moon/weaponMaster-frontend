@@ -102,7 +102,9 @@ export function getArticleFilter(categoryType, articleType) {
     return result;
 }
 
-export function getArticleFilterText(categoryType, articleType, articleDetailType) {
+export function getArticleFilterText(article) {
+    const { categoryType, articleType, articleDetailType } = article;
+
     if (categoryType == CATEGORY_TYPE.NEWS) {
         if (ARTICLE_DETAIL_TYPE_TEXT[categoryType]?.[articleType]) {
             return ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][articleDetailType];

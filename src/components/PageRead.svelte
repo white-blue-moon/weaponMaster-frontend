@@ -3,7 +3,7 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
     import { getPage, getArticleFilterText } from '../utils/page';
-    import { userInfo, isAdmin } from "../utils/auth";
+    import { userInfo, isAdmin, adminToken } from "../utils/auth";
     import { formatDate } from "../utils/time";
     import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
     import { getArticleIdFromUrl } from '../utils/pathUtiil';
@@ -60,8 +60,9 @@
         const response = await apiFetch(API.ARTICLES.TOGGLE_PIN(pageId), {
             method: 'PATCH',
             body: JSON.stringify({
-                "isAdminMode": $isAdmin,
                 "userId":      $userInfo,
+                "isAdminMode": $isAdmin,
+                "adminToken":  $adminToken,
             }),
         }).catch(handleApiError);
 
@@ -94,8 +95,9 @@
         const response = await apiFetch(API.ARTICLES.DELETE(pageId), {
             method: 'DELETE',
             body: JSON.stringify({
-                "isAdminMode": $isAdmin,
                 "userId":      $userInfo,
+                "isAdminMode": $isAdmin,
+                "adminToken":  $adminToken,
             }),
         }).catch(handleApiError);
 
