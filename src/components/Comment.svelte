@@ -4,21 +4,17 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
+    import { getArticleIdFromUrl } from "../utils/pathUtiil";
 
     import CommentItem from "./CommentItem.svelte";
     import CommentEnter from "./CommentEnter.svelte";
-
+    
 
     export let categoryType;
     export let articleType;
     export let author;
 
-    const url = window.location.pathname;
-
-    let articleId = 0;
-    if (/\d+$/.test(url)) {
-        articleId = url.split('/').pop();
-    }
+    const articleId = getArticleIdFromUrl();
 
     let comments       = [];
     let normalComments = [];

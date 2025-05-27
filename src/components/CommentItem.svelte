@@ -4,6 +4,7 @@
     import { formatDate } from "../utils/time";
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { API } from '../constants/api';
+    import { getArticleIdFromUrl } from "../utils/pathUtiil";
 
     import AdminAuthor from './AdminAuthor.svelte';
     import Spinner from './Spinner.svelte';
@@ -14,6 +15,8 @@
     export let articleType;
     export let author;
     export let isReply = false;
+
+    const articleId = getArticleIdFromUrl();
 
     let isDeleteLoading  = false;
     let reCommentVisible = false; 

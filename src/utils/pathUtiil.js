@@ -16,3 +16,15 @@ export function getRedirectUrl() {
     
     return redirect;
 }
+
+export function getArticleIdFromUrl() {
+    const url       = window.location.pathname;
+    let   articleId = 0;
+
+    // url의 끝부분이 숫자로 끝나는지 확인
+    if (/\d+$/.test(url)) {
+        articleId = url.split('/').pop();
+    }
+
+    return articleId;
+}

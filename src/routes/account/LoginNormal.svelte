@@ -63,8 +63,6 @@
         alert('로그인에 실패하였습니다.\n아이디와 비밀번호를 다시 한번 확인해 주세요.');
         return;
     }
-
-    
 </script>
 
 <GnbPublisher />
