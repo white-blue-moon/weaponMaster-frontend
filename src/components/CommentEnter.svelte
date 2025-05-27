@@ -2,25 +2,25 @@
     import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { isPrivacyMode } from "../utils/authUtil";
+    import { getArticleIdFromUrl } from "../utils/pathUtiil";
 
     import AdminAuthor from "./AdminAuthor.svelte";
     import Spinner from "./Spinner.svelte";
-
+  
 
     export let reCommentId = 0;
-    export let privacyMode = false;
+    export let articleInfo;
+
+    const { categoryType, articleType, author } = articleInfo;
+    const privacyMode = isPrivacyMode(categoryType, articleType, author);
 
     let placeHolder = getPlaceHolder();
 
     let contents = "";
     let isFocused = false;
 
-    let articleId = 0;
-    const url     = window.location.pathname;
-    if (/\d+$/.test(url)) {
-        articleId = url.split('/').pop();
-    }
-
+    let articleId = getArticleIdFromUrl();
     let isLoading = false;
 
     function getPlaceHolder() {
@@ -35,7 +35,6 @@
         return "비방, 욕설, 도배글 등은 서비스 이용제한 사유가 될 수 있습니다.";
     }
 
-    // contenteditable의 텍스트를 contents에 반영
     function updateContents(e) {
         contents = e.target.innerHTML.trim();
     }
@@ -109,6 +108,7 @@
 <div class="comment_enter" id="newCommentArea">
     <ul id="uiSticker" class="textarea">
         <li>
+            <!-- 댓글 작성자 이름 -->
             <!-- svelte-ignore a11y-missing-attribute -->
             <a class="name {reCommentId > 0 ? 'reply' : ''}">
                 {#if $isAdmin}
@@ -117,9 +117,9 @@
                     { $userInfo }
                 {/if}
             </a>
-            <!-- <a>힐더</a> -->
         </li>
         <li class="mrt">
+            <!-- 댓글 입력 창 -->
             <div
                 contenteditable="true"
                 class="stkTxtArea"
@@ -131,6 +131,8 @@
                     <span class="pNode">{ placeHolder }</span>
                 {/if}
             </div>
+
+            <!-- 등록 버튼 -->
             <a class="reg" on:click={ handleRegister }>
                 {#if isLoading}<Spinner colorTheme="white"/>{/if} 등록
             </a>

@@ -1,6 +1,5 @@
 <script>
     import { DF_UI } from "../constants/resourcePath";
-    import { isPrivacyMode } from "../utils/authUtil";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
@@ -8,13 +7,18 @@
 
     import CommentItem from "./CommentItem.svelte";
     import CommentEnter from "./CommentEnter.svelte";
-    
+
 
     export let categoryType;
     export let articleType;
     export let author;
 
-    const articleId = getArticleIdFromUrl();
+    const articleId   = getArticleIdFromUrl();
+    const articleInfo = {
+        categoryType,
+        articleType,
+        author,
+    };
 
     let comments       = [];
     let normalComments = [];
@@ -82,23 +86,12 @@
         <div id="comment_group_area">
             {#each normalComments as comment}
                 <!-- 댓글 -->
-                <CommentItem 
-                    comment={ comment }
-                    categoryType={ categoryType }
-                    articleType={ articleType }
-                    author={ author } 
-                />
+                <CommentItem comment={ comment } articleInfo={ articleInfo } />
             
                 <!-- 대댓글 -->
                 {#if replyCommentsList[comment.id]}
                     {#each replyCommentsList[comment.id] as replyComment}
-                        <CommentItem 
-                            comment={ replyComment } 
-                            categoryType={ categoryType }
-                            articleType={ articleType }
-                            author={ author }  
-                            isReply={ true }
-                        />
+                        <CommentItem comment={ replyComment } articleInfo={ articleInfo }  isReply={ true } />
                     {/each}
                 {/if}
             {/each}
@@ -106,7 +99,7 @@
 
         <!-- 댓글 입력 -->
         <div id="commentEnter">
-            <CommentEnter privacyMode={ isPrivacyMode(categoryType, articleType, author) } />
+            <CommentEnter articleInfo={ articleInfo } />
         </div>
     </div>
 </article>

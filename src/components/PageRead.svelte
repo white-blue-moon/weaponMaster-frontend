@@ -194,12 +194,13 @@
             </div>          
         </article>
 
+        <!-- 공지사항에는 댓글 기재 불가능 -->
         {#if article.categoryType != CATEGORY_TYPE.NEWS}
             <Comment 
                 categoryType={ article.categoryType }
                 articleType={ article.articleType }
                 author={ article.userId }
-            /> <!-- 공지사항에는 댓글 기재 불가능 -->
+            /> 
         {/if}
 
     </section>

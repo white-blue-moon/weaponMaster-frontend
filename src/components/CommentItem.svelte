@@ -1,6 +1,6 @@
 <script>
     import { userInfo, isAdmin, adminToken, isLoggedIn } from "../utils/auth";
-    import { isAuthorOrAdmin, isPrivacyArticle, isPrivacyMode } from "../utils/authUtil";
+    import { isAuthorOrAdmin, isPrivacyArticle } from "../utils/authUtil";
     import { formatDate } from "../utils/time";
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { API } from '../constants/api';
@@ -11,11 +11,10 @@
     import CommentEnter from "./CommentEnter.svelte";
   
     export let comment = {};
-    export let categoryTpye;
-    export let articleType;
-    export let author;
+    export let articleInfo;
     export let isReply = false;
 
+    const { categoryType, articleType, author } = articleInfo;
     const articleId = getArticleIdFromUrl();
 
     let isDeleteLoading  = false;
@@ -65,7 +64,7 @@
         }
 
         // 1:1 문의는 작성자/관리자에게만 버튼 표시
-        if (isPrivacyArticle(categoryTpye, articleType)) {
+        if (isPrivacyArticle(categoryType, articleType)) {
             if (isAuthorOrAdmin(author)) {
                 return true;
             }
@@ -128,7 +127,7 @@
 
 <!-- 답글 입력 -->
 {#if reCommentVisible}
-    <CommentEnter reCommentId={comment.id} privacyMode={ isPrivacyMode(categoryTpye, articleType, author) } />
+    <CommentEnter reCommentId={comment.id} articleInfo={ articleInfo } />
 {/if}
 
 
