@@ -1,9 +1,9 @@
 <script>
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin, handleCapsLock, adminToken, authLogin } from "../../utils/auth";
-    import { PATHS } from '../../constants/paths';
+    import { handleCapsLock, authLogin } from "../../utils/auth";
     import { DF_UI } from '../../constants/resourcePath';
+    import { getRedirectUrl } from '../../utils/pathUtiil';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
@@ -56,7 +56,7 @@
             authLogin(userId, response.data.adminToken, isAdminMode);
 
             alert(`관리자모드로 로그인합니다.\n${userId} 님 안녕하세요.`);
-            window.location.href = PATHS.HOME;
+            window.location.href = getRedirectUrl();
             return;
         }
 

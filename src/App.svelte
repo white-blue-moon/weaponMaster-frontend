@@ -72,9 +72,9 @@
 		<Route path={ PATHS.HOME } component={ Home } />
 
 		<!-- 계졍 관련 -->
-		<Route path={ PATHS.ACCOUNT.JOIN }        component={ Join } />
-		<Route path={ PATHS.ACCOUNT.LOGIN }       component={ LoginNormal } />
-		<Route path={ PATHS.ACCOUNT.LOGIN_ADMIN } component={ LoginAdmin } />
+		<Route path={ PATHS.ACCOUNT.JOIN }        		   component={ Join } />
+		<Route path={ PATHS.ACCOUNT.LOGIN_TEMPLATE }       component={ LoginNormal } />
+		<Route path={ PATHS.ACCOUNT.LOGIN_ADMIN_TEMPLATE } component={ LoginAdmin } />
 
 		<!-- 새소식 -->
 		<Route path={ PATHS.NEWS.NOTICE.LIST }   component={ NoticeList } />

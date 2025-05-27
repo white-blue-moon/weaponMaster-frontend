@@ -82,8 +82,8 @@
           <ul>
             {#if !$isLoggedIn}
               <li class="btn_before">
-                <a href={ PATHS.ACCOUNT.LOGIN_ADMIN }>관리자모드 로그인</a>
-                <a href={ PATHS.ACCOUNT.LOGIN } class="blue">일반모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN_ADMIN() }>관리자모드 로그인</a>
+                <a href={ PATHS.ACCOUNT.LOGIN() } class="blue">일반모드 로그인</a>
               </li>
               
               <li class="txt_before">

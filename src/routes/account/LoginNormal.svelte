@@ -3,6 +3,7 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { handleCapsLock, authLogin } from "../../utils/auth";
     import { PATHS } from '../../constants/paths';
+    import { getRedirectUrl } from '../../utils/pathUtiil';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/HeaderBanner.svelte';
@@ -54,7 +55,7 @@
             authLogin(userId);
 
             alert(`로그인에 성공하였습니다.\n${userId} 님 안녕하세요.`)
-            window.location.href = PATHS.HOME;
+            window.location.href = getRedirectUrl();
             return;
         }
 

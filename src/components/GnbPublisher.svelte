@@ -64,18 +64,18 @@
   
   <div class="actions">
     {#if $isLoggedIn}
-      <span class="loginInfo">
-        <!-- 유저 타입에 따라 다른 아이콘 출력되도록 하기 -->
-        {#if $isAdmin}
-          <span style="margin-right: 10px;">ADMIN MODE</span>
-        {/if}
-        <span class="platform-icon padding-2px platform-icon-nexon gnbText"></span>
-        <span class="nickname gnbText">{ $userInfo }</span>
-      </span>
-      <a class="logout" href="#" on:click={ onLogout }>로그아웃</a>
+        <span class="loginInfo">
+            <!-- 유저 타입에 따라 다른 아이콘 출력되도록 하기 -->
+            {#if $isAdmin}
+              <span style="margin-right: 10px;">ADMIN MODE</span>
+            {/if}
+            <span class="platform-icon padding-2px platform-icon-nexon gnbText"></span>
+            <span class="nickname gnbText">{ $userInfo }</span>
+        </span>
+        <a class="logout" on:click={ onLogout }>로그아웃</a>
     {:else}
-      <a class="join"  href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
-      <a class="login" href={ PATHS.ACCOUNT.LOGIN }>로그인</a>
+        <a class="join"  href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
+        <a class="login" href={ PATHS.ACCOUNT.LOGIN() }>로그인</a>
     {/if}
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { SERVICE_DOMAIN } from "./api";
+import { setRedirectUrl } from "../utils/pathUtiil";
 
 export const BASE = '/weapon-front';
 
@@ -8,8 +9,11 @@ export const PATHS = {
     MAINTENANCE: `${BASE}/`,
     ACCOUNT: {
         JOIN:        `${BASE}/account/join`,
-        LOGIN:       `${BASE}/account/login`,
-        LOGIN_ADMIN: `${BASE}/account/login/admin`,
+        LOGIN:       () => `${BASE}/account/login?redirect=${setRedirectUrl()}`,
+        LOGIN_ADMIN: () => `${BASE}/account/login/admin?redirect=${setRedirectUrl()}`,
+
+        LOGIN_TEMPLATE:       `${BASE}/account/login`,
+        LOGIN_ADMIN_TEMPLATE: `${BASE}/account/login/admin`,
     },
 
     INTRODUCE: {    
