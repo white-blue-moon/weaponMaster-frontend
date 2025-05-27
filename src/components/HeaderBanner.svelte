@@ -12,20 +12,19 @@
     const logoBackground        = `/weapon-front/images/logo_background.png`;
 </script>
 
+
 <header class="banner" style="--banner-background: url({ bannerBackground })">
     {#if isLogoVisible}
         <h1 style="padding-top: {logoPaddingTop};">
             <a href={ PATHS.HOME } style="--logo-background: url({ logoBackground })">{ homeName }</a>
         </h1>
     {/if}
-    <h2 
-        class:isLogoVisible={ isLogoVisible } 
-        class:notLogoVisible={ !isLogoVisible } 
-        style="color: { bannerTextColor };"
-    >
+
+    <h2 class="{isLogoVisible ? "isLogoVisible" : "notLogoVisible"}" style="color: { bannerTextColor };">
         { bannerText }
     </h2>
 </header>
+
 
 <style>
     * {

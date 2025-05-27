@@ -3,10 +3,11 @@
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
     import { getPage, getArticleFilterText } from '../utils/page';
-    import { userInfo, isLoggedIn, isAdmin } from "../utils/auth";
+    import { userInfo, isAdmin } from "../utils/auth";
     import { formatDate } from "../utils/time";
-    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_TYPE } from '../constants/articles';
-    
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
+    import { getArticleIdFromUrl } from '../utils/pathUtiil';
+
     import GnbPublisher from "../components/GnbPublisher.svelte";
     import Gnb from "../components/Gnb.svelte";
     import HeaderBanner from "../components/HeaderBanner.svelte";
@@ -18,11 +19,11 @@
     import AdminAuthor from './AdminAuthor.svelte';
     import CopyUrlButton from './CopyUrlButton.svelte';
     import CampaignBanner from './CampaignBanner.svelte';
+  
     
-    let url     = window.location.pathname;
-    let pageId  = url.split('/').pop();
+    let pageId  = getArticleIdFromUrl();
     let page    = {};
-    let article = null;
+    let article;
 
     let isLoading = false;
 

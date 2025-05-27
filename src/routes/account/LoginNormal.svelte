@@ -71,11 +71,11 @@
     <h3>아이디와 비밀번호를 입력하여 로그인해 주시기 바랍니다.</h3>
 
     <article class="login">
-        <form action="/account/login" method="post" id="loginForm" on:submit={ onSubmitLogin }>
+        <form id="loginForm" on:submit={ onSubmitLogin }>
             <ul class="login_normal">
                 <li>
                     <label for="id">아이디</label>
-                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={ userId } autofocus="" maxlength="24">
+                    <input type="text" id="id" name="id" placeholder="아이디" bind:value={ userId } maxlength="24">
                 </li>
                 <li>
                     <label for="password">비밀번호</label>
@@ -83,8 +83,7 @@
                         type="password" 
                         id="password" 
                         name="password" 
-                        placeholder="비밀번호" 
-                        maxlength="16" 
+                        placeholder="비밀번호"
                         bind:value={ password }
                         on:keypress={ (event) => handleCapsLock(event, (value) => capsLockWarning = value) }
                     >

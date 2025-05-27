@@ -49,6 +49,7 @@
     }
 
     function isUserIdVaild() {
+        // 영문 대소문자와 숫자로만 이루어진 문자열인지 검사하는 정규식
         const userIdRegex = /^[A-Za-z0-9]+$/;
         if (userIdRegex.test(userId)) {
             return true;
