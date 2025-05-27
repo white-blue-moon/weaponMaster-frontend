@@ -1,6 +1,6 @@
 <script>
     import { DF_UI } from "../constants/resourcePath";
-    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
+    import { userInfo, isAdmin, adminToken } from "../utils/auth";
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from 'svelte';
@@ -86,12 +86,33 @@
         await fetchComments();
     })
 
+    function isPrivacyMode() {
+        // 1:1 문의는 작성자/관리자 에게만 댓글 허용
+        if (isPrivacyArticle() && !isAuthorOrAdmin()) {
+            return true;
+        }
+
+        return false;
+    }
+
     function isPrivacyArticle() {
         if (categoryType == CATEGORY_TYPE.SERVICE_CENTER)
             if (articleType == ARTICLE_TYPE.SERVICE_CENTER.PRIVATE_CONTACT) {
                 return true;
             }
         
+        return false;
+    }
+
+    function isAuthorOrAdmin(author) {
+        if (author == $userInfo) {
+            return true;
+        }
+
+        if ($isAdmin) {
+            return true;
+        }
+
         return false;
     }
 
@@ -108,9 +129,11 @@
         <dl>
             <dt id="comment_count_dt">댓글 <b>{ comments.length }</b></dt>
             <dd>
-                <a class="go_reply">댓글 쓰러 가기</a>
-                <a id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt=""> 최신 댓글 이동</a>
-                <a id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt=""> 댓글 새로고침</a>
+                <a href="#commentEnter" class="go_reply">댓글 쓰러 가기</a>
+                <!-- TODO 추후 구현 필요 -->
+                <a style="cursor: default;" id="move_to_last_comment"><img src="{DF_UI}/img/board/comment_ico_move.png" alt="">최신 댓글 이동</a>
+                <!-- TODO 추후 구현 필요 -->
+                <a style="cursor: default;" id="refresh_comment_button"><img src="{DF_UI}/img/board/comment_ico_ref.png" alt="">댓글 새로고침</a>
             </dd>
         </dl>
     </div>
@@ -170,15 +193,7 @@
                 </div>
 
                 {#if reCommentVisible[comment.id]}
-                    {#if isPrivacyArticle() }
-                        {#if author == $userInfo || $isAdmin }
-                            <CommentEnter reCommentId={comment.id} /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
-                        {:else}
-                            <CommentEnter reCommentId={comment.id} privacyMode={ true }/>
-                        {/if}
-                    {:else}
-                        <CommentEnter reCommentId={comment.id} />
-                    {/if}
+                    <CommentEnter reCommentId={comment.id} privacyMode={ isPrivacyMode() } />
                 {/if}
 
                 {#if replyCommentsList[comment.id]}
@@ -225,16 +240,9 @@
             {/each}
         </div>
 
-        {#if isPrivacyArticle() }
-            {#if author == $userInfo || $isAdmin }
-                <CommentEnter /> <!-- 1:1 문의는 작성자/관리자 에게만 댓글 허용 -->
-            {:else}
-                <CommentEnter privacyMode={ true }/>
-            {/if}
-        {:else}
-            <!-- 댓글 입력 창 -->
-            <CommentEnter />
-        {/if}
+        <div id="commentEnter">
+            <CommentEnter privacyMode={ isPrivacyMode() } />
+        </div>
     </div>
 </article>
 
