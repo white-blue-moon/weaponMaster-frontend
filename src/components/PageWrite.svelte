@@ -5,7 +5,8 @@
     import { onMount } from 'svelte';
     import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
     import { PATHS } from "../constants/paths";
-    import { getPage, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
+    import { getPageInfo, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
+    import { getArticleIdFromUrl } from '../utils/pathUtiil';
     
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
@@ -24,28 +25,21 @@
     let articleType       = 0;
     let articleDetailType = 0;
 
-    const articleTypes     = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
-    let articleDetailTypes = [];
+    const articleTypes       = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
+    let   articleDetailTypes = [];
 
     let title    = '';
     let contents = '';
     let editor;
 
-    let isEditPage = false;
+    let isEditMode = /\d+$/.test(url); // 마지막 URL이 숫자로 끝나면 편집모드
     let cachedArticleType = 0;
 
-    let article = null;
-    let pageId;
-    let page = getPage(categoryType, articleType);
+    let article  = null;
+    let pageId   = getArticleIdFromUrl();
+    let pageInfo = getPageInfo(categoryType, articleType);
 
     let isLoading = false;
-
-    // TODO url 확인 로직 -> 함수화 하기
-    // 마지막 문자열이 숫자인지 확인하는 정규식
-    if (/\d+$/.test(url)) {
-        isEditPage = true;
-        pageId = url.split('/').pop();
-    }
 
     onMount(async () => {
         editor = new Quill('#editor', {
@@ -89,7 +83,7 @@
             contents = editor.root.innerHTML;
         });
 
-        if (isEditPage) {
+        if (isEditMode) {
             await fetchArticle();
 
             categoryType          = article.categoryType;
@@ -154,7 +148,7 @@
 
         let apiMethod = 'POST';
         let apiURL = API.ARTICLES.CREATE;
-        if (isEditPage) {
+        if (isEditMode) {
             apiMethod = 'PUT';
             apiURL = API.ARTICLES.UPDATE(pageId);
         }
@@ -176,7 +170,7 @@
         if (response.success) {
             isLoading = false;
             alert('게시물 등록이 완료되었습니다.');
-            window.location.href = page.listPath;
+            window.location.href = pageInfo.listPath;
             return;
         }
 
@@ -188,12 +182,12 @@
     function handleCancle() {
         const isConfirm = confirm("정말 게시물 작성을 취소하시겠습니까?");
         if (isConfirm) {
-            if (isEditPage) {
-                window.location.href = page.readPath(pageId);
+            if (isEditMode) {
+                window.location.href = pageInfo.readPath(pageId);
                 return;
             }
             
-            window.location.href = page.listPath;
+            window.location.href = pageInfo.listPath;
             return;
         }
 
@@ -218,7 +212,7 @@
         <HeaderBanner
             isLogoVisible={ false }
             bannerText={ CATEGORY_TYPE_TEXT[categoryType] }
-            bannerBackground={ page.bannerBackground }
+            bannerBackground={ pageInfo.bannerBackground }
         />
     </div>
 </div>

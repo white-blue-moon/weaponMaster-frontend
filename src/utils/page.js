@@ -3,7 +3,7 @@ import { BASE, PATHS } from '../constants/paths';
 import { DF_UI } from '../constants/resourcePath';
 
 // categoryType 별 페이지 정보 조회 함수
-export function getPage(categoryType, articleType) {
+export function getPageInfo(categoryType, articleType) {
     const categoryConfig = {
         [CATEGORY_TYPE.NEWS]: {
             bannerBackground: `${DF_UI}/img/visual/bg_news.jpg`,

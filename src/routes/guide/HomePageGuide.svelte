@@ -2,7 +2,7 @@
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
-    import { getPage } from '../../utils/page';
+    import { getPageInfo } from '../../utils/page';
     import { formatDate } from "../../utils/time"
     import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
@@ -20,9 +20,9 @@
     const HOME_PAGE_PURPOSE_ARTICLE_ID = 420;
     const ARTICLE_FILTER_TEXT          = "가이드";
 
-    let pageId  = HOME_PAGE_PURPOSE_ARTICLE_ID;
-    let page    = {};
-    let article = null;
+    let pageId   = HOME_PAGE_PURPOSE_ARTICLE_ID;
+    let pageInfo = {};
+    let article  = null;
 
     async function fetchArticle() {
         const response = await apiFetch(API.ARTICLES.READ(pageId), {
@@ -30,8 +30,8 @@
         }).catch(handleApiError);
 
         if (response.success) {
-            article = response.data;
-            page    = getPage(article.categoryType, article.articleType);
+            article  = response.data;
+            pageInfo = getPageInfo(article.categoryType, article.articleType);
         }
     }
 
@@ -49,7 +49,7 @@
             <HeaderBanner
                 isLogoVisible={ false }
                 bannerText={ CATEGORY_TYPE_TEXT[article.categoryType] }
-                bannerBackground={ page.bannerBackground }
+                bannerBackground={ pageInfo.bannerBackground }
             />
         </div>
     </div>

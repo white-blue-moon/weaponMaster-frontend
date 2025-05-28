@@ -6,6 +6,7 @@
 
     import FocusBanner from '../components/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
+    import Top from '../components/Top.svelte';
   
 
     export let endDate;
@@ -132,16 +133,8 @@
     </article>
 </section>
 
+<Top />
 <Footer />
-
-<a 
-    href="#" 
-    class="top" 
-    style="position: fixed; display: block;"
->
-    TOP
-</a>
-
 
 
 <style>

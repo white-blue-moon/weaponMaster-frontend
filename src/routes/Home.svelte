@@ -4,7 +4,6 @@
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { PATHS } from '../constants/paths';
-    import { useLocation } from 'svelte-routing';
 
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
@@ -26,8 +25,7 @@
     
     let isLoading = true;
 
-    let   show     = false;
-	const location = useLocation();
+    let isPageRevealed = false;
 
     async function fetchFocusBanners() {
         const response = await apiFetch(API.PAGE.HOME, {
@@ -63,13 +61,13 @@
         if (isFromGate) {
             // 화면이 렌더링될 준비가 되었을 때(show = true) 실행되도록 예약
             // → 이렇게 하면 화면이 '서서히 등장하는' 애니메이션 효과를 줄 수 있음
-            requestAnimationFrame(() => show = true);
+            requestAnimationFrame(() => isPageRevealed = true);
             sessionStorage.removeItem('fromAccessGate'); // 비밀번호 입력 후 한 번만 연출
         }
 
         if (!isFromGate) {
             // 즉시 화면을 보여줌 (애니메이션 없이 바로 나타남)
-            show = true;
+            isPageRevealed = true;
         }
 
         await fetchFocusBanners();
@@ -82,7 +80,7 @@
     }
 </script>
 
-<div class:fade-in={ show } class="home-wrapper">
+<div class:fade-in={ isPageRevealed } class="home-wrapper">
     <GnbPublisher />
     <div class="menu">
         <div class="gnb">

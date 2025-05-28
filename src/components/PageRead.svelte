@@ -2,7 +2,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { onMount } from "svelte";
-    import { getPage, getArticleFilterText } from '../utils/page';
+    import { getPageInfo, getArticleFilterText } from '../utils/page';
     import { userInfo, isAdmin, adminToken } from "../utils/auth";
     import { formatDate } from "../utils/time";
     import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
@@ -21,8 +21,8 @@
     import CampaignBanner from './CampaignBanner.svelte';
   
     
-    let pageId  = getArticleIdFromUrl();
-    let page    = {};
+    let pageId   = getArticleIdFromUrl();
+    let pageInfo = {};
     let article;
 
     let isLoading = false;
@@ -34,7 +34,7 @@
 
         if (response.success) {
             article = response.data;
-            page = getPage(article.categoryType, article.articleType);
+            pageInfo = getPageInfo(article.categoryType, article.articleType);
         }
     }
 
@@ -75,7 +75,7 @@
             }
             alert(alertMesseage);
 
-            window.location.href = page.listPath;
+            window.location.href = pageInfo.listPath;
             return;
         }
         
@@ -104,7 +104,7 @@
         if (response.success) {
             isLoading = false;
             alert('게시물이 삭제되었습니다.');
-            window.location.href = page.listPath;
+            window.location.href = pageInfo.listPath;
             return;
         }
         
@@ -123,7 +123,7 @@
             <HeaderBanner
                 isLogoVisible={ false }
                 bannerText={ CATEGORY_TYPE_TEXT[article.categoryType] }
-                bannerBackground={ page.bannerBackground }
+                bannerBackground={ pageInfo.bannerBackground }
             />
         </div>
     </div>
@@ -186,14 +186,14 @@
                     {/if}
 
                     <!-- 수정 버튼 -->
-                    <a href={ page.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
+                    <a href={ pageInfo.editPath(article.id) } id="editButton" class="btn btntype_bk46 bold" style="width:140px">수정</a>
                     
                     <!-- 삭제 버튼 -->
                     <a on:click={ handleDelete } id="deleteButton" class="btn btntype_bk46 bold" style="width:140px">
                         {#if isLoading}<Spinner colorTheme="white"/>{/if} 삭제
                     </a>
                 {/if}
-                <a href={ page.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
+                <a href={ pageInfo.listPath } class="btn btntype_bk46 bold list" style="width:140px">목록</a>
             </div>          
         </article>
 

@@ -3,7 +3,7 @@
     import { API } from '../constants/api';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
-    import { getArticleFilter, getPage } from '../utils/page';
+    import { getArticleFilter, getPageInfo } from '../utils/page';
     import { isAdmin, isLoggedIn } from '../utils/auth';
 
     import GnbPublisher from "./GnbPublisher.svelte";
@@ -19,7 +19,7 @@
     export let categoryType;
     export let articleType;
 
-    let   page           = getPage(categoryType, articleType);
+    const pageInfo       = getPageInfo(categoryType, articleType);
     const articleFilters = getArticleFilter(categoryType, articleType);
 
     const PAGE_SIZE         = 20;   // 한 페이지에 표시할 게시물 수
@@ -28,7 +28,7 @@
     let articles          = [];
     let pinnedArticles    = [];
     let displayedArticles = [];
-    let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
+    let articlesMap       = new Map(); // 필터 key 별로 게시물 리스트를 미리 저장
 
     let totalPageNum      = 1;
     let currentPageNum    = 1;
@@ -158,7 +158,7 @@
 <div class="menu">
     <Gnb />
     <div class="header-banner">
-        <HeaderBanner isLogoVisible={ false } bannerText={ CATEGORY_TYPE_TEXT[categoryType] } bannerBackground={ page.bannerBackground } />
+        <HeaderBanner isLogoVisible={ false } bannerText={ CATEGORY_TYPE_TEXT[categoryType] } bannerBackground={ pageInfo.bannerBackground } />
     </div>
 </div>
 <Menu2nd categoryType={ categoryType } articleType={ articleType }/>
@@ -189,12 +189,12 @@
         {:else}
             <!-- 고정 게시물은 항상 출력 -->
             {#each pinnedArticles as article}
-                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } isPinned={ true } />
+                <ArticleRow article={ article } articleUrl={ pageInfo.readPath(article.id) } isPinned={ true } />
             {/each}
     
             {#if displayedArticles.length > 0}
                 {#each displayedArticles as article}
-                    <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } />
+                    <ArticleRow article={ article } articleUrl={ pageInfo.readPath(article.id) } />
                 {/each}
             {:else}
                 <ul class="nodata">
@@ -207,7 +207,7 @@
     <!-- 글쓰기 버튼 -->
     {#if canUserWrite()}
         <article class="btnarea_r mt30">
-            <a href="{ page.writePath }" class="btn btntype_bu46 bold" style="width:160px">글쓰기</a>
+            <a href="{ pageInfo.writePath }" class="btn btntype_bu46 bold" style="width:160px">글쓰기</a>
         </article>
     {/if}
 
