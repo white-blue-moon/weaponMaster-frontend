@@ -66,7 +66,7 @@
         <p class="news_tab">
             {#each tabs as tab}
                 <a
-                    href="#"
+                    style="cursor: pointer;"
                     class:on={activeTab === tab}
                     on:click|preventDefault={() => setActiveTab(tab)}
                 >

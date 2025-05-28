@@ -251,6 +251,7 @@
   }
 
   .login_area {
+    cursor: default;
     position: absolute;
     top: 100px; /* nav 높이 아래에 위치 */
     right: 0;
@@ -268,6 +269,7 @@
 
   /* 확장된 로그인 영역 내부 요소 스타일 */
   .login_area a {
+    cursor: pointer;
     display: block;
     text-decoration: none;
     color: white;

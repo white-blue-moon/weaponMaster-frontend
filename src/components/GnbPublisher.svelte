@@ -12,7 +12,7 @@
   let logo;
   let isMenuOpen = false;
 
-  // 최초 로고 설정 (기존 값 유지)
+  // 로고 정보 캐시 설정
   $: if ($publisherLogo && !logo) {
       logo = $publisherLogo;
   }
@@ -48,13 +48,13 @@
 <div class="header">
   <div class="gnb-publisher-menu">
     <!-- svelte-ignore a11y-invalid-attribute -->
-    <a href="#" on:click={ () => isMenuOpen = true }>
+    <a style="cursor: pointer;" on:click={ () => isMenuOpen = true }>
       <span class="menuIcon"></span> 
       <span class="menuText">메뉴</span>
     </a>
   </div>
 
-  <SideMenu isOpen={ isMenuOpen } onClose={ () => isMenuOpen = false } />
+  <SideMenu bind:isOpen={ isMenuOpen } />
   
   {#if logo}
     <a class="logo" href={ PATHS.HOME }>
@@ -162,6 +162,7 @@
   }
 
   .actions .login:hover, .logout:hover {
+    cursor: pointer;
     border: 2px solid #007aff;
     background-color: #007aff;
     color: white;

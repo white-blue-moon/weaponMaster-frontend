@@ -2,13 +2,11 @@
 <script>
     import { PATHS } from "../constants/paths";
 
-
     export let isOpen  = false;
-    export let onClose = () => {}; // 닫기 콜백
-
-    const handleDimmedClick = () => {
-        onClose();
-    };
+    
+    function onClose() {
+        isOpen = false;
+    }
 </script>
   
 {#if isOpen}
@@ -16,17 +14,19 @@
     <div class="gnbScrollHide">
         <div class="gnbContainer gnbWrapper gnbSizeS gnbStateAll">
             <!-- 배경 어둡게 -->
-            <div class="gnbDimmedLayer" on:click={ handleDimmedClick }></div>
+            <div class="gnbDimmedLayer" on:click={ onClose }></div>
 
             <div class="gnbAllLayer gnbStatePc" id="gnbAllLayer">
-                <div class="gnbLayerBt" on:click={ handleDimmedClick }>
-                    <a href="#" obj="P_GNB" >
+                    <a style="cursor: pointer;" obj="P_GNB" >
+                <div class="gnbLayerBt" on:click={ onClose }>
+                    <a obj="P_GNB" >
                         <span class="gnbIcon"></span>
                         <span class="gnbAcchidden"></span>
                     </a>
                 </div>
 
                 <div class="gnbScroll gnbAllScroll">
+                    <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
                     <div class="gnbScrollContent" tabindex="0">
                         <!-- 밑줄 전체서비스 -->
                         <div class="gnbGameTab">

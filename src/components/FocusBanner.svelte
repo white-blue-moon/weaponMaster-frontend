@@ -110,7 +110,8 @@
 
             {#if isDefaultCtrlShow}
                 <p class="pay_ctrl">
-                    <a href="#" 
+                    <a 
+                        style="cursor: pointer;" 
                         class="arrow_l swiper-button-prev" 
                         tabindex="0" 
                         role="button" 
@@ -125,7 +126,8 @@
                         <span class="swiper-pagination-total">{banners.length}</span>
                     </i>
 
-                    <a href="#"
+                    <a 
+                        style="cursor: pointer;"
                         class="arrow_r swiper-button-next" 
                         tabindex="0" 
                         role="button" 
