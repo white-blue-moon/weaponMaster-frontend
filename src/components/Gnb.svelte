@@ -64,15 +64,10 @@
 
   <div class="gameTab">
     <!-- 로그인 버튼 -->
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="login" on:click={ toggleLogin } class:is-active={ isLoginAreaVisible }>
       <a class="go_login" id="webGnbMyBtn">
         {#if !isLoginAreaVisible}
-          {#if !$isLoggedIn}
-            로그인
-          {:else}
-            MY
-          {/if}
+          {!$isLoggedIn ? '로그인' : 'MY' }
         {/if}
       </a>
     
@@ -81,25 +76,21 @@
         <div class="login_area">
           <ul>
             {#if !$isLoggedIn}
-              <li class="btn_before">
-                <a href={ PATHS.ACCOUNT.LOGIN_ADMIN() }>관리자모드 로그인</a>
-                <a href={ PATHS.ACCOUNT.LOGIN() } class="blue">일반모드 로그인</a>
-              </li>
-              
-              <li class="txt_before">
-                <a href={ PATHS.ACCOUNT.JOIN }>처음 오셨나요? 회원가입</a>
-              </li>
-            {/if}
+                <li class="btn_before">
+                  <a href={PATHS.ACCOUNT.LOGIN_ADMIN()}>관리자모드 로그인</a>
+                  <a href={PATHS.ACCOUNT.LOGIN()} class="blue">일반모드 로그인</a>
+                </li>
 
-            {#if $isLoggedIn}
-              <li class="user_after">
-                <div class="user_text">
-                  <span class="userId">{ $userInfo }</span>
-                  <span>님 안녕하세요</span>
-                  <!-- TODO 일반/관리자 모드에 따른 아이콘 추가하기 -->
-                </div>
-                <a href="#" class="blue" on:click={ onLogout }>로그아웃</a>
-              </li>
+                <li class="txt_before">
+                  <a href={PATHS.ACCOUNT.JOIN}>처음 오셨나요? 회원가입</a>
+                </li>
+            {:else}
+                <li class="user_after">
+                  <div class="user_text">
+                    <span class="userId">{ $userInfo } 님 안녕하세요</span>
+                  </div>
+                  <a class="blue" on:click={ onLogout }>로그아웃</a>
+                </li>
             {/if}
           </ul>
         </div>
@@ -107,8 +98,8 @@
     </div>
 
     <!-- GAME MARKET -->
-    <article class="gameinfo">
-      <a id="gameinfo" on:click={ showGameMarketPopUp }>
+    <article class="game-market">
+      <a id="game-market" on:click={ showGameMarketPopUp }>
           <span></span>
           <b>GAME MARKET</b>
       </a>
@@ -304,7 +295,7 @@
     background-color: #3392ff; /* 던파ID 로그인 버튼 색상 */
   }
 
-  .gameinfo {
+  .game-market {
       top: 0;
       right: 0;
       width: 260px;
@@ -313,10 +304,10 @@
       overflow: hidden;
   }
 
-  .gameinfo span {
+  .game-market span {
       transition: .5s;
       display: block;
-      animation: gameinfo 5s steps(150) infinite;
+      animation: game-market 5s steps(150) infinite;
       width: 260px;
       height: 100px;
       background: url("#{$DF_UI}/img/common/gamestart_ani3.jpg");
@@ -326,17 +317,17 @@
   }
 
   /* 버튼 배경 애니메이션 @keyframes 정의 */
-  @keyframes gameinfo {
+  @keyframes game-market {
     100% {
         background-position: 0 -15000px;
     }
   }
 
-  .gameinfo:hover span {
+  .game-market:hover span {
     transform: scale(1.1); /* 배경 이미지를 확대 */
   }
 
-  .gameinfo b {
+  .game-market b {
       transition: .5s;
       display: block;
       position: absolute;
@@ -355,7 +346,7 @@
       transition: transform 0.3s ease-in-out; /* 텍스트 축소 부드럽게 */
   }
 
-  .gameinfo:hover b {
+  .game-market:hover b {
     transform: scale(0.89); /* 텍스트 축소 */
   }
 
