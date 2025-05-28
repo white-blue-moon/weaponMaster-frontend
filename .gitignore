@@ -5,3 +5,4 @@
 deploy.sh
 deploy_build.sh
 deploy_local.sh
+deploy_local_build.sh

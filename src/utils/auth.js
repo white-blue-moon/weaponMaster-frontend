@@ -1,5 +1,4 @@
 import { writable } from "svelte/store";
-import { PATHS } from "../constants/paths";
 import { DURATION } from "../constants/duration";
 
 export const canAccessPage = cookieWritable("canAccessPage", false); // 홈페이지 자체 접근 가능 여부

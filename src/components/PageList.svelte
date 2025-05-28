@@ -14,6 +14,7 @@
     import Spinner from "./Spinner.svelte";
     import Top from "./Top.svelte";
     import ArticleRow from "./ArticleRow.svelte";
+    import SearchBar from "./SearchBar.svelte";
 
     export let categoryType;
     export let articleType;
@@ -26,15 +27,13 @@
 
     let articles          = [];
     let pinnedArticles    = [];
+    let displayedArticles = [];
     let articlesMap       = new Map(); // 필터 키별로 게시물 리스트를 미리 저장
 
     let totalPageNum      = 1;
     let currentPageNum    = 1;
 
-    let displayedArticles = [];
-
     let searchKeyword     = "";
-    let searchInput       = "";
 
     let selectedFilters   = new Set(); // 게시물 필터 버튼 상태 관리 (ex: 미답변/답변완료)
 
@@ -126,23 +125,32 @@
     }
 
     function handleSearch() {
-        searchKeyword  = searchInput;
         currentPageNum = 1;
         updateDisplayedArticles();
     }
 
     function clearSearch() {
         searchKeyword = "";
-        searchInput   = "";
         updateDisplayedArticles();
+    }
+
+    function canUserWrite() {
+        const isNews = categoryType === CATEGORY_TYPE.NEWS;
+
+        if (isNews && $isAdmin && $isLoggedIn) {
+            return true;
+        }
+
+        if (!isNews && $isLoggedIn) {
+            return true;
+        }
+
+        return false;
     }
 
     $: currentGroupStart = Math.floor((currentPageNum - 1) / GROUP_PAGING_SIZE) * GROUP_PAGING_SIZE + 1;
     $: currentGroupEnd   = Math.min(currentGroupStart + GROUP_PAGING_SIZE - 1, totalPageNum);
     $: currentGroupPages = Array.from({ length: currentGroupEnd - currentGroupStart + 1 }, (_, i) => currentGroupStart + i);
-
-    $: canWrite = (categoryType === CATEGORY_TYPE.NEWS && $isAdmin && $isLoggedIn) ||
-                  (categoryType !== CATEGORY_TYPE.NEWS && $isLoggedIn);
 </script>
 
 
@@ -169,56 +177,24 @@
         </div>
 
         <!-- 검색 바 -->
-        <div class="board_srch">
-            <div class="select_gy" style="width:120px">
-                <div class="select">
-                    <!-- <select id="searchType">
-                        <option value="1">제목+본문</option>
-                        <option value="2">제목</option>
-                    </select> -->
-                    <div class="select-element">
-                        <span class="active-option">제목</span>
-                        <!-- <div class="option-list" style="max-height: 205px; height: 84px;">
-                            <ul>
-                                <li data-value="1">제목+본문</li>
-                                <li data-value="2">제목</li>
-                            </ul>
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-            <div class="bs_ipt">
-                <input
-                    type="text"
-                    id="searchKeyword"
-                    class="search_input"
-                    autocomplete="off"
-                    bind:value={ searchInput }
-                    on:keydown={(e) => e.key === 'Enter' && handleSearch()}
-                >
-                <a class="btn_del" style:display={ searchInput ? 'block' : 'none' } on:click={ clearSearch }>삭제</a>
-                <label id="searchButton" on:click={ handleSearch }></label>
-            </div>
-        </div>
+        <SearchBar bind:searchKeyword={ searchKeyword } handleSearch={ handleSearch } clearSearch={ clearSearch } />
     </article>
 
     <!-- 게시물 목록 -->
     <article class="board_list news_list">
         {#if isLoading}
             <ul>
-                <li>
-                    <Spinner /> 게시물 정보를 불러오는 중입니다.
-                </li>
+                <li><Spinner /> 게시물 정보를 불러오는 중입니다.</li>
             </ul>
         {:else}
             <!-- 고정 게시물은 항상 출력 -->
             {#each pinnedArticles as article}
-                <ArticleRow article={article} articleUrl={page.readPath(article.id)} isPinned={true} />
+                <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } isPinned={ true } />
             {/each}
     
             {#if displayedArticles.length > 0}
                 {#each displayedArticles as article}
-                    <ArticleRow article={article} articleUrl={page.readPath(article.id)} />
+                    <ArticleRow article={ article } articleUrl={ page.readPath(article.id) } />
                 {/each}
             {:else}
                 <ul class="nodata">
@@ -228,12 +204,14 @@
         {/if}
     </article>
     
-    {#if canWrite}
+    <!-- 글쓰기 버튼 -->
+    {#if canUserWrite()}
         <article class="btnarea_r mt30">
             <a href="{ page.writePath }" class="btn btntype_bu46 bold" style="width:160px">글쓰기</a>
         </article>
     {/if}
 
+    <!-- 페이징 -->
     <article class="paging mt60">
         <a class="first" on:click={ () => changePage(1) }>FIRST</a>
         <a class="prev"  on:click={ () => changePage(currentPageNum - 1) }>PREV</a>
@@ -250,9 +228,7 @@
         <a class="end"  on:click={ () => changePage(totalPageNum) }>END</a>
     </article>
 </section>
-
 <Top />
-
 <Footer />
 
 
@@ -366,143 +342,6 @@
 
     .category_type_c a.selected::before {
         background-position: 0 -50px; // 체크 이미지 하얀색으로 변경 (이미지 내 위치 이동)            
-    }
-
-    .board_srch {
-        display: flex;
-        margin-left: auto;
-        position: relative;
-        width: 380px;
-    }
-
-    .board_srch .select_gy {
-        display: flex;
-    }
-
-    .select {
-        position: relative;
-        margin: 0;
-        width: 100%;
-        height: 42px;
-        z-index: 99;
-        font-size: 14px;
-        font-weight: 400;
-        color: #6a6e76;
-        z-index: 1;
-    }
-
-    select {
-        display: none;
-    }
-
-    .select_gy .select .active-option {
-        background: #f8f9fb;
-        border-color: #e7e8ed;
-    }
-
-    .select .active-option {
-        width: 100%;
-        height: 42px;
-        background: #fff;
-        border: 1px solid #e7e8ed;
-        color: #6a6e76;
-        line-height: 39px;
-        cursor: pointer;
-    }
-
-    .active-option {
-        padding: 0 0 0 13px;
-        width: 100%;
-        display: block;
-    }
-
-    .select .active-option:before {
-        content: "";
-        position: absolute;
-        top: 14px;
-        right: 10px;
-        width: 15px;
-        height: 15px;
-        background: url("#{$DF_UI}/img/form/select.png") no-repeat;
-    }
-
-    .select .option-list {
-        border: 1px solid #e7e8ed;
-        overflow-y: auto;
-    }
-
-    .option-list {
-        width: 100%;
-        position: absolute;
-        visibility: hidden;
-        z-index: 100;
-    }
-
-    .select .option-list ul {
-        color: #6a6e76;
-        max-height: 245px;
-    }
-
-    .select_gy .select .option-list ul li.on {
-        background: #fff;
-    }
-
-    .option-list li {
-        padding: 0 0 0 13px;
-        width: 100%;
-        height: 41px;
-        line-height: 39px;
-        border-bottom: 1px solid #e7e8ed;
-        cursor: pointer;
-    }
-
-    .board_srch .bs_ipt {
-        display: flex;
-        align-items: center;
-        width: 260px;
-        height: 42px;
-        border: 1px solid #e7e8ed;
-        border-left: none;
-        background: #f8f9fb;
-        font-size: 0;
-    }
-
-    .board_srch .bs_ipt input[type="text"] {
-        padding: 0;
-        margin: 0;
-        width: calc(100% - 60px);
-        height: 40px;
-        border: none;
-        background: #f8f9fb;
-        color: #6a6e76;
-        font-size: 14px;
-        outline: none; /* 기본 포커스 스타일 제거 */
-    }
-
-    input[type="text"] {
-        display: block;
-        line-height: 53px;
-        text-indent: 20px;
-    }
-
-    .board_srch .bs_ipt a.btn_del {
-        display: none;
-        position: relative;
-        margin-left: auto;
-        width: 30px;
-        height: 30px;
-        background: url("#{$DF_UI}/img/btn/btn_clse_18x18.png") no-repeat 50%;
-        cursor: pointer;
-        font-size: 0;
-        text-indent: -999px;
-    }
-
-    .board_srch .bs_ipt label {
-        margin-left: auto;
-        width: 30px;
-        height: 30px;
-        background: url("#{$DF_UI}/img/btn/btn_srch_30x30.png") no-repeat;
-        cursor: pointer;
     }
 
     .board_list {

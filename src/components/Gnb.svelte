@@ -66,7 +66,7 @@
     <!-- 로그인 버튼 -->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div class="login" on:click={ toggleLogin } class:is-active={ isLoginAreaVisible }>
-      <a href="#" class="go_login" id="webGnbMyBtn">
+      <a class="go_login" id="webGnbMyBtn">
         {#if !isLoginAreaVisible}
           {#if !$isLoggedIn}
             로그인
