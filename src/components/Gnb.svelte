@@ -1,8 +1,9 @@
 <script>
   import { PATHS } from '../constants/paths';
   import { userInfo, isLoggedIn, onLogout } from "../utils/auth";
-
-  import GameMarketPopUp from './GameMarketPopUp.svelte';
+  
+  import GameMarketPopup from './gameMarket/popup/GameMarketPopup.svelte';
+  // import GameMarketPopUp from './GameMarketPopUp.svelte';
 
   
   let isLoginAreaVisible = false;
@@ -108,7 +109,7 @@
 </section>
 
 {#if isGameMarketPopUpVisible}
-  <GameMarketPopUp on:close={ closeGameMarketPopUp }/>
+  <GameMarketPopup on:close={ closeGameMarketPopUp }/>
 {/if}
 
 

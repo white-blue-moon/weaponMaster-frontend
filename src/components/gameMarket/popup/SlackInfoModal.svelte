@@ -1,14 +1,14 @@
 <script>
     import { onDestroy, onMount } from "svelte";
-    import { SERVICE_DOMAIN, SLACK_API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { userInfo } from "../utils/auth";
-    import { SLACK_NOTICE_TYPE } from "../constants/slack";
+    import { SERVICE_DOMAIN, SLACK_API } from '../../../constants/api';
+    import { apiFetch, handleApiError } from '../../../utils/apiFetch';
+    import { userInfo } from "../../../utils/auth";
+    import { SLACK_NOTICE_TYPE } from "../../../constants/slack";
     import { createEventDispatcher } from 'svelte';
-    import { formatDate } from "../utils/time";
+    import { formatDate } from "../../../utils/time";
 
-    import Spinner from "./Spinner.svelte";
-    import AgreeBox from "./AgreeBox.svelte";
+    import Spinner from "../../Spinner.svelte";
+    import AgreeBox from "../../AgreeBox.svelte";
   
 
     export let slackBotInstallUrl;

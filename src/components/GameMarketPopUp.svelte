@@ -8,8 +8,8 @@
     import { AUCTION_STATE } from '../constants/auctionState';
     import { SLACK_NOTICE_TYPE } from "../constants/slack";
 
-    import SlackStatusButton from "./SlackStatusButton.svelte";
-    import SlackInfoModal from "./SlackInfoModal.svelte";
+    import SlackStatusButton from "./gameMarket/common/SlackStatusButton.svelte";
+    import SlackInfoModal from "./gameMarket/popup/SlackInfoModal.svelte";
     import Spinner from "./Spinner.svelte";
   
     // WebSocket 통신을 위한 impoprt

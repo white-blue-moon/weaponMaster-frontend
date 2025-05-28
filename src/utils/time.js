@@ -1,3 +1,4 @@
+// ex) 2025.05.28 13:45
 export function formatDate(inputDate) {
     const date = new Date(inputDate); // 문자열을 Date 객체로 변환
     
@@ -8,4 +9,12 @@ export function formatDate(inputDate) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
 
     return `${year}.${month}.${day} ${hours}:${minutes}`;
+}
+
+// ex) 05-28 13:45:22
+export function formatDateTimeShort(datetime) {
+    const [date, time] = datetime.split(" ");
+    const monthDay     = date.slice(5); // YYYY-MM-DD → MM-DD
+
+    return `${monthDay} ${time}`;
 }
