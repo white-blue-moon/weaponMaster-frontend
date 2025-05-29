@@ -68,8 +68,9 @@
             return;
         }
 
+        // 검색 실패
         isSearching = false;
-        alert('경매 아이템 검색에 실패하였습니다.');
+        alert(response.message);
         return;
     }
 
