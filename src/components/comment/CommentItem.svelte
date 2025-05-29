@@ -1,13 +1,13 @@
 <script>
-    import { userInfo, isAdmin, adminToken, isLoggedIn } from "../utils/auth";
-    import { isAuthorOrAdmin, isPrivacyArticle } from "../utils/authUtil";
-    import { formatDate } from "../utils/time";
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { API } from '../constants/api';
-    import { getArticleIdFromUrl } from "../utils/pathUtiil";
+    import { userInfo, isAdmin, adminToken, isLoggedIn } from "../../utils/auth";
+    import { isAuthorOrAdmin, isPrivacyArticle } from "../../utils/authUtil";
+    import { formatDate } from "../../utils/time";
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { API } from '../../constants/api';
+    import { getArticleIdFromUrl } from "../../utils/pathUtiil";
 
-    import AdminAuthor from './AdminAuthor.svelte';
-    import Spinner from './Spinner.svelte';
+    import AdminAuthor from '../AdminAuthor.svelte';
+    import Spinner from '../Spinner.svelte';
     import CommentEnter from "./CommentEnter.svelte";
   
     export let comment = {};

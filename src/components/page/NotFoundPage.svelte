@@ -1,10 +1,10 @@
 <script>
-    import { PATHS } from "../constants/paths";
-    import { DF_UI } from "../constants/resourcePath";
+    import { PATHS } from "../../constants/paths";
+    import { DF_UI } from "../../constants/resourcePath";
 
-    import Footer from "./Footer.svelte";
-    import GnbPublisher from "./GnbPublisher.svelte";
-    import HeaderBanner from "./HeaderBanner.svelte";
+    import Footer from "../Footer.svelte";
+    import GnbPublisher from "../GnbPublisher.svelte";
+    import HeaderBanner from "../banner/HeaderBanner.svelte";
 </script>
 
 

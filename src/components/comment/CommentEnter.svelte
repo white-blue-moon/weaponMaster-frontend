@@ -1,12 +1,12 @@
 <script>
-    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { isPrivacyMode } from "../utils/authUtil";
-    import { getArticleIdFromUrl } from "../utils/pathUtiil";
+    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../../utils/auth";
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { isPrivacyMode } from "../../utils/authUtil";
+    import { getArticleIdFromUrl } from "../../utils/pathUtiil";
 
-    import AdminAuthor from "./AdminAuthor.svelte";
-    import Spinner from "./Spinner.svelte";
+    import AdminAuthor from "../AdminAuthor.svelte";
+    import Spinner from "../Spinner.svelte";
   
 
     export let reCommentId = 0;

@@ -1,9 +1,9 @@
 <script>
-    import { DF_UI } from "../constants/resourcePath";
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { DF_UI } from "../../constants/resourcePath";
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from 'svelte';
-    import { getArticleIdFromUrl } from "../utils/pathUtiil";
+    import { getArticleIdFromUrl } from "../../utils/pathUtiil";
 
     import CommentItem from "./CommentItem.svelte";
     import CommentEnter from "./CommentEnter.svelte";

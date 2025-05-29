@@ -1,20 +1,20 @@
 <script>
     import { onMount } from "svelte";
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
-    import { getArticleFilter, getPageInfo } from '../utils/page';
-    import { isAdmin, isLoggedIn } from '../utils/auth';
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../../constants/articles';
+    import { getArticleFilter, getPageInfo } from '../../utils/page';
+    import { isAdmin, isLoggedIn } from '../../utils/auth';
 
-    import GnbPublisher from "./GnbPublisher.svelte";
-    import Gnb from "./Gnb.svelte";
-    import HeaderBanner from "./HeaderBanner.svelte";
-    import Menu2nd from './Menu2nd.svelte';
-    import Footer from "./Footer.svelte";
-    import Spinner from "./Spinner.svelte";
-    import Top from "./Top.svelte";
-    import ArticleRow from "./ArticleRow.svelte";
-    import SearchBar from "./SearchBar.svelte";
+    import GnbPublisher from "../GnbPublisher.svelte";
+    import Gnb from "../Gnb.svelte";
+    import HeaderBanner from "../banner/HeaderBanner.svelte";
+    import Menu2nd from '../Menu2nd.svelte';
+    import Footer from "../Footer.svelte";
+    import Spinner from "../Spinner.svelte";
+    import Top from "../Top.svelte";
+    import ArticleRow from "../ArticleRow.svelte";
+    import SearchBar from "../SearchBar.svelte";
 
     export let categoryType;
     export let articleType;

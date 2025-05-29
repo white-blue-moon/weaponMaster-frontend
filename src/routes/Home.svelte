@@ -7,13 +7,13 @@
 
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
-    import FocusBanner from '../components/FocusBanner.svelte';
-    import NewsBanner from '../components/NewsBanner.svelte';
+    import FocusBanner from '../components/banner/FocusBanner.svelte';
+    import NewsBanner from '../components/banner/NewsBanner.svelte';
     import ListBox from '../components/ListBox.svelte';
     import Footer from '../components/Footer.svelte';
     import Spinner from '../components/Spinner.svelte';
     import Top from '../components/Top.svelte';
-    import CharacterBanner from '../components/CharacterBanner.svelte';
+    import CharacterBanner from '../components/banner/CharacterBanner.svelte';
     import FocusControl from '../components/FocusControl.svelte';
     
   

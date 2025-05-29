@@ -1,9 +1,9 @@
 <script>
-    import Intro from "../components/Intro.svelte";
+    import IntroPage from "../components/page/IntroPage.svelte";
 </script>
 
 
-<Intro />
+<IntroPage />
 
 
 <style>

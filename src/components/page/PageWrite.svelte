@@ -1,23 +1,23 @@
 <script>
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../utils/auth";
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { userInfo, isLoggedIn, isAdmin, adminToken } from "../../utils/auth";
     import { onMount } from 'svelte';
-    import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../constants/articles";
-    import { PATHS } from "../constants/paths";
-    import { getPageInfo, getCategoryTypeByURL, isDetailTypeExist } from "../utils/page";
-    import { getArticleIdFromUrl } from '../utils/pathUtiil';
+    import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../../constants/articles";
+    import { PATHS } from "../../constants/paths";
+    import { getPageInfo, getCategoryTypeByURL, isDetailTypeExist } from "../../utils/page";
+    import { getArticleIdFromUrl } from '../../utils/pathUtiil';
     
     import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
-    import GnbPublisher from "../components/GnbPublisher.svelte";
-    import HeaderBanner from "../components/HeaderBanner.svelte";
-    import Gnb from "../components/Gnb.svelte";
-    import Menu2nd from "./Menu2nd.svelte";
-    import Footer from "../components/Footer.svelte";
-    import Spinner from './Spinner.svelte';
-    import Top from './Top.svelte';
+    import GnbPublisher from "../GnbPublisher.svelte";
+    import HeaderBanner from "../banner/HeaderBanner.svelte";
+    import Gnb from "../Gnb.svelte";
+    import Menu2nd from "../Menu2nd.svelte";
+    import Footer from "../Footer.svelte";
+    import Spinner from '../Spinner.svelte';
+    import Top from '../Top.svelte';
 
     const url = window.location.pathname;
 

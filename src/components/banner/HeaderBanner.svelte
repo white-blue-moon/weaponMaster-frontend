@@ -1,6 +1,6 @@
 <script>
-    import { PATHS } from "../constants/paths";
-    import { DF_UI } from "../constants/resourcePath";
+    import { PATHS } from "../../constants/paths";
+    import { DF_UI } from "../../constants/resourcePath";
 
     export let homeName         = "weaponMaster";
     export let bannerText       = "BANNER TEXT";

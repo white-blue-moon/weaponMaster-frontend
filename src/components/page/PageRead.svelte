@@ -1,24 +1,24 @@
 <script>
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
-    import { getPageInfo, getArticleFilterText } from '../utils/page';
-    import { userInfo, isAdmin, adminToken } from "../utils/auth";
-    import { formatDate } from "../utils/time";
-    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../constants/articles';
-    import { getArticleIdFromUrl } from '../utils/pathUtiil';
+    import { getPageInfo, getArticleFilterText } from '../../utils/page';
+    import { userInfo, isAdmin, adminToken } from "../../utils/auth";
+    import { formatDate } from "../../utils/time";
+    import { CATEGORY_TYPE, CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT } from '../../constants/articles';
+    import { getArticleIdFromUrl } from '../../utils/pathUtiil';
 
-    import GnbPublisher from "../components/GnbPublisher.svelte";
-    import Gnb from "../components/Gnb.svelte";
-    import HeaderBanner from "../components/HeaderBanner.svelte";
-    import Menu2nd from './Menu2nd.svelte';
-    import Footer from '../components/Footer.svelte';
-    import Comment from './Comment.svelte';
-    import Spinner from './Spinner.svelte';
-    import Top from './Top.svelte';
-    import AdminAuthor from './AdminAuthor.svelte';
-    import CopyUrlButton from './CopyUrlButton.svelte';
-    import CampaignBanner from './CampaignBanner.svelte';
+    import GnbPublisher from "../GnbPublisher.svelte";
+    import Gnb from '../Gnb.svelte';
+    import HeaderBanner from "../banner/HeaderBanner.svelte";
+    import Menu2nd from '../Menu2nd.svelte';
+    import Footer from '../Footer.svelte';
+    import Comment from '../comment/Comment.svelte';
+    import Spinner from '../Spinner.svelte';
+    import Top from '../Top.svelte';
+    import AdminAuthor from '../AdminAuthor.svelte';
+    import CopyUrlButton from '../CopyUrlButton.svelte';
+    import CampaignBanner from '../banner/CampaignBanner.svelte';
   
     
     let pageId   = getArticleIdFromUrl();

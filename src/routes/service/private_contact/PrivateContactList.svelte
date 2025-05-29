@@ -1,6 +1,6 @@
 <script>
     import { CATEGORY_TYPE, ARTICLE_TYPE } from '../../../constants/articles'
-    import PageList from "../../../components/PageList.svelte";
+    import PageList from "../../../components/page/PageList.svelte";
 </script>
 
 <PageList 

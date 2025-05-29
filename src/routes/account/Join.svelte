@@ -5,7 +5,7 @@
     import { DF_UI } from '../../constants/resourcePath';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
-    import HeaderBanner from '../../components/HeaderBanner.svelte';
+    import HeaderBanner from '../../components/banner/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
     import AgreeBox from '../../components/AgreeBox.svelte';
     import BlueButton from '../../components/BlueButton.svelte';

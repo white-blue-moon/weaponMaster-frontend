@@ -15,8 +15,8 @@
 	import NoticeList from './routes/news/notice/NoticeList.svelte';
 	import UpdateList from './routes/news/update/UpdateList.svelte';
 	import DevNoteList from './routes/news/devnote/DevNoteList.svelte'
-	import PageWrite from './components/PageWrite.svelte';
-	import PageRead from './components/PageRead.svelte';
+	import PageWrite from './components/page/PageWrite.svelte';
+	import PageRead from './components/page/PageRead.svelte';
 
 	import AllList from './routes/community/all/AllList.svelte';
 	import AskList from './routes/community/ask/AskList.svelte';
@@ -26,7 +26,7 @@
 	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
 	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
   	import AccessGate from './routes/AccessGate.svelte';
-  	import NotFoundPage from './components/NotFoundPage.svelte';
+  	import NotFoundPage from './components/page/NotFoundPage.svelte';
 
 	let isMaintenanceOn = false;
 	let endDate;

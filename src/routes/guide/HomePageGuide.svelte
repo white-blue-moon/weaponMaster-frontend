@@ -8,13 +8,13 @@
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
-    import HeaderBanner from "../../components/HeaderBanner.svelte";
+    import HeaderBanner from "../../components/banner/HeaderBanner.svelte";
     import Menu2nd from '../../components/Menu2nd.svelte';
     import Footer from '../../components/Footer.svelte';
     import Top from '../../components/Top.svelte';
     import AdminAuthor from '../../components/AdminAuthor.svelte';
     import CopyUrlButton from '../../components/CopyUrlButton.svelte';
-    import CampaignBanner from '../../components/CampaignBanner.svelte';
+    import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
 
     const HOME_PAGE_PURPOSE_ARTICLE_ID = 420;

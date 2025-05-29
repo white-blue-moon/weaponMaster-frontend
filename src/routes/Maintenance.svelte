@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
 
-    import FocusBanner from '../components/FocusBanner.svelte';
+    import FocusBanner from '../components/banner/FocusBanner.svelte';
     import Footer from '../components/Footer.svelte';
     import Top from '../components/Top.svelte';
   

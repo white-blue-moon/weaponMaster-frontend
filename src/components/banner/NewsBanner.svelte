@@ -1,8 +1,8 @@
 <script>
     import { onMount } from "svelte";
-    import { ARTICLE_TYPE } from '../constants/articles';
-    import { PATHS } from '../constants/paths';
-    import { getArticleFilterText } from '../utils/page';
+    import { ARTICLE_TYPE } from '../../constants/articles';
+    import { PATHS } from '../../constants/paths';
+    import { getArticleFilterText } from '../../utils/page';
 
 
     export let width    = "400px";

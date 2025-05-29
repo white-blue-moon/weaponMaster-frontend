@@ -6,7 +6,7 @@
     import { getRedirectUrl } from '../../utils/pathUtiil';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
-    import HeaderBanner from '../../components/HeaderBanner.svelte';
+    import HeaderBanner from '../../components/banner/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
     import CapsLockWarning from '../../components/CapsLockWarning.svelte';
     import Spinner from '../../components/Spinner.svelte';

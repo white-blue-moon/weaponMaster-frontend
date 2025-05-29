@@ -1,10 +1,10 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
     import { navigate } from 'svelte-routing';
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
-    import { PATHS } from '../constants/paths';
-    import { canAccessPage } from '../utils/auth';
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
+    import { PATHS } from '../../constants/paths';
+    import { canAccessPage } from '../../utils/auth';
 
 
     let introOn        = false;
