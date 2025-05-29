@@ -125,13 +125,18 @@
     }
 
     function handleSearch() {
-        currentPageNum = 1;
-        updateDisplayedArticles();
+        if (searchKeyword.trim()) {
+            currentPageNum = 1;
+            updateDisplayedArticles();
+            return;
+        }
+
+        alert('검색어를 입력해 주세요.');
+        return;
     }
 
     function clearSearch() {
         searchKeyword = "";
-        updateDisplayedArticles();
     }
 
     function canUserWrite() {

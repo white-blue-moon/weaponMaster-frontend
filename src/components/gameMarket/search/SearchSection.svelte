@@ -17,6 +17,7 @@
     export let toggleWatch = () => {};
     
     let searchInput;
+    let searchKeyword; 
 
     onMount(() => {
         searchInput?.focus();
@@ -31,22 +32,21 @@
     let isSearching = false;
 
     async function searchItems() {
-        const searchKeyWord = searchInput?.value.trim();
-        if (!searchKeyWord) {
+        if (!searchKeyword.trim()) {
             alert('검색할 아이템명을 입력해 주세요.');
             return;
         }
 
         isSearching = true;
 
-        const response = await apiFetch(NEOPLE_API.AUCTION.LIST(searchKeyWord), {
+        const response = await apiFetch(NEOPLE_API.AUCTION.LIST(searchKeyword.trim()), {
             method: "GET",
         }).catch(handleApiError);
 
         if (response.success) {
             search.list = response.data;
             if (search.list.length === 0) {
-                alert(searchKeyWord + ' 와 관련된 등록 물품이 없습니다.');
+                alert(searchKeyword + ' 와 관련된 등록 물품이 없습니다.');
             }
 
             // === 판매 등록 알림 현황 상태를 검색 결과에도 반영 ===
@@ -91,14 +91,22 @@
         // 1시간 이상부터는 시간 단위로 표시
         return diffHours + "시간";
     }
+
+    function clearSearch() {
+        searchKeyword = "";
+    }
 </script>
 
 
 <div class="search-box">
-    <input type="text" 
-           placeholder="던전앤파이터 경매 아이템 검색" 
-           bind:this={ searchInput } 
-           on:keydown={ handleKeyDown } />
+    <input 
+        type="text" 
+        placeholder="던전앤파이터 경매 아이템 검색" 
+        bind:this={ searchInput }
+        bind:value={ searchKeyword }
+        on:keydown={ handleKeyDown } 
+    />
+    <a class="btn_del" style:display={ searchKeyword ? 'block' : 'none' } on:click={ clearSearch }>삭제</a>
     <button class="btn-search" on:click={ searchItems }>검색</button>
 </div>
 
@@ -229,6 +237,7 @@
 
     .search-box {
         display: flex;
+        position: relative;
         margin-bottom: 10px;
     }
 
@@ -242,6 +251,20 @@
 
     input:focus {
         border: 2px solid #3392ff;
+    }
+
+    a.btn_del {
+        display: none;
+        position: absolute;
+        margin-left: auto;
+        padding-top: 41px;
+        right: 48px;
+        width: 30px;
+        height: 30px;
+        background: url("#{$DF_UI}/img/btn/btn_clse_18x18.png") no-repeat 50%;
+        font-size: 0;
+        text-indent: -999px;
+        cursor: pointer;
     }
 
     button {
