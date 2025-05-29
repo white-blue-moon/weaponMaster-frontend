@@ -106,7 +106,7 @@
                 <li class="logo" id="weaponMasterLogo"></li>
                 <li>관리자 권한이 있는 계정에 한해서 관리자모드로 로그인할 수 있습니다.</li>
                 <li>
-                    <a href={ PATHS.ACCOUNT.LOGIN_ADMIN }>관리자모드 로그인</a>
+                    <a href={ PATHS.ACCOUNT.LOGIN_ADMIN() }>관리자모드 로그인</a>
                 </li>
                 <li>
                     <span>

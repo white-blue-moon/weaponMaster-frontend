@@ -1,9 +1,17 @@
 import { PATHS } from "../constants/paths";
 
 export function setRedirectUrl() {
+    const urlParams        = new URLSearchParams(window.location.search);
+    const existingRedirect = urlParams.get('redirect');
+
+    if (existingRedirect) {
+        return existingRedirect;
+    }
+
     const redirect = encodeURIComponent(window.location.pathname + window.location.search);
     return redirect;
 }
+
 
 export function getRedirectUrl() {
     const params   = new URLSearchParams(window.location.search);

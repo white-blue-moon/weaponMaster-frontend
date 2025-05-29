@@ -93,7 +93,7 @@
             editor.root.innerHTML = article.contents;
             contents              = article.contents;
 
-            cachedArticleType = articleType;
+            cachedArticleType  = articleType;
             articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
                 Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
         }
@@ -219,6 +219,7 @@
 <Menu2nd categoryType={ categoryType } isActiveOn={ false }/>
 
 <section class="content">
+    <!-- 게시물 타입: 라디오 버튼 -->
     <article class="community_header h_wrt">
         <div class="category_wrt">
             <div class="split_cont">
@@ -244,6 +245,7 @@
         </div>
     </article>
     
+    <!-- 분류 항목 -->
     {#if isDetailTypeExist(categoryType, articleType)}
         <article class="article_slt" style="padding:13px 0">      
             <select bind:value={ articleDetailType }>
@@ -260,6 +262,7 @@
         </article>
     {/if}
 
+    <!-- 제목 -->
     <article class="board_write">
         <ul>
             <li><input type="text" id="title" bind:value={ title } placeholder="제목을 입력해 주세요."></li>
@@ -267,6 +270,7 @@
         </ul>
     </article>
 
+    <!-- 버튼 -->
     <article class="btnarea mt40">
         <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>
             {#if isLoading}<Spinner colorTheme="white"/>{/if} 등록

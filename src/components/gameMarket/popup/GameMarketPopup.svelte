@@ -103,7 +103,7 @@
 
     function connectWebSocket() {
         client = new Client({
-            brokerURL: "", // 직접 WebSocket 쓰지 않고 sockjs 로
+            brokerURL: "", // 브라우저의 기본 WebSocket 쓰지 않고 sockjs 로
             webSocketFactory: () => new SockJS(WEB_SOCKET_API.FACTORY), // Spring Boot WebSocket 연결
             reconnectDelay: 5000, // 연결 끊겼을 때 재연결
 
@@ -125,12 +125,12 @@
 
     function handleAuctionStateChange(response) {
         const watchIndex = watch.list.findIndex(item => item.itemInfo.auctionNo === response.itemInfo.auctionNo);
-        if (watchIndex != -1) {
+        if (watchIndex >= 0) {
             watch.list[watchIndex].auctionState = response.auctionState;
         }
 
         const searchIndex = search.list.findIndex(item => item.itemInfo.auctionNo === response.itemInfo.auctionNo);
-        if (searchIndex != -1) {
+        if (searchIndex >= 0) {
             search.list[searchIndex].auctionState = response.auctionState;
         }
 

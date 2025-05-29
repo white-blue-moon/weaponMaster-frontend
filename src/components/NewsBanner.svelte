@@ -4,57 +4,53 @@
     import { PATHS } from '../constants/paths';
     import { getArticleFilterText } from '../utils/page';
 
+
     export let width    = "400px";
     export let height   = "280px";
     export let articles = [];
 
-    let activeTab = "전체";
-    let newsData = {
-        전체: [],
-        공지사항: [],
-        업데이트: [],
-        개발자노트: []
+    let tabs = {
+        all:     { label: "전체",     news: [] },
+        notice:  { label: "공지사항",  news: [] },
+        update:  { label: "업데이트",  news: [] },
+        devNote: { label: "개발자노트", news: [] },
     };
-    const tabs = ["전체", "공지사항", "업데이트", "개발자노트"];
+    let activeTab = "all";
+
+    onMount(() => {
+        fetchArticles();
+    });
 
     function fetchArticles() {
-        // newsData 분류 할당
-        newsData = {
-            전체: articles.map((article) => formatArticleTitle(article)),
-            공지사항: articles
-                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.NOTICE)
-                .map((article) => formatArticleTitle(article)),
-            업데이트: articles
-                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.UPDATE)
-                .map((article) => formatArticleTitle(article)),
-            개발자노트: articles
-                .filter((article) => article.articleType === ARTICLE_TYPE.NEWS.DEV_NOTE)
-                .map((article) => formatArticleTitle(article)),
+        tabs.all.news     = articles.map(formatArticleTitle);
+        tabs.notice.news  = filterByType(ARTICLE_TYPE.NEWS.NOTICE);
+        tabs.update.news  = filterByType(ARTICLE_TYPE.NEWS.UPDATE);
+        tabs.devNote.news = filterByType(ARTICLE_TYPE.NEWS.DEV_NOTE);
+    }
+
+    function formatArticleTitle(article) {
+        // 접두사 확인 -> 접두사를 기존 제목 앞에 추가
+        const prefix = `[${getArticleFilterText(article)}]`;
+        const title  = `${prefix} ${article.title}`.trim();
+
+        return {
+            title: title,
+            id:    article.id,
         };
     }
 
-    // 게시물 제목 포맷
-    function formatArticleTitle(article) {
-        // 접두사 확인
-        const prefix = `[${getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType)}]`;
-
-        // 접두사를 기존 제목 앞에 추가
-        const title = `${prefix} ${article.title}`.trim();
-
-        return {
-            title,
-            id: article.id,
-        };
+    function filterByType(type) {
+        return articles
+            .filter((article) => article.articleType === type)
+            .map(formatArticleTitle);
     }
 
     // 탭 변경
-    function setActiveTab(tab) {
-        activeTab = tab;
+    function setActiveTab(event, tabKey) {
+        event.preventDefault();
+        activeTab = tabKey;
+        return;
     }
-
-    onMount(async () => {
-        fetchArticles();
-    });
 </script>
 
 <section
@@ -64,21 +60,20 @@
     <div class="news_header">
         <h3>새소식</h3>
         <p class="news_tab">
-            {#each tabs as tab}
-                <a
-                    style="cursor: pointer;"
-                    class:on={activeTab === tab}
-                    on:click|preventDefault={() => setActiveTab(tab)}
+            {#each Object.entries(tabs) as [tabKey, tab]}
+                <a 
+                    class:on={activeTab === tabKey} 
+                    on:click={(e) => setActiveTab(e, tabKey)}
                 >
-                    #{tab}
+                    #{tab.label}
                 </a>
             {/each}
         </p>
     </div>
     <ul class="news_con">
         <li>
-            {#each newsData[activeTab] as news}
-                <a href={ PATHS.NEWS.READ(news.id) }>{news.title}</a>
+            {#each tabs[activeTab].news as news}
+                <a href={ PATHS.NEWS.READ(news.id) }>{ news.title }</a>
             {/each}
         </li>   
     </ul>
@@ -132,6 +127,7 @@
     }
 
     .news_tab a:hover {
+        cursor: pointer;
         color: #3392ff;
     }
 
