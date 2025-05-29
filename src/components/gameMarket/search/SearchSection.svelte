@@ -32,6 +32,11 @@
     let isSearching = false;
 
     async function searchItems() {
+        // 검색 중이면 중복 호출 차단
+        if(isSearching) {
+            return;
+        }
+
         if (!searchKeyword.trim()) {
             alert('검색할 아이템명을 입력해 주세요.');
             return;

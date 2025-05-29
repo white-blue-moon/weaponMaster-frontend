@@ -151,6 +151,11 @@
     let loadingButtonMap = {}; // (auctionNo: true/false)
 
     async function registerNotice(item) {
+        // 이미 호출 중이면 중복 호출 차단
+        if (loadingButtonMap[item.itemInfo.auctionNo]) {
+            return;
+        }
+
         const sellingCount = watch.list.filter(w => w.auctionState == AUCTION_STATE.SELLING).length;
         if(sellingCount >= maxNoticeCount) {
             alert(`한 번에 추적 가능한 판매 알림은 최대 ${maxNoticeCount}개입니다.\n판매 완료 이후 혹은 알림 해제 후 다시 시도해 주세요.`);
@@ -183,6 +188,11 @@
     }
 
     async function deleteNotice(item) {
+        // 이미 호출 중이면 중복 호출 차단
+        if (loadingButtonMap[item.itemInfo.auctionNo]) {
+            return;
+        }
+
         loadingButtonMap[item.itemInfo.auctionNo] = true;
 
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.DELETE, {
