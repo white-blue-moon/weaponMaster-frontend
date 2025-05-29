@@ -6,7 +6,7 @@ export async function apiFetch(url, options = {}) {
     if (shouldCheckSession(url, options.body)) {
         if (isSessionExpired()) {
             alert('로그인 정보가 만료되었습니다.\n로그인 후 이용해 주세요.');
-            window.location.href = PATHS.ACCOUNT.LOGIN;
+            window.location.href = PATHS.ACCOUNT.LOGIN();
             throw new Error('로그인 세션 정보 만료');
         }
     }

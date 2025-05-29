@@ -5,8 +5,10 @@
 
     export let articles = [];
 
-    const ITEMS_PER_SLIDE  = 3; // 한 슬라이드에 보여지는 추천 게시물 개수
-    let currentIndex       = 0;
+    const ITEMS_PER_SLIDE   = 3; // 한 슬라이드에 보여지는 추천 게시물 개수
+    const DEFAULT_THUMBNAIL = `${DF_UI}/img/common/today_dnf_default.jpg`;
+    
+    let   currentIndex      = 0;
 
     function prevSlide() {
         currentIndex -= ITEMS_PER_SLIDE;
@@ -25,7 +27,7 @@
         }
     }
 
-    const DEFAULT_THUMBNAIL = `${DF_UI}/img/common/today_dnf_default.jpg`;
+    
 
     function extractFirstImageSrc(html) {
         if (!html) {

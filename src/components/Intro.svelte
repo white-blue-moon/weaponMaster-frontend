@@ -52,14 +52,6 @@
         return;
     }
 
-    function isMobile() {
-        if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
-            return true;
-        }
-
-        return false;
-    }
-
     function restoreMobileZoom() {
         if (!isMobile()) return;
 
@@ -70,6 +62,14 @@
         }
 
         return;
+    }
+
+    function isMobile() {
+        if (/Mobi|Android|iPhone/i.test(navigator.userAgent)) {
+            return true;
+        }
+
+        return false;
     }
 
     // 배경 클릭 시 비밀 코드 포커스를 유지하기 위한 함수

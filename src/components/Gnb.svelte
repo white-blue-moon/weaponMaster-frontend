@@ -3,10 +3,9 @@
   import { userInfo, isLoggedIn, onLogout } from "../utils/auth";
   
   import GameMarketPopup from './gameMarket/popup/GameMarketPopup.svelte';
-  // import GameMarketPopUp from './GameMarketPopUp.svelte';
 
   
-  let isLoginAreaVisible = false;
+  let isLoginAreaVisible       = false;
   let isGameMarketPopUpVisible = false;
 
   function toggleLogin() {

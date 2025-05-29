@@ -9,7 +9,7 @@
     import { updatePagination } from "../../../utils/gameMarket/paging";
 
     // WebSocket 통신을 위한 impoprt
-    import SockJS, { load } from 'sockjs-client/dist/sockjs.js';
+    import SockJS from 'sockjs-client/dist/sockjs.js';
     import { Client } from "@stomp/stompjs";
 
     import SlackInfoModal from "../popup/SlackInfoModal.svelte";

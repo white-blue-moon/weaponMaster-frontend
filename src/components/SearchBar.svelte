@@ -5,7 +5,6 @@
 </script>
   
 
-<!-- 검색 바 -->
 <div class="board_srch">
     <div class="select_gy" style="width:120px">
         <div class="select">

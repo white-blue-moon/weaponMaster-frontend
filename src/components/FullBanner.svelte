@@ -1,3 +1,4 @@
+<!-- TODO 추후 사용을 위해 우선 기본 틀만 추가함 -->
 <div class="gnbFullBanner gnbFullBannerOpen" id="GNB_FullBanner">
     <div class="gnbFullBannerDimmed" obj="P_BANNER"></div>
     <div class="gnbFullBannerSec">
@@ -26,7 +27,6 @@
         </div>
     </div>
 </div>
-
 
 
 <style>
