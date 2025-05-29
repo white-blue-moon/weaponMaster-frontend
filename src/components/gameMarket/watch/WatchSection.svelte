@@ -1,7 +1,6 @@
 <script>
-    import { AUCTION_STATE } from "../../../constants/auctionState"; 
     import { formatItemName } from "../../../utils/gameMarket/itemName";
-    import { isAuctionCompleted } from "../../../utils/gameMarket/auctionStateUtil";
+    import { getStatusLabelAndClass, isAuctionCompleted } from "../../../utils/gameMarket/auctionStateUtil";
     import { formatDateTimeShort } from "../../../utils/time";
 
     import Spinner from "../../Spinner.svelte";
@@ -74,25 +73,14 @@
                         <span class="item-date">{ formatDateTimeShort(item.itemInfo.regDate) }</span>
                         
                         <!-- 버튼 -->
-                        <!-- 판매 완료 -->
-                        {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
+                        <!-- 판매 완료 및 추적 중단 -->
+                        {#if isAuctionCompleted(item.auctionState)}
+                            {@const status = getStatusLabelAndClass(item.auctionState)}
                             <span class="status-wrap">
-                                <span class="completed">판매 완료</span>
+                                <span class={ status.class }>{ status.label }</span>
                                 <button class="btn-x" on:click={() => toggleWatch(item)}>
                                     {#if loadingButtonMap[item.itemInfo.auctionNo]}
-                                        <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px"/>
-                                    {:else}
-                                        ×
-                                    {/if}
-                                </button>
-                            </span>
-                        <!-- 기간 만료 -->
-                        {:else if item.auctionState == AUCTION_STATE.EXPIRED}
-                            <span class="status-wrap">
-                                <span class="expired" style="margin-left: 10px;">기간 만료</span>
-                                <button class="btn-x" on:click={() => toggleWatch(item)}>
-                                    {#if loadingButtonMap[item.itemInfo.auctionNo]}
-                                        <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px"/>
+                                        <Spinner colorTheme="white" margin_left="3px" margin_bottom="2px" />
                                     {:else}
                                         ×
                                     {/if}
@@ -284,6 +272,10 @@
         gap: 6px;
     }
 
+    .status-wrap span{
+        margin-left: 10px;
+    }
+
     .completed {
         background-color: #f5f5f5;
         opacity: 0.6;
@@ -300,13 +292,20 @@
         }
     }
 
-    span.completed {
-        margin-left: 10px;
-    }
-
     .expired {
         opacity: 0.6;
         color: #ff4d4d;
+    }
+
+    .untrackable {
+        opacity: 0.9;
+        color: #8888ff;
+    }
+
+    .error-state {
+        opacity: 0.9;
+        color: #cc0000;
+        font-weight: bold;
     }
 
     .btn-x {
