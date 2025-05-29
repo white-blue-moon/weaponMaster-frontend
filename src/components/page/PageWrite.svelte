@@ -170,7 +170,7 @@
         if (response.success) {
             isLoading = false;
             alert('게시물 등록이 완료되었습니다.');
-            window.location.href = pageInfo.listPath;
+            window.location.href = pageInfo.readPath(pageId);
             return;
         }
 
