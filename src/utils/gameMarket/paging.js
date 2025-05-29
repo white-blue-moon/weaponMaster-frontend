@@ -3,6 +3,8 @@ export function changePage(target, pageNo) {
         target.currentPage = pageNo;
         return updatePagination(target);
     }
+
+    return target;
 }
 
 export function updatePagination(target) {
