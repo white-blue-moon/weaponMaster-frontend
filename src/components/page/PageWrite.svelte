@@ -7,8 +7,8 @@
     import { PATHS } from "../../constants/paths";
     import { getPageInfo, getCategoryTypeByURL, isDetailTypeExist } from "../../utils/page";
     import { getArticleIdFromUrl } from '../../utils/pathUtiil';
+    import { initQuillEditor } from '../../utils/quillEditor';
     
-    import Quill from 'quill';
     import 'quill/dist/quill.snow.css';
 
     import GnbPublisher from "../GnbPublisher.svelte";
@@ -42,49 +42,22 @@
     let isLoading = false;
 
     onMount(async () => {
-        editor = new Quill('#editor', {
-            theme: 'snow',
-            placeholder: '여기에 내용을 입력하세요...',
-            modules: {
-                toolbar: [
-                    [{ 'header': 1 }, { 'header': 2 }], // 헤더 스타일
-                    ['bold', 'underline', 'strike'], // 글씨 스타일
-                    [{ 'font': [] }], // 폰트
-                    [{ 'size': ['small', false, 'large', 'huge'] }], // 글씨 크기
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }], // 목록
-                    [{ 'align': [] }], // 텍스트 정렬
-                    [{ 'color': [] }, { 'background': [] }], // 텍스트 색상 및 배경색
-                    ['link'], // 링크 기능
-                ]
-            }
-        });
-
-        const ql_editor = document.querySelector('.ql-editor');
-        if (ql_editor) {
-            // 영문과 달리 한글을 한 글자만 입력했을 때에는 placeholder 가 사라지지 않는 현상이 있어서 직접 추가
-            ql_editor.addEventListener('compositionstart', () => {
-                ql_editor.classList.remove('ql-blank');
-            });
-
-            // Quill 에디터는 div를 사용하여 placeholder 스타일이 기본적으로 ::before 가상 요소를 통해 구현되어 있기 때문에 직접 수정
-            ql_editor.classList.add('custom-placeholder'); // 새 클래스 추가
-            const style = document.createElement('style');
-            style.textContent = `
-                .custom-placeholder.ql-blank::before {
-                    font-style: normal; /* 기울이지 않음 */
-                    color: grey;        /* 선택 사항: 텍스트 색상 */
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // 에디터 내용 업데이트
-        editor.on('text-change', () => {
-            contents = editor.root.innerHTML;
+        editor = initQuillEditor('#editor', html => {
+            contents = html;
         });
 
         if (isEditMode) {
             await fetchArticle();
+        }
+    });
+
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.READ(pageId), {
+            method: 'GET',
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article = response.data;
 
             categoryType          = article.categoryType;
             articleType           = article.articleType;
@@ -96,17 +69,12 @@
             cachedArticleType  = articleType;
             articleDetailTypes = isDetailTypeExist(categoryType, articleType)? 
                 Object.keys(ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType]) : [];
+            
+            return;
         }
-    });
 
-    async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.READ(pageId), {
-            method: 'GET',
-        }).catch(handleApiError);
-
-        if (response.success) {
-            article = response.data;
-        }
+        console.log("수정을 위한 게시물 정보 불러오기에 실패하였습니다.");
+        return;
     }
 
     function isArticleValid() {
@@ -184,7 +152,8 @@
     }
 
     function handleCancle() {
-        const isConfirm = confirm("정말 게시물 작성을 취소하시겠습니까?");
+        const action    = isEditMode ? "수정" : "작성";
+        const isConfirm = confirm(`정말 게시물 ${action}을 취소하시겠습니까?`);
         if (isConfirm) {
             if (isEditMode) {
                 window.location.href = pageInfo.readPath(pageId);
