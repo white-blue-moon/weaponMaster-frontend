@@ -129,7 +129,7 @@
       
     {#if isSearching}
         <div class="loading-result">
-            <p><Spinner margin_bottom="4px"/>검색 중입니다.</p>
+            <p><Spinner margin_right="7px" margin_bottom="4px"/>검색 중입니다.</p>
         </div>
     {:else}
         {#if search.list.length === 0}
@@ -238,6 +238,7 @@
     }
 
     .no-result, .loading-result {
+        font-size: 14px;
         padding-top: 10px;
     }
 
@@ -286,11 +287,11 @@
         background: #2673cc;
     }
 
-    .result-list ul, .watch-list ul {
+    .result-list ul {
         padding: 0;
     }
 
-    .result-list ul li, .watch-list ul li {
+    .result-list ul li {
         display: grid;
         grid-template-columns: 50px 2fr 100px 100px auto;
         align-items: start;
@@ -300,16 +301,8 @@
         font-size: 14px;
     }
 
-    .result-list ul li:last-child, .watch-list ul li:last-child {
+    .result-list ul li:last-child {
         border-bottom: none;
-    }
-
-    .watch-list-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        column-gap: 8px;
     }
 
     .item-img {

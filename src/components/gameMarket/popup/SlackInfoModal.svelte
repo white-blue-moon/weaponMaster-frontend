@@ -154,7 +154,7 @@
 
 <style lang="scss">
     div.stxt {
-        font-size: 14px; 
+        font-size: 13px; 
         line-height: 1.5; // 줄 간격 
         color: #4a4e57;
     }

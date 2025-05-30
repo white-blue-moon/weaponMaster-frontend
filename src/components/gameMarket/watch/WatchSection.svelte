@@ -155,6 +155,7 @@
     }
 
     .no-result, .loading-result {
+        font-size: 14px;
         padding-top: 10px;
     }
 
@@ -188,11 +189,11 @@
         background: #2673cc;
     }
 
-    .result-list ul, .watch-list ul {
+    .watch-list ul {
         padding: 0;
     }
 
-    .result-list ul li, .watch-list ul li {
+    .watch-list ul li {
         display: grid;
         grid-template-columns: 50px 2fr 100px 100px auto;
         align-items: start;
@@ -202,7 +203,7 @@
         font-size: 14px;
     }
 
-    .result-list ul li:last-child, .watch-list ul li:last-child {
+    .watch-list ul li:last-child {
         border-bottom: none;
     }
 
