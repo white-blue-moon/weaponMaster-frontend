@@ -15,7 +15,7 @@ export const API = {
     ACCOUNT: {
         JOIN:  `${ROOT}/accounts`,
         LOGIN: `${ROOT}/accounts/login`,
-        CHECK_USER_ID_EXISTS: (userId) => `${ROOT}/accounts/${userId}/exists`,
+        CHECK_USER_ID_EXISTS: (userId) => `${ROOT}/accounts/exists?userId=${userId}`,
     },
     ARTICLES: {
         CREATE:     `${ROOT}/articles`,
