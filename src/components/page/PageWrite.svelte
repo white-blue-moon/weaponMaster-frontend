@@ -146,11 +146,14 @@
 
         isLoading = true;
 
+        let action    = '등록';
         let apiMethod = 'POST';
-        let apiURL = API.ARTICLES.CREATE;
+        let apiURL    = API.ARTICLES.CREATE;
+        
         if (isEditMode) {
+            action    = '수정';
             apiMethod = 'PUT';
-            apiURL = API.ARTICLES.UPDATE(pageId);
+            apiURL    = API.ARTICLES.UPDATE(pageId);
         }
 
         const response = await apiFetch(apiURL, {
@@ -169,13 +172,14 @@
 
         if (response.success) {
             isLoading = false;
-            alert('게시물 등록이 완료되었습니다.');
+            pageId    = response.data;
+            alert(`게시물 ${action}이 완료되었습니다.`);
             window.location.href = pageInfo.readPath(pageId);
             return;
         }
 
         isLoading = false;
-        alert('게시물 등록에 실패하였습니다.');
+        alert(`게시물 ${action}에 실패하였습니다.`);
         return;
     }
 
@@ -273,7 +277,12 @@
     <!-- 버튼 -->
     <article class="btnarea mt40">
         <a class="btn btntype_bu46 bold mar" style="width:140px" on:click={ handleRegister }>
-            {#if isLoading}<Spinner colorTheme="white"/>{/if} 등록
+            {#if isLoading}<Spinner colorTheme="white"/>{/if}
+            {#if isEditMode}
+                수정
+            {:else}
+                등록
+            {/if}
         </a>
         <a class="btn btntype_bk46 bold" style="width:140px" on:click={ handleCancle }>취소</a>
     </article>
