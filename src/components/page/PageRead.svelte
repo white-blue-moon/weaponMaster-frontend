@@ -133,7 +133,7 @@
         <h3>{ ARTICLE_TYPE_TEXT[article.categoryType][article.articleType] }</h3>
         <div class="board_view news_view">
             <dl>
-                <dt>{ getArticleFilterText(article.categoryType, article.articleType, article.articleDetailType) }</dt>
+                <dt>{ getArticleFilterText(article) }</dt>
                 <dd>
                     <p>
                         { article.title }
