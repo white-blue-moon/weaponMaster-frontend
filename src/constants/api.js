@@ -1,6 +1,4 @@
-
-
-export const SERVICE_DOMAIN = 'https://weapon-master-portfolio.uk';
+export const SERVICE_DOMAIN = process.env.SERVICE_DOMAIN;
 
 const isDevelopment = window.location.hostname === 'localhost'; 
 const ROOT          = isDevelopment ? 'http://localhost:7070' : `${SERVICE_DOMAIN}/weapon-back`; // (개발환경/배포환경)

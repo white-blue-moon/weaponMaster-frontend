@@ -8,6 +8,12 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import postcss from 'rollup-plugin-postcss';
 import deletePlugin from 'rollup-plugin-delete';
+import replace from '@rollup/plugin-replace';
+import dotenv from 'dotenv';
+
+
+// .env 파일 로드
+dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -47,6 +53,11 @@ export default {
 		deletePlugin({
 			targets: 'public/weapon-front/build/*',
 			verbose: true, // 삭제된 파일들 출력
+		}),
+
+		replace({
+			preventAssignment: true,
+			'process.env.SERVICE_DOMAIN': JSON.stringify(process.env.SERVICE_DOMAIN)
 		}),
 
 		svelte({
