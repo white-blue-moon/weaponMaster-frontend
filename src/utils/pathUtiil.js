@@ -8,10 +8,14 @@ export function setRedirectUrl() {
         return existingRedirect;
     }
 
-    const redirect = encodeURIComponent(window.location.pathname + window.location.search);
+    const currentPath = window.location.pathname;
+    if (currentPath === PATHS.ACCOUNT.JOIN) {
+        return PATHS.HOME;
+    }
+
+    const redirect = encodeURIComponent(currentPath + window.location.search);
     return redirect;
 }
-
 
 export function getRedirectUrl() {
     const params   = new URLSearchParams(window.location.search);

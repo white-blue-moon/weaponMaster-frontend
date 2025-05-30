@@ -4,12 +4,14 @@
     import { handleCapsLock, authLogin } from "../../utils/auth";
     import { DF_UI } from '../../constants/resourcePath';
     import { getRedirectUrl } from '../../utils/pathUtiil';
+    import { PATHS } from '../../constants/paths';
 
     import GnbPublisher from '../../components/GnbPublisher.svelte';
     import HeaderBanner from '../../components/banner/HeaderBanner.svelte';
     import Footer from '../../components/Footer.svelte';
     import CapsLockWarning from '../../components/CapsLockWarning.svelte';
     import Spinner from '../../components/Spinner.svelte';
+
   
   
     let userId   = "";
@@ -102,7 +104,10 @@
                     <button type="submit" id="login">
                         {#if isLoginLoading} <Spinner colorTheme="white"/> {/if} 관리자모드 로그인
                     </button>
-                </li>              
+                </li>
+                <li class="find">
+                    <a href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
+                </li>               
             </ul>
         </form>
     </article>
@@ -154,6 +159,33 @@
     .login_admin li {
         margin-bottom: 10px;
     }
+
+    .login_admin li.find {
+        margin-top: 17px;
+        font-size: 0;
+        text-align: center;
+    }
+
+    .login_admin li.find a {
+        margin-top: 5px;
+        display: inline-block;
+        color: #6a6e76;
+        font-size: 14px;
+    }
+
+    .login_admin li.find a::after {
+        content: '';
+        display: inline-block;
+        margin: -2px 11px 0 12px;
+        width: 1px;
+        height: 13px;
+        background: #bec5cc;
+        vertical-align: middle;
+    }
+
+    .login_admin li.find a:last-child::after {
+        display: none;
+    }
     
     .login_admin input {
         border: 1px solid #e1e6ee;
@@ -177,6 +209,7 @@
 
     .login .login_admin li.btn button {
         all: unset; /* 모든 기본 스타일 제거 */
+        margin-top: 30px;
         display: block;
         width: 560px;
         height: 61px;

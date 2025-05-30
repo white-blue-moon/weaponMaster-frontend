@@ -99,7 +99,10 @@
                     <button type="submit" id="login">
                         {#if isLoginLoading} <Spinner colorTheme="white"/> {/if} 일반모드 로그인
                     </button>
-                </li>              
+                </li>  
+                <li class="find">
+                    <a href={ PATHS.ACCOUNT.JOIN }>회원가입</a>
+                </li>            
             </ul>
 
             <ul class="login_admin">
@@ -169,6 +172,33 @@
         border: 1px solid #e1e6ee;
         background: #f8f9fb;
     }
+
+    .login_normal li.find {
+        margin-top: 17px;
+        font-size: 0;
+        text-align: center;
+    }
+
+    .login_normal li.find a {
+        margin-top: 5px;
+        display: inline-block;
+        color: #6a6e76;
+        font-size: 14px;
+    }
+
+    .login_normal li.find a::after {
+        content: '';
+        display: inline-block;
+        margin: -2px 11px 0 12px;
+        width: 1px;
+        height: 13px;
+        background: #bec5cc;
+        vertical-align: middle;
+    }
+
+    .login_normal li.find a:last-child::after {
+        display: none;
+    }
     
     input[type="text"], input[type="password"] {
         display: block;
@@ -186,6 +216,7 @@
 
     .login .login_normal li.btn button {
         all: unset; /* 모든 기본 스타일 제거 */
+        margin-top: 30px;
         display: block;
         width: 560px;
         height: 61px;
