@@ -43,7 +43,7 @@
         <a href={ PATHS.NEWS.DEV_NOTE.LIST }>개발자노트</a>
       </div>
       <div>
-        <a href={ PATHS.INTRODUCE.PURPOSE }>홈페이지 용도</a>
+        <a href={ PATHS.INTRODUCE.PURPOSE }>목적 및 소개</a>
       </div>
       <div>
         <a href={ PATHS.GUIDE.HOW_TO_USE }>홈페이지 가이드</a>

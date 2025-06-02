@@ -51,7 +51,7 @@ export const ARTICLE_TYPE_TEXT = {
     },
 
     [CATEGORY_TYPE.INTRODUCE]: {
-        [ARTICLE_TYPE.INTRODUCE.HOME_PAGE_PURPOSE]: "홈페이지 용도",
+        [ARTICLE_TYPE.INTRODUCE.HOME_PAGE_PURPOSE]: "목적 및 소개",
     },
 
     [CATEGORY_TYPE.GUIDE]: {
