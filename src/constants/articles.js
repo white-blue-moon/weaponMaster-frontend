@@ -55,7 +55,7 @@ export const ARTICLE_TYPE_TEXT = {
     },
 
     [CATEGORY_TYPE.GUIDE]: {
-        [ARTICLE_TYPE.GUIDE.HOME_PAGE_GUIDE]: "홈페이지 가이드",
+        [ARTICLE_TYPE.GUIDE.HOME_PAGE_GUIDE]: "통합 가이드",
     },
 
     [CATEGORY_TYPE.COMMUNITY]: {

@@ -46,7 +46,7 @@
         <a href={ PATHS.INTRODUCE.PURPOSE }>목적 및 소개</a>
       </div>
       <div>
-        <a href={ PATHS.GUIDE.HOW_TO_USE }>홈페이지 가이드</a>
+        <a href={ PATHS.GUIDE.HOW_TO_USE }>통합 가이드</a>
       </div>
       <div>
         <a href={ PATHS.COMMUNITY.ALL.LIST }>전체</a>
