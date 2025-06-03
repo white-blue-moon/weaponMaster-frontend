@@ -157,7 +157,7 @@
     }
 
     .swiper-overlay {
-        background: url('/weapon-front/images/banner_overlay.png') 50% 0px no-repeat;
+        background: url('#{$WEAPON_ASSETS}/banner/banner_overlay.png') 50% 0px no-repeat;
         background-size: cover;
         width: 100%;
         height: 100%;
