@@ -112,6 +112,10 @@
             return;
         }
 
+        if (isLoading) {
+            return;
+        }
+
         isLoading = true;
 
         let action    = '등록';

@@ -77,6 +77,10 @@
             return;
         }
 
+        if (isLoading) {
+            return;
+        }
+
         isLoading = true;
 
         const response = await apiFetch(API.COMMENTS.CREATE, {

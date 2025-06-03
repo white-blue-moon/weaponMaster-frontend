@@ -58,6 +58,10 @@
             return;
         }
 
+        if(isDeleting) {
+            return;
+        }
+
         isDeleting = true;
 
         const response = await apiFetch(SLACK_API.CHANNEL.DELETE($userInfo, SLACK_NOTICE_TYPE.AUCTION), {
@@ -81,6 +85,10 @@
     let isChecking = false;
 
     async function testSlackInfo() {
+        if(isChecking) {
+            return;
+        }
+
         isChecking = true;
 
         const response = await apiFetch(SLACK_API.CHANNEL.TEST($userInfo, SLACK_NOTICE_TYPE.AUCTION), {

@@ -25,6 +25,10 @@
         if (!isConfirm) {
             return;
         }
+        
+        if (isDeleteLoading) {
+            return;
+        }
 
         isDeleteLoading = true;
 

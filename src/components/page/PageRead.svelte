@@ -55,6 +55,10 @@
             return;
         }
 
+        if(isToggling) {
+            return;
+        }
+
         isToggling = true;
 
         const response = await apiFetch(API.ARTICLES.TOGGLE_PIN(pageId), {
@@ -87,6 +91,10 @@
     async function handleDelete() {
         const isConfirm = confirm("정말 해당 게시물을 삭제하시겠습니까?");
         if (!isConfirm) {
+            return;
+        }
+
+        if (isLoading) {
             return;
         }
 
