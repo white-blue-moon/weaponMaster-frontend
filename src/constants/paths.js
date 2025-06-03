@@ -5,7 +5,7 @@ export const BASE = '/weapon-front';
 
 export const PATHS = {
     ACCESS_GATE: `${BASE}/access-gate`,
-    HOME: `${BASE}/`,
+    HOME:        `${BASE}/`,
     MAINTENANCE: `${BASE}/`,
     ACCOUNT: {
         JOIN:        `${BASE}/account/join`,
@@ -20,10 +20,12 @@ export const PATHS = {
         PURPOSE: `${BASE}/introduce/purpose`,
     },
 
-    GUIDE: {    
-        HOW_TO_USE: `${BASE}/guide/how-to-use`,
+    GUIDE: {
+        OVERVIEW: `${BASE}/guide/overview`,
+        AUCTION:  `${BASE}/guide/auction`,
+        SLACK:    `${BASE}/guide/slack`,
     },
-
+    
     NEWS: {    
         READ:   (id) => `${BASE}/news/${id}`,
         EDIT:   (id) => `${BASE}/news/edit/${id}`,

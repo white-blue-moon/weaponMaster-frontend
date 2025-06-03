@@ -17,10 +17,10 @@
     import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
 
-    const HOME_PAGE_PURPOSE_ARTICLE_ID = 420;
-    const ARTICLE_FILTER_TEXT          = "가이드";
+    const AUCTION_GUIDE_ARTICLE_ID = 432;
+    const ARTICLE_FILTER_TEXT      = "가이드";
 
-    let pageId   = HOME_PAGE_PURPOSE_ARTICLE_ID;
+    let pageId   = AUCTION_GUIDE_ARTICLE_ID;
     let pageInfo = {};
     let article  = null;
 
@@ -247,7 +247,6 @@
     .bold {
         font-weight: 500 !important;
     }
-
 
     .footer {
         margin-top: 160px !important;

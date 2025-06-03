@@ -24,7 +24,10 @@
   	import PrivateContactList from './routes/service/private_contact/PrivateContactList.svelte';
 
 	import HomePagePurpose from './routes/introduce/HomePagePurpose.svelte';
-	import HomePageGuide from './routes/guide/HomePageGuide.svelte';
+	import OverView from './routes/guide/OverView.svelte';
+	import AuctionGuide from './routes/guide/AuctionGuide.svelte';
+	import SlackGuide from './routes/guide/SlackGuide.svelte';
+
   	import AccessGate from './routes/AccessGate.svelte';
   	import NotFoundPage from './components/page/NotFoundPage.svelte';
 
@@ -88,7 +91,9 @@
 		<Route path={ PATHS.INTRODUCE.PURPOSE } component={ HomePagePurpose } />
 
 		<!-- 가이드 -->
-		<Route path={ PATHS.GUIDE.HOW_TO_USE } component={ HomePageGuide } />
+		<Route path={ PATHS.GUIDE.OVERVIEW } component={ OverView } />
+		<Route path={ PATHS.GUIDE.AUCTION }  component={ AuctionGuide } />
+		<Route path={ PATHS.GUIDE.SLACK }    component={ SlackGuide } />
 
 		<!-- 커뮤니티 -->
 		<Route path={ PATHS.COMMUNITY.ALL.LIST } 	  component={ AllList } />

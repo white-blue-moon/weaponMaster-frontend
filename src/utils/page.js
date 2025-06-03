@@ -132,6 +132,15 @@ export function getListPath(categoryType, articleType) {
         }
     }
 
+    if (categoryType == CATEGORY_TYPE.GUIDE) {
+        switch (articleType) {
+            case ARTICLE_TYPE.GUIDE.OVERVIEW:   return PATHS.GUIDE.OVERVIEW;
+            case ARTICLE_TYPE.GUIDE.AUCTION:    return PATHS.GUIDE.AUCTION;
+            case ARTICLE_TYPE.GUIDE.SLACK:      return PATHS.GUIDE.SLACK;
+            default:                            return PATHS.GUIDE.OVERVIEW;
+        }
+    }
+
     if (categoryType == CATEGORY_TYPE.COMMUNITY) {
         switch (articleType) {
             case ARTICLE_TYPE.COMMUNITY.ALL:    return PATHS.COMMUNITY.ALL.LIST;
@@ -170,10 +179,12 @@ export function getCategoryTypeByURL(url) {
 
 // Menu2nd 에서의 텍스트, url 정보 할당
 export function getMenu2nd(categoryType, articleType) {
-    return Object.keys(ARTICLE_TYPE_TEXT[categoryType]).map((article_type) => ({
-        text: ARTICLE_TYPE_TEXT[categoryType][article_type],
-        url: getListPath(categoryType, Number(article_type)),
-        isActive: articleType == article_type,
+    const articleTypes  = Object.keys(ARTICLE_TYPE_TEXT[categoryType]);
+
+    return articleTypes.map((type) => ({
+        text:     ARTICLE_TYPE_TEXT[categoryType][type],
+        url:      getListPath(categoryType, Number(type)),
+        isActive: articleType == type,
     }));
 }
 
@@ -181,8 +192,8 @@ export function getPagePath(article) {
     let category;
 
     switch(article.categoryType) {
-        case CATEGORY_TYPE.INTRODUCE:      return `${BASE}/introduce/purpose`;
-        case CATEGORY_TYPE.GUIDE:          return `${BASE}/guide/how-to-use`;
+        case CATEGORY_TYPE.INTRODUCE:      return PATHS.INTRODUCE.PURPOSE;
+        case CATEGORY_TYPE.GUIDE:          return PATHS.GUIDE.OVERVIEW;
         case CATEGORY_TYPE.NEWS:           category = "news";       break;
         case CATEGORY_TYPE.COMMUNITY:      category = "community";  break;
         case CATEGORY_TYPE.SERVICE_CENTER: category = "service";    break;

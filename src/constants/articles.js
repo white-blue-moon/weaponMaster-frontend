@@ -29,7 +29,9 @@ export const ARTICLE_TYPE = {
     },
 
     GUIDE: {
-        HOME_PAGE_GUIDE: 1,
+        OVERVIEW: 1,
+        AUCTION:  2,
+        SLACK:    3,
     },
 
     COMMUNITY: {
@@ -55,7 +57,9 @@ export const ARTICLE_TYPE_TEXT = {
     },
 
     [CATEGORY_TYPE.GUIDE]: {
-        [ARTICLE_TYPE.GUIDE.HOME_PAGE_GUIDE]: "통합 가이드",
+        [ARTICLE_TYPE.GUIDE.OVERVIEW]: "전체 가이드",
+        [ARTICLE_TYPE.GUIDE.AUCTION]: "경매 가이드",
+        [ARTICLE_TYPE.GUIDE.SLACK]: "Slack 가이드",
     },
 
     [CATEGORY_TYPE.COMMUNITY]: {

@@ -27,7 +27,7 @@
       <li><a class="logo" href={ PATHS.HOME }><img src="images/logo.png" alt="Dungeon & Fighter"></a></li>
       <li><a href={ PATHS.NEWS.NOTICE.LIST }>새소식</a></li>
       <li><a href={ PATHS.INTRODUCE.PURPOSE }>사이트소개</a></li>
-      <li><a href={ PATHS.GUIDE.HOW_TO_USE }>가이드</a></li>
+      <li><a href={ PATHS.GUIDE.OVERVIEW }>가이드</a></li>
       <li><a href={ PATHS.COMMUNITY.ALL.LIST }>커뮤니티</a></li>
       <li><a href={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST }>서비스센터</a></li>
       <li> <!-- 공간 확보를 위해 비워둠 --> </li>
@@ -46,7 +46,9 @@
         <a href={ PATHS.INTRODUCE.PURPOSE }>목적 및 소개</a>
       </div>
       <div>
-        <a href={ PATHS.GUIDE.HOW_TO_USE }>통합 가이드</a>
+        <a href={ PATHS.GUIDE.OVERVIEW }>전체 가이드</a>
+        <a href={ PATHS.GUIDE.AUCTION }>경매 가이드</a>
+        <a href={ PATHS.GUIDE.SLACK }>Slack 가이드</a>
       </div>
       <div>
         <a href={ PATHS.COMMUNITY.ALL.LIST }>전체</a>

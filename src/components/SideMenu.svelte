@@ -62,7 +62,7 @@
                             </a>
                         </li>
                     </ul>
-                    <a class="gnbBtAll" href={ PATHS.GUIDE.HOW_TO_USE } obj="P_GNB">
+                    <a class="gnbBtAll" href={ PATHS.GUIDE.OVERVIEW } obj="P_GNB">
                         전체가이드
                     </a>
                 </div>
