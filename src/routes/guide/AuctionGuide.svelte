@@ -53,7 +53,6 @@
 
                 if (targetElement) {
                     targetElement.scrollIntoView({ behavior: 'smooth' });
-                    history.pushState(null, '', `#${targetId}`);
                 }
             });
         });
