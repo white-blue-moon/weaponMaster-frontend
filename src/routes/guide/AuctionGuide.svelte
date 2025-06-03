@@ -24,6 +24,11 @@
     let pageInfo = {};
     let article  = null;
 
+    onMount(async ()=> {
+        await fetchArticle();
+        setAnchorScroll();
+    });
+
     async function fetchArticle() {
         const response = await apiFetch(API.ARTICLES.READ(pageId), {
             method: 'GET',
@@ -35,9 +40,24 @@
         }
     }
 
-    onMount(async ()=> {
-        await fetchArticle();
-    });
+    // #id 앵커에 스크롤 이벤트 연결 (동적 @html 출력이므로 별도 연결 필요)
+    function setAnchorScroll() {
+        const anchors = document.querySelectorAll('a[href^="#"]');
+
+        anchors.forEach(anchor => {
+            anchor.addEventListener('click', event => {
+                event.preventDefault();
+
+                const targetId      = anchor.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                    history.pushState(null, '', `#${targetId}`);
+                }
+            });
+        });
+    }
 </script>
 
 
