@@ -1,11 +1,10 @@
 <script>
     import { onMount } from "svelte";
-    import { AUCTION_STATE } from "../../../constants/auctionState"; 
+    import { getStatusLabelAndClass, isAuctionCompleted } from "../../../utils/gameMarket/auctionStateUtil";
     import { updatePagination } from "../../../utils/gameMarket/paging";
     import { formatItemName } from "../../../utils/gameMarket/itemName";
     import { apiFetch, handleApiError } from "../../../utils/apiFetch";
     import { NEOPLE_API } from "../../../constants/api";
-    import { isAuctionCompleted } from "../../../utils/gameMarket/auctionStateUtil";
 
     import Spinner from "../../Spinner.svelte";
     import Pagination from "../common/Pagination.svelte";
@@ -161,14 +160,13 @@
                         <span class="item-date">{ getLeftTime(item.itemInfo.expireDate) }</span>
     
                         <!-- 버튼 -->
-                        {#if item.auctionState == AUCTION_STATE.SOLD_OUT}
+                        <!-- 판매 완료 및 추적 중단 -->
+                        {#if isAuctionCompleted(item.auctionState)}
+                            {@const status = getStatusLabelAndClass(item.auctionState)}
                             <span class="status-wrap">
-                                <span class="completed">판매 완료</span>
+                                <span class={ status.class }>{ status.label }</span>
                             </span>
-                        {:else if item.auctionState == AUCTION_STATE.EXPIRED}
-                            <span class="status-wrap">
-                                <span class="expired" style="margin-left: 10px;">기간 만료</span>
-                            </span>
+                        <!-- 판매 중 --> 
                         {:else}
                             <button class={ watchAuctionNoMap.has(item.itemInfo.auctionNo) ? "btn-remove" : "btn-register" } 
                                 on:click={ () => toggleWatch(item) }>
@@ -356,6 +354,7 @@
     }
 
     .status-wrap {
+        padding-left: 29px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -386,6 +385,17 @@
     .expired {
         opacity: 0.6;
         color: #ff4d4d;
+    }
+
+    .untrackable {
+        opacity: 0.9;
+        color: #8888ff;
+    }
+
+    .error-state {
+        opacity: 0.9;
+        color: #cc0000;
+        font-weight: bold;
     }
 
     .btn-x {
