@@ -4,6 +4,7 @@
     import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
     import { apiFetch, handleApiError } from '../utils/apiFetch';
     import { PATHS } from '../constants/paths';
+    import { WEAPON_ASSETS } from '../constants/resourcePath';
 
     import GnbPublisher from '../components/GnbPublisher.svelte';
     import Gnb from '../components/Gnb.svelte';
@@ -15,7 +16,7 @@
     import Top from '../components/Top.svelte';
     import CharacterBanner from '../components/banner/CharacterBanner.svelte';
     import FocusControl from '../components/FocusControl.svelte';
-    
+  
   
     let focusBanners     = [];
     let newsArticles     = [];
@@ -103,7 +104,11 @@
                 <FocusControl bannerRef={ mainBannerRef } isHovered={ isMainFocusHovered }/>
             {:else}
                 <div class="spinner-container">
-                    <Spinner /> <span class="loading-text">로딩중입니다.</span>
+                    <img src="{WEAPON_ASSETS}/gif/gunner_loading.gif" alt="콜라보 거너(여) 로딩"/>
+                    <p>
+                        <Spinner margin_bottom="4px" margin_right="6px"/>
+                        <span class="loading-text">로딩중입니다.</span>
+                    </p>
                 </div>
             {/if}
         </div>
@@ -185,6 +190,17 @@
         align-items: center;      /* 세로 중앙 정렬 */
         flex-direction: column;   /* 스피너와 텍스트를 세로로 배치 */
         z-index: 10;              /* 다른 요소 위에 올리기 */
+    }
+
+    .spinner-container img {
+        position: absolute;
+        top: 108px;
+        padding-left: 150px;
+    }
+
+    .spinner-container p {
+        position: absolute;
+        top: 328px; /* 이미지 하단에서 10px 위 */
     }
 
     .loading-text {
