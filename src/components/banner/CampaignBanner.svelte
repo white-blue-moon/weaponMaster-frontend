@@ -1,5 +1,7 @@
 <script>
-    export let imgUrl = "images/campaign_banner.jpg";
+    import { WEAPON_ASSETS } from "../../constants/resourcePath";
+
+    export let imgUrl = `${WEAPON_ASSETS}/banner/campaign_banner.jpg`;
     export let href   = "https://df.nexon.com/"; // 던파 공식 홈페이지 주소 기본 할당
     export let alt    = "포트폴리오 용도 강조 알림 배너";
 </script>
