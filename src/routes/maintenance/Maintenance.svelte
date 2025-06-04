@@ -1,12 +1,12 @@
 <script>
-    import { API } from '../constants/api';
-    import { apiFetch, handleApiError } from '../utils/apiFetch';
+    import { API } from '../../constants/api';
+    import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
-    import { FOCUS_BANNER_TYPE } from '../constants/focusBanner';
+    import { FOCUS_BANNER_TYPE } from '../../constants/focusBanner';
 
-    import FocusBanner from '../components/banner/FocusBanner.svelte';
-    import Footer from '../components/Footer.svelte';
-    import Top from '../components/Top.svelte';
+    import FocusBanner from '../../components/banner/FocusBanner.svelte';
+    import Footer from '../../components/Footer.svelte';
+    import Top from '../../components/Top.svelte';
   
 
     export let endDate;
@@ -36,6 +36,33 @@
             latestDevNote = response.data.devNote;
           }
     });
+
+    function fullScreen(event) {
+        event.preventDefault();
+
+        const iframe = document.getElementById("game-container");
+
+        // 크롬, 파이어폭스, 엣지, 사파리 등 최신 브라우저
+        if (iframe.requestFullscreen) {
+            iframe.requestFullscreen();
+            return;
+        }
+
+        // 구버전 크롬, 사파리
+        if (iframe.webkitRequestFullscreen) {
+            iframe.webkitRequestFullscreen();
+            return;
+        }
+
+        // IE11
+        if (iframe.msRequestFullscreen) {
+            iframe.msRequestFullscreen();
+            return;
+        }
+
+        alert("브라우저가 전체화면을 지원하지 않습니다.");
+        return;
+    }
 </script>
 
 <header>
@@ -121,7 +148,7 @@
                     </div>
                     <div class="game_f">
                         <span class="none">조작키 [W] [A] [S] [D] [Space Bar]</span>
-                        <a href="#f" onclick="fullscreen(); return false;">전체화면</a>
+                        <a role="button" on:click={ fullScreen }>전체화면</a>
                     </div>
                     <p>
                         ※ 본 서비스는 크롬, 엣지, 파이어폭스, 사파리 등 최신 인터넷 브라우저에서 이용 가능합니다.

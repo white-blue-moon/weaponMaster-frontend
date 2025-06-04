@@ -62,6 +62,7 @@ export const WEB_SOCKET_API = {
 const ADMIN_ROOT = isDevelopment ? 'http://localhost:7770' : `${SERVICE_DOMAIN}/admin-back`;
 export const ADMIN_API = {
     MAINTENANCE: {
-        GET_ACTIVE: `${ADMIN_ROOT}/maintenance/active`,
+        GET_ACTIVE:        `${ADMIN_ROOT}/maintenance/active`,
+        GET_ACTIVE_LATEST: `${ADMIN_ROOT}/maintenance/active/latest`,
     }
 };

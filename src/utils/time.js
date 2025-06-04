@@ -18,3 +18,23 @@ export function formatDateTimeShort(datetime) {
 
     return `${monthDay} ${time}`;
 }
+
+export function getFormattedEndTime(dateStr) {
+    const date    = new Date(dateStr);
+    let   hours   = date.getHours();
+    const minutes = date.getMinutes();
+
+    const amPm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0이면 12로 변환 (12AM, 12PM)
+
+    // 두 자리수로 만들기 위해 0 채움
+    const formatHours   = hours   < 10 ? `0${hours}`   : `${hours}`;
+    const formatMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+    return { 
+        amPm:    amPm, 
+        hours:   formatHours, 
+        minutes: formatMinutes, 
+    };
+}

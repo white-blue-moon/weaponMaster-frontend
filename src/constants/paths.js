@@ -6,7 +6,10 @@ export const BASE = '/weapon-front';
 export const PATHS = {
     ACCESS_GATE: `${BASE}/access-gate`,
     HOME:        `${BASE}/`,
-    MAINTENANCE: `${BASE}/`,
+
+    MAINTENANCE:         `${BASE}/`,
+    MAINTENANCE_PREVIEW: `${BASE}/maintenance-preview`,
+
     ACCOUNT: {
         JOIN:        `${BASE}/account/join`,
         LOGIN:       () => `${BASE}/account/login?redirect=${setRedirectUrl()}`,
