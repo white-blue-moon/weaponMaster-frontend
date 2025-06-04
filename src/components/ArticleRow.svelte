@@ -5,7 +5,7 @@
     import AdminAuthor from "./AdminAuthor.svelte";
 
     export let article;
-    export let articleUrl; // (page.readPath(article.id))
+    export let articleUrl;
     export let isPinned = false;
 
     function isMaintenance() {
@@ -21,7 +21,7 @@
 <ul class:notice={ isPinned }>
     <li class="category">
         <span class:bold={ isMaintenance() }>
-            { getArticleFilterText(article) }
+            { getArticleFilterText(article, isPinned) }
         </span>
     </li>
   

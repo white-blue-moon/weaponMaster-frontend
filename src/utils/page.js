@@ -102,13 +102,17 @@ export function getArticleFilter(categoryType, articleType) {
     return result;
 }
 
-export function getArticleFilterText(article) {
+export function getArticleFilterText(article, isPinned = false) {
     const { categoryType, articleType, articleDetailType } = article;
 
     if (categoryType == CATEGORY_TYPE.NEWS) {
         if (ARTICLE_DETAIL_TYPE_TEXT[categoryType]?.[articleType]) {
             return ARTICLE_DETAIL_TYPE_TEXT[categoryType][articleType][articleDetailType];
         }
+    }
+
+    if (isPinned) {
+        return "공지";
     }
 
     if (categoryType == CATEGORY_TYPE.COMMUNITY) {
