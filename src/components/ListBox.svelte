@@ -5,7 +5,7 @@
 
     export let articles = [];
 
-    const ITEMS_PER_SLIDE   = 3; // 한 슬라이드에 보여지는 추천 게시물 개수
+    const ITEMS_PER_SLIDE   = 3; // 한 슬라이드에 보여지는 인기 게시물 개수
     const DEFAULT_THUMBNAIL = `${DF_UI}/img/common/today_dnf_default.jpg`;
     
     let   currentIndex      = 0;
@@ -52,6 +52,15 @@
         return DEFAULT_THUMBNAIL;
     }
 
+    function getAuthor(article) {
+        const {isAdminMode, userId} = article;
+        if (isAdminMode) {
+          return "웨펀마스터"
+        }
+
+        return userId;
+    }
+
     $: visibleArticles = articles.slice(currentIndex, currentIndex + ITEMS_PER_SLIDE);
 </script>
 
@@ -79,7 +88,7 @@
               <span class="category">{ CATEGORY_TYPE_TEXT[article.categoryType] }</span>
               <div class="info">
                 <h4 class="title">{ article.title }</h4>
-                <p class="author">{ article.userId }</p>
+                <p class="author">{ getAuthor(article) }</p>
               </div>
             </a>
           </li>
