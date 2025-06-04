@@ -378,10 +378,6 @@
         }
     }
 
-    span.completed {
-        margin-left: 10px;
-    }
-
     .expired {
         opacity: 0.6;
         color: #ff4d4d;
