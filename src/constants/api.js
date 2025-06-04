@@ -35,7 +35,7 @@ export const API = {
 // 네오플 API
 export const NEOPLE_API = {
     AUCTION: {
-        LIST: (itemName) => `${ROOT}/neople/auction/${itemName}`,
+        LIST: (itemName) => `${ROOT}/neople/auction?itemName=${itemName}`,
     },
     AUCTION_NOITCE: {
         CREATE: `${ROOT}/neople/auction/notice`,
