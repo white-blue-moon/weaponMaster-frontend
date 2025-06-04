@@ -193,7 +193,7 @@ export function getPagePath(article) {
 
     switch(article.categoryType) {
         case CATEGORY_TYPE.INTRODUCE:      return PATHS.INTRODUCE.PURPOSE;
-        case CATEGORY_TYPE.GUIDE:          return PATHS.GUIDE.OVERVIEW;
+        case CATEGORY_TYPE.GUIDE:          return getGuidePath(article.articleType);
         case CATEGORY_TYPE.NEWS:           category = "news";       break;
         case CATEGORY_TYPE.COMMUNITY:      category = "community";  break;
         case CATEGORY_TYPE.SERVICE_CENTER: category = "service";    break;
@@ -201,4 +201,12 @@ export function getPagePath(article) {
     }
 
     return `${BASE}/${category}/${article.id}`;
+}
+
+function getGuidePath(articleType) {
+    switch (articleType) {
+        case ARTICLE_TYPE.GUIDE.AUCTION: return PATHS.GUIDE.AUCTION;
+        case ARTICLE_TYPE.GUIDE.SLACK:   return PATHS.GUIDE.SLACK;
+        default:                         return PATHS.GUIDE.OVERVIEW;
+    }
 }
