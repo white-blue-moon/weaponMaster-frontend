@@ -14,12 +14,18 @@
     const TICK = 10;
     let   PROGRESS_INCREMENT;
 
+    let ctrl_margin_left = "350px";
+
     onMount(async () => {
         await tick(); // DOM과 바인딩 완료를 기다림
         if (bannerRef) {
             banners            = bannerRef.getBanners();
             SLIDE_TERM         = bannerRef.getSlideTerm();
             PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK);
+        }
+
+        if(!showMenu) {
+            ctrl_margin_left = "423px";
         }
 
         startAutoProgress();
@@ -78,6 +84,7 @@
 
 <div class="focus">
     <div class="focus_ctrl"
+        style="margin-left: { ctrl_margin_left };"
         on:mouseenter={ handleMouseEnter }
         on:mouseleave={ handleMouseLeave }
     >
@@ -132,7 +139,7 @@ a {
     transition: opacity 0.3s;
 }
 
-.focus .focus_ctrl{display:flex;position:absolute;bottom:0;left:50%;padding:0;margin:0;margin-left:350px;width:227px;height:69px;background:rgba(0,0,0,.8);z-index:11;}
+.focus .focus_ctrl{display:flex;position:absolute;bottom:0;left:50%;padding:0;margin:0;width:227px;height:69px;background:rgba(0,0,0,.8);z-index:11;}
 .focus .focus_ctrl .swiper-button-prev{position:absolute;left:10px; top:14px;margin:0;width:41px;height:41px;background:url('#{$DF_UI}/img/main/focus_prev.png') no-repeat;cursor:pointer;text-indent:-9999px }
 .focus .focus_ctrl .swiper-button-next{position:absolute;left:120px;top:14px;margin:0;width:41px;height:41px;background:url('#{$DF_UI}/img/main/focus_next.png') no-repeat;cursor:pointer;text-indent:-9999px;}
 .focus .focus_ctrl .swiper-pagination{display:flex;align-items:center;justify-content:center;left:51px;top:14px;width:70px;height:41px;color:#bec5cc;font-size:13px;text-align:center}
