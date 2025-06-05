@@ -30,6 +30,7 @@
     onDestroy(() => {
         restoreMobileZoom();
         document.removeEventListener('mousedown', handleClickOutside);
+        cancelAnimationFrame(delayProgressTimer);
     });
 
     // 화면을 가로지르는 초기 기본 로딩 바 연출 함수

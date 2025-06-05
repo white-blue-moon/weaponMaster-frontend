@@ -22,6 +22,9 @@
     let newsArticles     = [];
     let bestViewArticles = [];
     let characterBanners = [];
+
+    let mainBannerProgress     = 0;
+    let mainBannerCurrentIndex = 0;
     
     let isLoading = true;
 
@@ -98,10 +101,17 @@
                         isOverlayExist={ true }
                         showDefaultCtrl={ false }
                         bind:this={ mainBannerRef }
+                        bind:progress={ mainBannerProgress }
+                        bind:currentIndex={ mainBannerCurrentIndex }
                         on:hoverState={event => updateHoverState(event.detail)}
                     />
                 </a>
-                <FocusControl bannerRef={ mainBannerRef } isHovered={ isMainFocusHovered }/>
+                <FocusControl 
+                    bannerRef={ mainBannerRef }
+                    progress={ mainBannerProgress }
+                    currentIndex={ mainBannerCurrentIndex } 
+                    isHovered={ isMainFocusHovered }
+                />
             {:else}
                 <div class="spinner-container">
                     <img src="{WEAPON_ASSETS}/gif/gunner_loading.gif" alt="콜라보 거너(여) 로딩"/>

@@ -1,45 +1,58 @@
 <script>
-    import { onMount, createEventDispatcher } from "svelte";
+    import { onMount, onDestroy, createEventDispatcher } from "svelte";
 
     export let width             = "560px";
     export let height            = "280px";
-    export let banners           = [];
+    export let banners           = []; 
     export let isOverlayExist    = false;
     export let showDefaultCtrl   = true;
+
+    // FocusControl 사용 시 아래 두 변수 bind: 할당 필요
+    export let progress     = 0;       
+    export let currentIndex = 0;      
     
     const dispatch = createEventDispatcher();
-
-    let currentIndex   = 0;
-    let overlayVisible = true;
-    let autoPlayInterval;
-    
-    let progress = 0;
-
     const SLIDE_TERM   = 5000; // 슬라이드 변경 텀 (단위: ms)
     const OVERLAY_TERM = 200;  // 오버레이 이미지 등장/전환 텀 (단위: ms)
 
-    const TICK = 10; // 10ms 마다 업데이트
-    const PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK); // 10ms마다 증가량
+    let overlayVisible = true;
 
+    let animationFrameId;
+    let lastTimestamp;
+    
     onMount(() => {
         startAutoPlay();
     });
 
+    onDestroy(() => {
+        cancelAnimationFrame(animationFrameId);
+    });
+
     export function startAutoPlay() {
-        autoPlayInterval = setInterval(() => {
-            progress += PROGRESS_INCREMENT;
-
-            if (progress >= 100) {
-                progress = 0;
-                nextSlide();
-            }
-        }, TICK);
-
+        lastTimestamp    = null;
+        animationFrameId = requestAnimationFrame(animateAutoPlay);
         dispatch('hoverState', false);
     }
 
+    function animateAutoPlay(timestamp) {
+        if (!lastTimestamp) {
+            lastTimestamp = timestamp;
+        }
+
+        const delta   = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+
+        progress += (delta / SLIDE_TERM) * 100;
+
+        if (progress >= 100) {
+            nextSlide();
+        }
+
+        animationFrameId = requestAnimationFrame(animateAutoPlay);
+    }
+
     export function stopAutoPlay() {
-        clearInterval(autoPlayInterval);
+        cancelAnimationFrame(animationFrameId);
         dispatch('hoverState', true);
     }
 
@@ -79,13 +92,8 @@
         return;
     }
 
-
     export function getBanners() {
         return banners;
-    }
-
-    export function getSlideTerm() {
-        return SLIDE_TERM;
     }
 </script>
 

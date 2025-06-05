@@ -19,7 +19,10 @@
         minutes: '',
     }; 
     
-    let focusBanner   = [];
+    let focusBanner        = [];
+    let bannerProgress     = 0;
+    let bannerCurrentIndex = 0;
+
     let latestDevNote = {};
 
     let isLoading = true;
@@ -110,10 +113,14 @@
                 banners={ focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN] }
                 showDefaultCtrl={ false }
                 bind:this={ mainBannerRef }
+                bind:progress={ bannerProgress }
+                bind:currentIndex={ bannerCurrentIndex }
                 on:hoverState={event => updateHoverState(event.detail)} 
             />
             <FocusControl 
-                bannerRef={ mainBannerRef } 
+                bannerRef={ mainBannerRef }
+                progress={ bannerProgress } 
+                currentIndex={ bannerCurrentIndex }
                 isHovered={ isMainFocusHovered }
                 showMenu={ false }
             />

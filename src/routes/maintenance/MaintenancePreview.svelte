@@ -6,6 +6,7 @@
     import Maintenance from "./Maintenance.svelte";
 
     let endDate;
+    let isLoading = true;
 
     onMount(async () => {
         await fetchLastActiveEndTime();
@@ -17,17 +18,21 @@
         }).catch(handleApiError);
 
 		if (response!= null) {
-			endDate = response.maintenance.end_date;
+            isLoading = false;
+			endDate   = response.maintenance.end_date;
 			return;
 		}
 
+        isLoading = false;
         console.log('[프리뷰] 점검 종료 시간 불러오기에 실패하였습니다.');
         return;
     }
 </script>
 
 
-<Maintenance endDate={ endDate }/>
+{#if !isLoading}
+    <Maintenance endDate={ endDate }/>
+{/if}
 
 
 <style>

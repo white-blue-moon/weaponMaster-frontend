@@ -2,82 +2,56 @@
     import { onMount, tick } from "svelte";
 
     export let bannerRef;
+    export let progress = 0;
+    export let currentIndex;
+
     export let isHovered;
     export let showMenu = true;
 
-    let banners      = [];
-    let currentIndex = 0;
-    let SLIDE_TERM   = 0;
-    let progress     = 0;
-    let autoplayInterval;
-    
-    const TICK = 10;
-    let   PROGRESS_INCREMENT;
-
+    let banners          = [];
     let ctrl_margin_left = "350px";
 
     onMount(async () => {
         await tick(); // DOM과 바인딩 완료를 기다림
         if (bannerRef) {
-            banners            = bannerRef.getBanners();
-            SLIDE_TERM         = bannerRef.getSlideTerm();
-            PROGRESS_INCREMENT = 100 / (SLIDE_TERM / TICK);
+            banners = bannerRef.getBanners();
         }
 
         if(!showMenu) {
             ctrl_margin_left = "423px";
         }
-
-        startAutoProgress();
     });
 
-
     function handlePrev() {
-        progress = 0;
         bannerRef.prevSlide();
-        currentIndex = (currentIndex - 1 + banners.length) % banners.length;
         return;
     }
 
     function handleNext() {
-        progress = 0;
         bannerRef.nextSlide();
-        currentIndex = (currentIndex + 1) % banners.length;
         return;
-    }
-
-    function startAutoProgress() {
-        autoplayInterval = setInterval(() => {
-            if (!isHovered) {
-                progress += PROGRESS_INCREMENT;
-                if (progress >= 100) {
-                    progress = 0;
-                    currentIndex = (currentIndex + 1) % banners.length;
-                } 
-            }
-        }, TICK); // 10ms마다 진행 상태 업데이트
     }
 
     function handleMouseEnter() {
         bannerRef.stopAutoPlay();
-        clearInterval(autoplayInterval);
+        return;
     }
 
     function handleMouseLeave() {
         bannerRef.startAutoPlay();
-        startAutoProgress(); 
+        return;
     }
 
     let isOpen = false;
 
 	function toggleBannerList() {
 		isOpen = !isOpen;
+        return;
 	}
 
     function handleBannerListClick(index) {
-		progress     = 0;
-		currentIndex = index;
         bannerRef.moveToSlide(index);
+        return;
 	}
 </script>
 
