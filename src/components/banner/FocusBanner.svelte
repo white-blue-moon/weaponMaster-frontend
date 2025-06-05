@@ -5,7 +5,7 @@
     export let height            = "280px";
     export let banners           = [];
     export let isOverlayExist    = false;
-    export let isDefaultCtrlShow = true;
+    export let showDefaultCtrl   = true;
     
     const dispatch = createEventDispatcher();
 
@@ -108,7 +108,7 @@
                 <a class="swiper-overlay {overlayVisible ? 'visible' : ''}"></a>
             {/if}
 
-            {#if isDefaultCtrlShow}
+            {#if showDefaultCtrl}
                 <p class="pay_ctrl">
                     <a 
                         style="cursor: pointer;" 

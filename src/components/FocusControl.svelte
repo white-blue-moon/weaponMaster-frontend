@@ -3,6 +3,7 @@
 
     export let bannerRef;
     export let isHovered;
+    export let showMenu = true;
 
     let banners      = [];
     let currentIndex = 0;
@@ -95,18 +96,20 @@
         </div>    
     </div>
 
-    <div class="bnr_lst">
-        <a class="bnr_tot {isOpen ? 'open' : ''}" on:click={ toggleBannerList }></a>
-        <div style="display: {isOpen ? 'block' : 'none'};">
-            <p>
-                {#each banners as banner, index}
-                    <a on:click={ () => handleBannerListClick(index) }>
-                        { banner.imgComment }
-                    </a>
-                {/each}
-            </p>
+    {#if showMenu}
+        <div class="bnr_lst">
+            <a class="bnr_tot {isOpen ? 'open' : ''}" on:click={ toggleBannerList }></a>
+            <div style="display: {isOpen ? 'block' : 'none'};">
+                <p>
+                    {#each banners as banner, index}
+                        <a on:click={ () => handleBannerListClick(index) }>
+                            { banner.imgComment }
+                        </a>
+                    {/each}
+                </p>
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 

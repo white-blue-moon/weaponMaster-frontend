@@ -22,7 +22,6 @@
     let newsArticles     = [];
     let bestViewArticles = [];
     let characterBanners = [];
-    let mainBannerRef;
     
     let isLoading = true;
 
@@ -74,6 +73,7 @@
         await fetchFocusBanners();
     });
 
+    let mainBannerRef;
     let isMainFocusHovered = false;
   
     function updateHoverState(hovered) {
@@ -96,7 +96,7 @@
                         height="600px" 
                         banners={ focusBanners[FOCUS_BANNER_TYPE.MAIN] }
                         isOverlayExist={ true }
-                        isDefaultCtrlShow={ false }
+                        showDefaultCtrl={ false }
                         bind:this={ mainBannerRef }
                         on:hoverState={event => updateHoverState(event.detail)}
                     />

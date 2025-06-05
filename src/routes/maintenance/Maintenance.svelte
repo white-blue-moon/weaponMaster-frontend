@@ -6,6 +6,7 @@
     import { getFormattedEndTime } from '../../utils/time';
 
     import FocusBanner from '../../components/banner/FocusBanner.svelte';
+    import FocusControl from '../../components/FocusControl.svelte';
     import Footer from '../../components/Footer.svelte';
     import Top from '../../components/Top.svelte';
   
@@ -21,6 +22,8 @@
     let focusBanner   = [];
     let latestDevNote = {};
 
+    let isLoading = true;
+
     onMount(async () => {
         await fetcheMaintenancePageInfo();
         formattedEndTime = getFormattedEndTime(endDate);
@@ -32,11 +35,13 @@
         }).catch(handleApiError);
 
         if (response.success) {
+            isLoading     = false;
             focusBanner   = response.data.focusBanners;
             latestDevNote = response.data.devNote;
             return;
         }
 
+        isLoading = false;
         console.log('점검 페이지(배너, 개발자노트) 정보 불러오기에 실패하였습니다.');
         return;
     }
@@ -67,6 +72,13 @@
         alert("브라우저가 전체화면을 지원하지 않습니다.");
         return;
     }
+
+    let mainBannerRef;
+    let isMainFocusHovered = false;
+  
+    function updateHoverState(hovered) {
+        isMainFocusHovered = hovered;
+    }
 </script>
 
 <header>
@@ -91,7 +103,21 @@
         </div>
     </article>
     <article class="focus">
-        <FocusBanner width="650px" height="650px" banners={ focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN] } />
+        {#if !isLoading}
+            <FocusBanner 
+                width="650px" 
+                height="650px" 
+                banners={ focusBanner[FOCUS_BANNER_TYPE.MAINTENANCE_MAIN] }
+                showDefaultCtrl={ false }
+                bind:this={ mainBannerRef }
+                on:hoverState={event => updateHoverState(event.detail)} 
+            />
+            <FocusControl 
+                bannerRef={ mainBannerRef } 
+                isHovered={ isMainFocusHovered }
+                showMenu={ false }
+            />
+        {/if}
     </article>
 </section>
 
