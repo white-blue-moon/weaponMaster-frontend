@@ -40,6 +40,10 @@
             return;
         }
 
+        if (isLoginLoading) {
+            return;
+        }
+
         isLoginLoading = true;
 
         const response = await apiFetch(API.ACCOUNT.LOGIN, {
