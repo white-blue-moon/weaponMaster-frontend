@@ -8,8 +8,8 @@
 
 	import Home from './routes/Home.svelte';
 	import Maintenance from './routes/maintenance/Maintenance.svelte';
-	import MaiintenancePreview from './routes/maintenance/MaiintenancePreview.svelte';
-	
+	import MaintenancePreview from './routes/maintenance/MaintenancePreview.svelte';
+
 	import Join from './routes/account/Join.svelte';
 	import LoginNormal from './routes/account/LoginNormal.svelte';
 	import LoginAdmin from './routes/account/LoginAdmin.svelte';
@@ -78,7 +78,7 @@
 		<Route path={ PATHS.HOME } component={ Home } />
 
 		<!-- 점검 페이지 확인용 -->
-		<Route path={ PATHS.MAINTENANCE_PREVIEW } component={ MaiintenancePreview } />
+		<Route path={ PATHS.MAINTENANCE_PREVIEW } component={ MaintenancePreview } />
 
 		<!-- 계졍 관련 -->
 		<Route path={ PATHS.ACCOUNT.JOIN }        		   component={ Join } />

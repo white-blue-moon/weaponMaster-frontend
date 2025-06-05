@@ -3,6 +3,7 @@
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { onMount } from "svelte";
     import { FOCUS_BANNER_TYPE } from '../../constants/focusBanner';
+    import { getFormattedEndTime } from '../../utils/time';
 
     import FocusBanner from '../../components/banner/FocusBanner.svelte';
     import Footer from '../../components/Footer.svelte';
@@ -11,31 +12,34 @@
 
     export let endDate;
 
-    const date    = new Date(endDate);
-    let   hours   = date.getHours();
-    const minutes = date.getMinutes();
-
-    const amPm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // 0이면 12로 변환 (12AM, 12PM)
-    
-    // 두 자리수로 만들기 위해 0 채움
-    const formatHours   = hours   < 10 ? `0${hours}`   : hours; 
-    const formatMinutes = minutes < 10 ? `0${minutes}` : minutes; 
+    let formattedEndTime = {
+        amPm:    '',
+        hours:   '',
+        minutes: '',
+    }; 
     
     let focusBanner   = [];
     let latestDevNote = {};
 
     onMount(async () => {
-          const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAINTENANCE_MAIN), {
-              method: "GET",
-          }).catch(handleApiError);
+        await fetcheMaintenancePageInfo();
+        formattedEndTime = getFormattedEndTime(endDate);
+    });
 
-          if (response.success) {
+    async function fetcheMaintenancePageInfo() {
+        const response = await apiFetch(API.PAGE.MAINTENANCE(FOCUS_BANNER_TYPE.MAINTENANCE_MAIN), {
+              method: "GET",
+        }).catch(handleApiError);
+
+        if (response.success) {
             focusBanner   = response.data.focusBanners;
             latestDevNote = response.data.devNote;
-          }
-    });
+            return;
+        }
+
+        console.log('점검 페이지(배너, 개발자노트) 정보 불러오기에 실패하였습니다.');
+        return;
+    }
 
     function fullScreen(event) {
         event.preventDefault();
@@ -80,9 +84,9 @@
         <div class="date">
             <span>오픈 예정 시간</span>
             <ul id="openSchedule">
-                <li>{ formatHours }</li>
-                <li>{ formatMinutes }</li>
-                <li>{ amPm }</li>
+                <li>{ formattedEndTime.hours }</li>
+                <li>{ formattedEndTime.minutes }</li>
+                <li>{ formattedEndTime.amPm }</li>
             </ul>
         </div>
     </article>
