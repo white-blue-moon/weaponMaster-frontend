@@ -30,7 +30,7 @@
 	import AuctionGuide from './routes/guide/AuctionGuide.svelte';
 	import SlackGuide from './routes/guide/SlackGuide.svelte';
 
-  	import AccessGate from './routes/AccessGate.svelte';
+  	import AccessGate from './routes/access-gate/AccessGate.svelte';
   	import NotFoundPage from './components/page/NotFoundPage.svelte';
   
 
