@@ -82,6 +82,14 @@
     function updateHoverState(hovered) {
         isMainFocusHovered = hovered;
     }
+
+    function scrollToMedia(event) {
+		event.preventDefault();
+		const el = document.getElementById('media');
+		if (el) {
+			el.scrollIntoView({ behavior: 'smooth' });
+		}
+	}
 </script>
 
 <header>
@@ -135,7 +143,7 @@
     <a href="https://www.youtube.com/user/dnfilive" target="_blank">
         <img src="https://cdn.df.nexon.com/img/insp/2023/bnr2.png" alt="" />
     </a>
-    <a href="#media">
+    <a href="#media" on:click={ scrollToMedia }>
         <img src="https://cdn.df.nexon.com/img/insp/2023/bnr3.png" alt="" />
     </a>
 </section>
