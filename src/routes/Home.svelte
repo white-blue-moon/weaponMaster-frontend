@@ -153,7 +153,7 @@
 
     {#if !isLoading} <CharacterBanner banners={ characterBanners } /> {/if}
 
-    <!-- TODO 풀 배너 이벤트 등록하기 -->
+    <!-- TODO (추후) 풀 배너 이벤트 등록하기 -->
     <!-- <FullBanner /> -->
 
     <Footer />

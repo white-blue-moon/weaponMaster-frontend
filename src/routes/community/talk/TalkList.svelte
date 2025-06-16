@@ -4,4 +4,7 @@
     import PageList from "../../../components/page/PageList.svelte";
 </script>
 
-<PageList categoryType={ CATEGORY_TYPE.COMMUNITY } articleType={ ARTICLE_TYPE.COMMUNITY.TALK }/>
+<PageList 
+    categoryType={ CATEGORY_TYPE.COMMUNITY } 
+    articleType={ ARTICLE_TYPE.COMMUNITY.TALK }
+/>
