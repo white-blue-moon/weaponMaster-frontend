@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { getPageInfo } from '../../utils/page';
     import { formatDate } from "../../utils/time"
-    import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
+    import { ARTICLE_TYPE, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
@@ -16,11 +16,8 @@
     import CopyUrlButton from '../../components/CopyUrlButton.svelte';
     import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
+    const ARTICLE_FILTER_TEXT = "가이드";
 
-    const AUCTION_GUIDE_ARTICLE_ID = 432;
-    const ARTICLE_FILTER_TEXT      = "가이드";
-
-    let pageId   = AUCTION_GUIDE_ARTICLE_ID;
     let pageInfo = {};
     let article  = null;
 
@@ -30,14 +27,18 @@
     });
 
     async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.READ(pageId), {
-            method: 'GET',
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.GUIDE, ARTICLE_TYPE.GUIDE.AUCTION), {
+            method: "GET",
         }).catch(handleApiError);
 
         if (response.success) {
-            article  = response.data;
+            article  = response.data[0];
             pageInfo = getPageInfo(article.categoryType, article.articleType);
+            return;
         }
+
+        console.log("경매 가이드 게시물 불러오기 실패");
+        return;
     }
 
     // #id 앵커에 스크롤 이벤트 연결 (동적 @html 출력이므로 별도 연결 필요)

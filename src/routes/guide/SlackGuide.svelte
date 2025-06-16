@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { getPageInfo } from '../../utils/page';
     import { formatDate } from "../../utils/time"
-    import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
+    import { ARTICLE_TYPE, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
@@ -17,27 +17,29 @@
     import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
 
-    const SLACK_GUIDE_ARTICLE_ID = 433;
-    const ARTICLE_FILTER_TEXT    = "가이드";
+    const ARTICLE_FILTER_TEXT = "가이드";
 
-    let pageId   = SLACK_GUIDE_ARTICLE_ID;
     let pageInfo = {};
     let article  = null;
-
-    async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.READ(pageId), {
-            method: 'GET',
-        }).catch(handleApiError);
-
-        if (response.success) {
-            article  = response.data;
-            pageInfo = getPageInfo(article.categoryType, article.articleType);
-        }
-    }
 
     onMount(async ()=> {
         await fetchArticle();
     });
+
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.GUIDE, ARTICLE_TYPE.GUIDE.SLACK), {
+            method: "GET",
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article  = response.data[0];
+            pageInfo = getPageInfo(article.categoryType, article.articleType);
+            return;
+        }
+
+        console.log("Slack 가이드 게시물 불러오기 실패");
+        return;
+    }
 </script>
 
 

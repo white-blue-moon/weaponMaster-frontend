@@ -4,7 +4,7 @@
     import { onMount } from "svelte";
     import { getPageInfo } from '../../utils/page';
     import { formatDate } from "../../utils/time"
-    import { CATEGORY_TYPE_TEXT } from '../../constants/articles';
+    import { ARTICLE_TYPE, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../../constants/articles';
     
     import GnbPublisher from "../../components/GnbPublisher.svelte";
     import Gnb from "../../components/Gnb.svelte";
@@ -16,28 +16,29 @@
     import CopyUrlButton from '../../components/CopyUrlButton.svelte';
     import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
-
-    const OVERVIEW_ARTICLE_ID = 420;
     const ARTICLE_FILTER_TEXT = "가이드";
 
-    let pageId   = OVERVIEW_ARTICLE_ID;
     let pageInfo = {};
     let article  = null;
-
-    async function fetchArticle() {
-        const response = await apiFetch(API.ARTICLES.READ(pageId), {
-            method: 'GET',
-        }).catch(handleApiError);
-
-        if (response.success) {
-            article  = response.data;
-            pageInfo = getPageInfo(article.categoryType, article.articleType);
-        }
-    }
 
     onMount(async ()=> {
         await fetchArticle();
     });
+
+    async function fetchArticle() {
+        const response = await apiFetch(API.ARTICLES.LIST(CATEGORY_TYPE.GUIDE, ARTICLE_TYPE.GUIDE.OVERVIEW), {
+            method: "GET",
+        }).catch(handleApiError);
+
+        if (response.success) {
+            article  = response.data[0];
+            pageInfo = getPageInfo(article.categoryType, article.articleType);
+            return;
+        }
+
+        console.log("전체 가이드 게시물 불러오기 실패");
+        return;
+    }
 </script>
 
 
