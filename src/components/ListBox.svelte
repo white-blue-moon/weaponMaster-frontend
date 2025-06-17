@@ -1,12 +1,12 @@
 <script>
-    import { DF_UI } from '../constants/resourcePath';
+    import { WEAPON_ASSETS } from '../constants/resourcePath';
     import { CATEGORY_TYPE_TEXT } from '../constants/articles';
     import { getPagePath } from '../utils/page';
 
     export let articles = [];
 
     const ITEMS_PER_SLIDE   = 3; // 한 슬라이드에 보여지는 인기 게시물 개수
-    const DEFAULT_THUMBNAIL = `${DF_UI}/img/common/today_dnf_default.jpg`;
+    const DEFAULT_THUMBNAIL = `${WEAPON_ASSETS}/list-box/default.jpg`;
     
     let   currentIndex      = 0;
 
