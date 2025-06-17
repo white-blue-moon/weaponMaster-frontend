@@ -67,5 +67,7 @@ export const PATHS = {
         PRIVATE_CONTACT: { LIST: `${BASE}/service/private_contact/list` },
     },
 
-    ADMIN_TOOL: `${SERVICE_DOMAIN}/admin-front/`
+    ADMIN_TOOL: `${SERVICE_DOMAIN}/admin-front/`,
+
+    DNF: `https://df.nexon.com`
 };

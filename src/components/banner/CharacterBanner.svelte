@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { PATHS } from '../../constants/paths';
 
 
     export let banners = [];
@@ -39,6 +40,15 @@
     function clickDetailType(detailType) {
         selectedDetailType = detailType;
     }
+
+    function getPageLink(url) {
+        // 시작 경로가 /pg/ 면 던파 공식 홈페이지와 매칭
+        if (/^\/pg\//.test(url)) {
+            return `${PATHS.DNF}${url}`;
+        }
+
+        return url;
+    }
 </script>
 
   
@@ -57,7 +67,7 @@
                 {#each banner.bannerDetails as detail}
                     <!-- 메인 배너 이미지 -->
                     <li style="background: url('{detail.imgUrl}') no-repeat" class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}">
-                        <a href="{detail.homepageLinkUrl}" target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
+                        <a href={getPageLink(detail.homepageLinkUrl)} target="_blank"   class="{detail.characterDetailType === selectedDetailType ? 'on' : ''}" data-gtm-type="character-section"></a>
                         <p class="name">{detail.characterName}</p>
                         <p class="info">{detail.characterIntro}</p>
                     </li>
