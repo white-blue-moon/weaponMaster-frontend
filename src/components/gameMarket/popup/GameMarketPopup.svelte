@@ -62,6 +62,13 @@
         isApiLoaded = true;
     });
 
+    onDestroy(async () => {
+        // 웹소켓 연결 해제
+        if (client && client.active) {
+            await client.deactivate();
+        }
+    });
+
     async function fetchUserAuctionNotice() {
         const response = await apiFetch(NEOPLE_API.AUCTION_NOITCE.READ($userInfo), {
             method: "GET",
@@ -93,13 +100,6 @@
         console.log('fetchUserSlackInfo() error');
         return;
     }
-
-    onDestroy(async () => {
-        // 웹소켓 연결 해제
-        if (client && client.active) {
-            await client.deactivate();
-        }
-    });
 
     function connectWebSocket() {
         client = new Client({

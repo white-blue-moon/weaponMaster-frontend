@@ -30,6 +30,24 @@
 
     let isPageRevealed = false;
 
+    onMount(async () => {
+        const isFromGate = sessionStorage.getItem('fromAccessGate') === 'true';
+        
+        if (isFromGate) {
+            // 화면이 렌더링될 준비가 되었을 때(show = true) 실행되도록 예약
+            // → 이렇게 하면 화면이 '서서히 등장하는' 애니메이션 효과를 줄 수 있음
+            requestAnimationFrame(() => isPageRevealed = true);
+            sessionStorage.removeItem('fromAccessGate'); // 비밀번호 입력 후 한 번만 연출
+        }
+
+        if (!isFromGate) {
+            // 즉시 화면을 보여줌 (애니메이션 없이 바로 나타남)
+            isPageRevealed = true;
+        }
+
+        await fetchFocusBanners();
+    });
+
     async function fetchFocusBanners() {
         const response = await apiFetch(API.PAGE.HOME, {
             method: 'POST',
@@ -57,24 +75,6 @@
         console.log('홈페이지 정보 불러오기에 실패하였습니다.')
         return;
     }
-
-    onMount(async () => {
-        const isFromGate = sessionStorage.getItem('fromAccessGate') === 'true';
-        
-        if (isFromGate) {
-            // 화면이 렌더링될 준비가 되었을 때(show = true) 실행되도록 예약
-            // → 이렇게 하면 화면이 '서서히 등장하는' 애니메이션 효과를 줄 수 있음
-            requestAnimationFrame(() => isPageRevealed = true);
-            sessionStorage.removeItem('fromAccessGate'); // 비밀번호 입력 후 한 번만 연출
-        }
-
-        if (!isFromGate) {
-            // 즉시 화면을 보여줌 (애니메이션 없이 바로 나타남)
-            isPageRevealed = true;
-        }
-
-        await fetchFocusBanners();
-    });
 
     let mainBannerRef;
     let isMainFocusHovered = false;

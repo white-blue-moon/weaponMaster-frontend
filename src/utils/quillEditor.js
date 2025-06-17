@@ -48,3 +48,22 @@ export function initQuillEditor(selector, onChangeCallback) {
 
     return editor;
 }
+
+export function destroyQuillEditor(editor) {
+    const info = editorInstances.get(editor);
+    if (!info) return;
+
+    const { qlEditor, handleCompositionStart, style } = info;
+
+    if (qlEditor) {
+        qlEditor.removeEventListener('compositionstart', handleCompositionStart);
+        qlEditor.classList.remove('custom-placeholder');
+    }
+
+    if (style && document.head.contains(style)) {
+        document.head.removeChild(style);
+    }
+
+    editorInstances.delete(editor);
+    return;
+}

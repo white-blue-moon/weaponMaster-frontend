@@ -27,6 +27,10 @@
 
     let isLoading = false;
 
+    onMount(async ()=> {
+        await fetchArticle();
+    });
+
     async function fetchArticle() {
         const response = await apiFetch(API.ARTICLES.READ(pageId), {
             method: 'GET',
@@ -37,10 +41,6 @@
             pageInfo = getPageInfo(article.categoryType, article.articleType);
         }
     }
-
-    onMount(async ()=> {
-        await fetchArticle();
-    });
 
     let isToggling = false;
 

@@ -2,12 +2,12 @@
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
     import { userInfo, isLoggedIn, isAdmin, adminToken } from "../../utils/auth";
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { CATEGORY_TYPE_TEXT, ARTICLE_TYPE_TEXT, ARTICLE_DETAIL_TYPE_TEXT } from "../../constants/articles";
     import { PATHS } from "../../constants/paths";
     import { getPageInfo, getCategoryTypeByURL, isDetailTypeExist } from "../../utils/page";
     import { getArticleIdFromUrl } from '../../utils/pathUtiil';
-    import { initQuillEditor } from '../../utils/quillEditor';
+    import { destroyQuillEditor, initQuillEditor } from '../../utils/quillEditor';
     
     import 'quill/dist/quill.snow.css';
 
@@ -49,6 +49,10 @@
         if (isEditMode) {
             await fetchArticle();
         }
+    });
+
+    onDestroy(() => {
+        destroyQuillEditor(editor);
     });
 
     async function fetchArticle() {

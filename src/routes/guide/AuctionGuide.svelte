@@ -1,7 +1,7 @@
 <script>
     import { API } from '../../constants/api';
     import { apiFetch, handleApiError } from '../../utils/apiFetch';
-    import { onMount } from "svelte";
+    import { onMount, onDestroy } from "svelte";
     import { getPageInfo } from '../../utils/page';
     import { formatDate } from "../../utils/time"
     import { ARTICLE_TYPE, CATEGORY_TYPE, CATEGORY_TYPE_TEXT } from '../../constants/articles';
@@ -16,6 +16,7 @@
     import CopyUrlButton from '../../components/CopyUrlButton.svelte';
     import CampaignBanner from '../../components/banner/CampaignBanner.svelte';
     
+
     const ARTICLE_FILTER_TEXT = "가이드";
 
     let pageInfo = {};
@@ -24,6 +25,14 @@
     onMount(async ()=> {
         await fetchArticle();
         setAnchorScroll();
+    });
+
+    onDestroy(() => {
+        const anchors = getAnchors();
+        anchors.forEach((anchor, index) => {
+            anchor.removeEventListener('click', anchorClickHandlers[index]);
+        });
+        anchorClickHandlers = []; // 메모리도 초기화
     });
 
     async function fetchArticle() {
@@ -43,7 +52,7 @@
 
     // #id 앵커에 스크롤 이벤트 연결 (동적 @html 출력이므로 별도 연결 필요)
     function setAnchorScroll() {
-        const anchors = document.querySelectorAll('a[href^="#"]');
+        const anchors = getAnchors();
 
         anchors.forEach(anchor => {
             anchor.addEventListener('click', event => {
@@ -57,6 +66,12 @@
                 }
             });
         });
+    }
+
+    // href가 "#"으로 시작하는 모든 <a> 태그를 선택하여 반환
+    function getAnchors() {
+        const anchors = document.querySelectorAll('a[href^="#"]');
+        return anchors;
     }
 </script>
 
