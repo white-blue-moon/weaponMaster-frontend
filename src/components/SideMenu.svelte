@@ -32,7 +32,7 @@
                         <div class="gnbGameTab">
                             <ul>
                             <li class="gnbBtPc" obj="P_GNB" opt=''>
-                                <a href="#gnbListPc">전체서비스</a>
+                                <a>전체서비스</a>
                             </li>
                             </ul>
                             <a href={ PATHS.SERVICE_CENTER.PRIVATE_CONTACT.LIST } obj="P_GNB" opt=''>고객센터</a>
@@ -45,6 +45,7 @@
                                 <h3>A~Z</h3>
                                 <ul>
                                     <li obj="P_GNB" opt=''><a href={ PATHS.ADMIN_TOOL } target="_blank">Admin Tool</a></li>
+                                    <li obj="P_GNB" opt=''><a href={ PATHS.HOME }>Weapon Master</a></li>
                                 </ul>
                             </div>
                         </div>
