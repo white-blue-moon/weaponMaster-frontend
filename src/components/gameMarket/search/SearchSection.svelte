@@ -43,7 +43,8 @@
 
         isSearching = true;
 
-        const response = await apiFetch(NEOPLE_API.AUCTION.LIST(searchKeyword.trim()), {
+        const encodedKeyword = encodeURIComponent(searchKeyword.trim());
+        const response       = await apiFetch(NEOPLE_API.AUCTION.LIST(encodedKeyword), {
             method: "GET",
         }).catch(handleApiError);
 

@@ -210,7 +210,7 @@
 
     .spinner-container p {
         position: absolute;
-        top: 328px; /* 이미지 하단에서 10px 위 */
+        top: 328px;
     }
 
     .loading-text {
