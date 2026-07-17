@@ -1,0 +1,13 @@
+.git
+.idea
+.vscode
+.DS_Store
+node_modules
+public/weapon-front/build
+.env
+.env.example
+deploy.sh
+deploy_build.sh
+deploy_local.sh
+deploy_local_build.sh
+README.md
